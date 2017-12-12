@@ -1,18 +1,18 @@
 <?php
 defined('BASEPATH') OR exit('No direct script access allowed');
 
-class m_produk extends CI_Model
+class M_pengeluaran extends CI_Model
 {
 
-    function getProduk()
+    function getPengeluaran()
     {
-        return $this->db->get('produk')->result();
+        return $this->db->get('pengeluaran')->result();
     }
 
-    function tambahProduk($data)
+    function tambahPengeluaran($data)
     {
-        $this->db->insert('produk', $data);
-        redirect('admin/produk');
+        $this->db->insert('pengeluaran', $data);
+        redirect('admin/pengeluaran');
     }
 
     function ubahProduk($idProduk)
@@ -47,6 +47,6 @@ class m_produk extends CI_Model
 
     function datacount()
     {
-        return $this->db->count_all('produk');
+        return $this->db->count_all('pengeluaran');
     }
 }

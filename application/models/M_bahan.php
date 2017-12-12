@@ -1,7 +1,7 @@
 <?php
 defined('BASEPATH') OR exit('No direct script access allowed');
 
-class m_bahan extends CI_Model
+class M_bahan extends CI_Model
 {
 
     function getBahan()
