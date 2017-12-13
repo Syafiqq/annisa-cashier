@@ -199,7 +199,10 @@
                                     foreach ($minuman as $data)
                                     {
                                         ?>
-                                        <button class="btn btn-large my_button" type="button" value="<?php echo $data->harga_jual ?>"><?php echo $data->nama_produk; ?></button>
+                                        <div style="display: inline">
+                                            <input type="hidden" class="hidden p-key" value="<?php echo $data->id_produk ?>">
+                                            <button class="btn btn-large my_button p-cost" type="button" value="<?php echo $data->harga_jual ?>"><?php echo $data->nama_produk; ?></button>
+                                        </div>
                                     <?php } ?>
                                 </td>
                             </tr>
@@ -214,7 +217,10 @@
                                     foreach ($lauk as $data)
                                     {
                                         ?>
-                                        <button class="btn btn-large my_button" type="button" value="<?php echo $data->harga_jual ?>"><?php echo $data->nama_produk; ?></button>
+                                        <div style="display: inline">
+                                            <input type="hidden" class="hidden p-key" value="<?php echo $data->id_produk ?>">
+                                            <button class="btn btn-large my_button p-cost" type="button" value="<?php echo $data->harga_jual ?>"><?php echo $data->nama_produk; ?></button>
+                                        </div>
                                     <?php } ?>
                                 </td>
                             </tr>
@@ -284,21 +290,45 @@
             container.find('td.p-t').text(data['c'] * data['q']);
         }
 
+        function obs_d_p(pid)
+        {
+            $("#my_table").find('tr.' + pid).remove();
+        }
+
         function obs_c_p(pid)
         {
             var data = p_projection[pid];
             $("#my_table").append(
                 //@formatter:off
                 '<tr class="'+ pid +'">' +
+                    '<td class="p-id" style="display: none" >' + pid + '</td>' +
                     '<td class="p-n" >' + data['n'] + '</td>' +
                     '<td class="p-c">' + data['c'] + '</td>' +
                     '<td><input class="input-mini p-q" type="number" value="'+ data['q'] +'" min="1" step="1"></td>' +
                     '<td class="p-t">' + (data['c'] * data['q']) + '</td>' +
-                    '<td>0</td>' +
+                    '<td><a class="p-d " href="" role="button button-warning"><i class="icon-trash "></i></a></td>' +
                 '</tr>'
                 //@formatter:on
             );
         }
+
+        var myTableBody = $('#my_table').find('tbody');
+
+        myTableBody.on('click', 'a.p-d', function (event) {
+            event.preventDefault();
+            var pid = $(this).parent().siblings('td.p-id').text();
+            delete p_projection[pid];
+
+            obs_d_p(pid);
+        });
+
+        myTableBody.on('change', 'input.p-q', function (event) {
+            event.preventDefault();
+            var pid                = $(this).parent().siblings('td.p-id').text();
+            var qty                = $(this).val();
+            p_projection[pid]['q'] = qty;
+            obs_u_p(pid);
+        });
 
         $("button.my_button").click(function () {
             var id    = $(this).siblings('input.p-key').val();
@@ -315,25 +345,7 @@
                 p_projection[pid] = {n: value, c: harga, q: 1};
                 obs_c_p(pid);
             }
-            //console.log(p_projection);
-            /*$("#my_table td").each(function () {
-                if ($(this).text() == value)
-                {
-                    //alert("wew");
-                } else
-                {
-                    //alert("WOW");
-                    //
-                }
-            });*/
-
         });
-
-        function TotalBayar()
-        {
-            var Total = 0;
-            $('#my_table')
-        }
     </script>
 
     <!-- END JAVASCRIPTS -->
