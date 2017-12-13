@@ -81,7 +81,7 @@
                         <div class="widget-body form">
                             <div class='alert alert-info TotalBayar'>
                                 <h2>Total :
-                                    <span id='TotalBayar'>Rp. 0</span>
+                                    <span id='TotalBayar'>Rp 0</span>
                                 </h2>
                                 <input type="hidden" id='TotalBayarHidden'>
                             </div>
@@ -249,6 +249,7 @@
 
     </div>
     <script src="<?php echo base_url(); ?>assets/js/jquery-1.8.3.min.js"></script>
+    <script src="<?php echo base_url(); ?>assets/js/currency.min.js"></script>
     <script src="<?php echo base_url(); ?>assets/assets/jquery-slimscroll/jquery-ui-1.9.2.custom.min.js"></script>
     <script src="<?php echo base_url(); ?>assets/assets/jquery-slimscroll/jquery.slimscroll.min.js"></script>
     <script src="<?php echo base_url(); ?>assets/assets/fullcalendar/fullcalendar/fullcalendar.min.js"></script>
@@ -278,6 +279,15 @@
     </script>
 
     <script type="text/javascript">
+        "use strict";
+
+        function indonesian(value)
+        {
+            //@formatter:off
+            return currency(value, {separator: ".", decimal: ",", symbol: "Rp ", precision: 2, formatWithSymbol: true});
+            //@formatter:on
+        }
+
         var p_projection = {};
 
         function obs_u_p(pid)
@@ -285,14 +295,16 @@
             var data      = p_projection[pid];
             var container = $("#my_table").find('tr.' + pid);
             container.find('td.p-n').text(data['n']);
-            container.find('td.p-c').text(data['c']);
+            container.find('td.p-c').text(indonesian(data['c']).format());
             container.find('input.p-q').val(data['q']);
-            container.find('td.p-t').text(data['c'] * data['q']);
+            container.find('td.p-t').text(indonesian(data['c'] * data['q']).format());
+            obs_gt();
         }
 
         function obs_d_p(pid)
         {
             $("#my_table").find('tr.' + pid).remove();
+            obs_gt();
         }
 
         function obs_c_p(pid)
@@ -303,13 +315,23 @@
                 '<tr class="'+ pid +'">' +
                     '<td class="p-id" style="display: none" >' + pid + '</td>' +
                     '<td class="p-n" >' + data['n'] + '</td>' +
-                    '<td class="p-c">' + data['c'] + '</td>' +
+                    '<td class="p-c" style="text-align: right">' + indonesian(data['c']).format() + '</td>' +
                     '<td><input class="input-mini p-q" type="number" value="'+ data['q'] +'" min="1" step="1"></td>' +
-                    '<td class="p-t">' + (data['c'] * data['q']) + '</td>' +
+                    '<td class="p-t" style="text-align: right">' + indonesian(data['c'] * data['q']).format() + '</td>' +
                     '<td><a class="p-d " href="" role="button button-warning"><i class="icon-trash "></i></a></td>' +
                 '</tr>'
                 //@formatter:on
             );
+            obs_gt();
+        }
+
+        function obs_gt()
+        {
+            var gt = 0;
+            $.each(p_projection, function (index, value) {
+                gt += (value['c'] * value['q'])
+            });
+            $('span#TotalBayar').text(indonesian(gt).format())
         }
 
         var myTableBody = $('#my_table').find('tbody');
