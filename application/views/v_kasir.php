@@ -23,6 +23,10 @@
         #content1, #content2, #content3 {
             display: none;
         }
+
+        .hidden {
+            display: none;
+        }
     </style>
 </head>
 
@@ -176,7 +180,11 @@
                                     foreach ($makanan as $data)
                                     {
                                         ?>
-                                        <button class="btn btn-large my_button" value="<?php echo $data->harga_jual ?>"><?php echo $data->nama_produk; ?></button>
+                                        <div style="display: inline">
+                                            <input type="hidden" class="hidden p-key" value="<?php echo $data->id_produk ?>">
+                                            <button class="my_button btn btn-large p-cost" value="<?php echo $data->harga_jual ?>"><?php echo $data->nama_produk; ?></button>
+                                        </div>
+
                                     <?php } ?>
                                 </td>
                             </tr>
@@ -263,12 +271,52 @@
         }
     </script>
 
-    <script>
-        $(".my_button").click(function () {
+    <script type="text/javascript">
+        var p_projection = {};
+
+        function obs_u_p(pid)
+        {
+            var data      = p_projection[pid];
+            var container = $("#my_table").find('tr.' + pid);
+            container.find('td.p-n').text(data['n']);
+            container.find('td.p-c').text(data['c']);
+            container.find('input.p-q').val(data['q']);
+            container.find('td.p-t').text(data['c'] * data['q']);
+        }
+
+        function obs_c_p(pid)
+        {
+            var data = p_projection[pid];
+            $("#my_table").append(
+                //@formatter:off
+                '<tr class="'+ pid +'">' +
+                    '<td class="p-n" >' + data['n'] + '</td>' +
+                    '<td class="p-c">' + data['c'] + '</td>' +
+                    '<td><input class="input-mini p-q" type="number" value="'+ data['q'] +'" min="1" step="1"></td>' +
+                    '<td class="p-t">' + (data['c'] * data['q']) + '</td>' +
+                    '<td>0</td>' +
+                '</tr>'
+                //@formatter:on
+            );
+        }
+
+        $("button.my_button").click(function () {
+            var id    = $(this).siblings('input.p-key').val();
             var value = $(this).text();
             var harga = $(this).val();
-            $("#my_table").append('<tr><td>' + value + '</td><td>' + harga + '</td><td><input class="input-mini" type="number" value="1"></input></td><td>' + harga + '</td><td>0</td></tr>');
-            $("#my_table td").each(function () {
+            var pid   = "l_p-" + id;
+            if (p_projection[pid] !== undefined)
+            {
+                ++p_projection[pid]['q'];
+                obs_u_p(pid);
+            }
+            else
+            {
+                p_projection[pid] = {n: value, c: harga, q: 1};
+                obs_c_p(pid);
+            }
+            //console.log(p_projection);
+            /*$("#my_table td").each(function () {
                 if ($(this).text() == value)
                 {
                     //alert("wew");
@@ -277,7 +325,7 @@
                     //alert("WOW");
                     //
                 }
-            });
+            });*/
 
         });
 
