@@ -104,39 +104,39 @@
                             </table>
                         </div>
                         <div class="widget-body form">
-                            <form action="" method="POST" class="form-horizontal">
+                            <form id="form-sender" action="" method="POST" class="form-horizontal">
                                 <fieldset>
                                     <div class="control-group">
                                         <label class="control-label">Status Pembelian</label>
                                         <div class="controls">
-                                            <select name="statusPesan" class="input-large m-wrap" tabindex="1" required="true">
+                                            <select name="status" class="input-large m-wrap" tabindex="1" required="true">
                                                 <option value="ya">Makan di tempat</option>
                                                 <option value="tidak">Bawa Pulang</option>
                                             </select>
                                         </div>
                                     </div>
-                                    <div class="control-group">
+                                    <div class="control-group wrapper-table-no">
                                         <label for="name" class="control-label">Nomor Meja</label>
                                         <div class="controls">
-                                            <input name="noMeja" type="number" placeholder="Isi disini" class="input-medium" required="true"/>
+                                            <input name="table" type="number" placeholder="Isi disini" class="input-medium" required="true"/>
                                         </div>
                                     </div>
                                     <div class="control-group">
                                         <label for="name" class="control-label">Catatan</label>
                                         <div class="controls">
-                                            <textarea class="span6 " rows="3"></textarea>
+                                            <textarea name="mark" class="span6 " rows="3"></textarea>
                                         </div>
                                     </div>
                                     <div class="control-group">
                                         <label for="name" class="control-label">Uang Pembayaran</label>
                                         <div class="controls">
-                                            <input name="" type="number" placeholder="Isi disini" class="input-medium" required="true"/>
+                                            <input type="text" name="payment" placeholder="Isi disini" class="input-medium" required="true"/>
                                         </div>
                                     </div>
                                     <div class="control-group">
                                         <label for="name" class="control-label">Uang Kembalian</label>
                                         <div class="controls">
-                                            <input name="" type="number" placeholder="" class="input-medium" readonly/>
+                                            <p class="input-medium payback"></p>
                                         </div>
                                     </div>
                                     <div class="form-actions">
@@ -250,6 +250,7 @@
     </div>
     <script src="<?php echo base_url(); ?>assets/js/jquery-1.8.3.min.js"></script>
     <script src="<?php echo base_url(); ?>assets/js/currency.min.js"></script>
+    <script src="<?php echo base_url(); ?>assets/js/jquery.maskMoney.min.js"></script>
     <script src="<?php echo base_url(); ?>assets/assets/jquery-slimscroll/jquery-ui-1.9.2.custom.min.js"></script>
     <script src="<?php echo base_url(); ?>assets/assets/jquery-slimscroll/jquery.slimscroll.min.js"></script>
     <script src="<?php echo base_url(); ?>assets/assets/fullcalendar/fullcalendar/fullcalendar.min.js"></script>
@@ -281,14 +282,18 @@
     <script type="text/javascript">
         "use strict";
 
+        var p_projection = {};
+        var table_state  = '';
+        var cost         = 0;
+        var payment      = 0;
+        var payback      = 0;
+
         function indonesian(value)
         {
             //@formatter:off
             return currency(value, {separator: ".", decimal: ",", symbol: "Rp ", precision: 2, formatWithSymbol: true});
             //@formatter:on
         }
-
-        var p_projection = {};
 
         function obs_u_p(pid)
         {
@@ -325,16 +330,8 @@
             obs_gt();
         }
 
-        function obs_gt()
-        {
-            var gt = 0;
-            $.each(p_projection, function (index, value) {
-                gt += (value['c'] * value['q'])
-            });
-            $('span#TotalBayar').text(indonesian(gt).format())
-        }
-
         var myTableBody = $('#my_table').find('tbody');
+        var form_sender = $('form#form-sender');
 
         myTableBody.on('click', 'a.p-d', function (event) {
             event.preventDefault();
@@ -352,7 +349,55 @@
             obs_u_p(pid);
         });
 
-        $("button.my_button").click(function () {
+        form_sender.find('select[name=status]').on('change', function () {
+            var target     = $('form#form-sender').find('div.wrapper-table-no');
+            var target_val = target.find('input[name=table]');
+
+            switch ($(this).val().toString())
+            {
+                case "ya" :
+                {
+                    target.show();
+                    target_val.val(table_state);
+                    break;
+                }
+                default :
+                {
+                    target.hide();
+                    table_state = target_val.val();
+                    target_val.val('');
+                    break;
+                }
+            }
+        });
+
+        form_sender.find('input[name=payment]').maskMoney({
+            prefix: 'Rp ',
+            thousands: '.',
+            decimal: ',',
+            precision: 2,
+            affixesStay: true
+        });
+
+        form_sender.find('input[name=payment]').on('keyup', function () {
+            cost = parseFloat(form_sender.find('input[name=payment]').maskMoney('unmasked')[0]);
+            obs_gt();
+        });
+
+        function obs_gt()
+        {
+            var gt = 0;
+            $.each(p_projection, function (index, value) {
+                gt += (value['c'] * value['q'])
+            });
+            $('span#TotalBayar').text(indonesian(gt).format());
+            payment = gt;
+            payback = cost - payment;
+            form_sender.find('p.payback').text(indonesian(payback).format())
+
+        }
+
+        $("button.my_button").on('click', function () {
             var id    = $(this).siblings('input.p-key').val();
             var value = $(this).text();
             var harga = $(this).val();
