@@ -35,7 +35,8 @@ class Login extends CI_Controller
                 $data_session = array(
                     'nama' => $username,
                     'status' => "login",
-                    'level' => $row->level
+                    'level' => $row->level,
+                    'outlet' => $row->id_outlet
                 );
 
                 $this->session->set_userdata($data_session);
