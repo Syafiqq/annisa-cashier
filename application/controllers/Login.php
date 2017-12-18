@@ -33,6 +33,7 @@ class Login extends CI_Controller
             foreach ($akses as $row)
             {
                 $data_session = array(
+                    'id' => $row->id_user,
                     'nama' => $username,
                     'status' => "login",
                     'level' => $row->level,
