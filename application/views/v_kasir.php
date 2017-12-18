@@ -104,7 +104,7 @@
                             </table>
                         </div>
                         <div class="widget-body form">
-                            <form id="form-sender" action="" method="POST" class="form-horizontal">
+                            <form id="form-sender" action="<?php echo site_url('kasir/transaksi') ?>" method="POST" class="form-horizontal">
                                 <fieldset>
                                     <div class="control-group">
                                         <label class="control-label">Status Pembelian</label>
@@ -423,7 +423,6 @@
             var form = $(this);
 
             var input        = form.serializeObject();
-            input            = removeEmptyValues(input);
             input['payment'] = payment;
             input['cost']    = cost;
             input['payback'] = payback;
@@ -432,13 +431,35 @@
                 goods.push({i: p['i'], c: p['c'], q: p['q']})
             });
             input['goods'] = goods;
+            input          = removeEmptyValues(input);
             $.post(
                 form.attr('action'),
                 input,
                 null,
                 'json')
                 .done(function (response) {
-                    console.log(response);
+                    if (response !== undefined)
+                    {
+                        if (response['m'] !== undefined)
+                        {
+                            alert(response['m']);
+                            for (var i = -1, is = response['m'].length; ++i < is;)
+                            {
+                                console.log(response['m'][i]);
+                            }
+                        }
+                        if (response['s'] !== undefined)
+                        {
+                            switch (parseInt(response['s']))
+                            {
+                                case 1 :
+                                {
+                                    location.reload();
+                                }
+                                    break;
+                            }
+                        }
+                    }
                 })
                 .fail(function () {
                 })
