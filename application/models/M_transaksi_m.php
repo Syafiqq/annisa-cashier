@@ -12,17 +12,17 @@ defined('BASEPATH') OR exit('No direct script access allowed');
  * @property CI_DB_query_builder|CI_DB_pdo_driver db
  *
  */
-class M_transaksi_m extends CI_Model
+class M_transaksi_m extends MY_Model
 {
     public function __construct()
     {
-        parent::__construct();
+        parent::__construct('`transaksi_m`');
         // Your own constructor code
     }
 
     /**
      * @param $data
-     * @return int
+     * @return bool
      */
     public function insert($data)
     {
@@ -35,9 +35,10 @@ class M_transaksi_m extends CI_Model
         $this->db->set('grand_total', $data['grand_total']);
         $this->db->set('id_user', $data['id_user']);
         $this->db->set('id_outlet', $data['id_outlet']);
-        $this->db->insert('`transaksi_m`');
+        $status          = $this->db->insert($this->table);
+        $this->insert_id = $this->db->insert_id("{$this->table}_id_seq");
 
-        return $this->db->insert_id('transaksi_m_id_seq');
+        return $status;
     }
 }
 
