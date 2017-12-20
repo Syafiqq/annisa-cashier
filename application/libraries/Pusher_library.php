@@ -13,7 +13,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
  * @property CI_Config config
  * @property CI_Loader load
  */
-class Pusher_messaging_library
+class Pusher_library
 {
 
     /**
@@ -78,15 +78,16 @@ class Pusher_messaging_library
 
     /**
      * @param string $topic
+     * @param string $event
      * @param string|array $data
      * @return bool
      */
 
-    public function sendToTopic($topic, $data = null)
+    public function publish($topic, $event, $data = null)
     {
         $data = $this->makeItArray($data);
 
-        $this->pusher->trigger($topic, 'my-event', $data);
+        $this->pusher->trigger($topic, $event, $data);
 
         return 200;
     }
