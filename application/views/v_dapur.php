@@ -40,13 +40,12 @@ Website: http://thevectorlab.net/
 <div class="span3">
     <div class="pricing-table green">
         <div class="pricing-head">
-            <h3> Micro </h3>
+            <h3>
+                <strong> meja 1</strong>
+                waktu
+            </h3>
         </div>
         <ul>
-            <li>
-                <strong>Free</strong>
-                setup
-            </li>
             <li>
                 <strong>1</strong>
                 Website
@@ -65,7 +64,7 @@ Website: http://thevectorlab.net/
             </li>
         </ul>
         <div class="price-actions">
-            <a class="btn" href="javascript:">Purchase Now</a>
+            <a class="btn" href="javascript:">Saji</a>
         </div>
     </div>
     <!-- END LOGIN FORM -->
