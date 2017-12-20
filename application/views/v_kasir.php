@@ -18,6 +18,7 @@
     <link href="<?php echo site_url(); ?>assets/assets/fancybox/source/jquery.fancybox.css" rel="stylesheet"/>
     <link rel="stylesheet" type="text/css" href="<?php echo site_url(); ?>assets/assets/uniform/css/uniform.default.css"/>
     <link href="<?php echo site_url(); ?>assets/assets/fullcalendar/fullcalendar/bootstrap-fullcalendar.css" rel="stylesheet"/>
+    <link href="<?php echo site_url(); ?>assets/css/bootstrap-dialog.min.css" rel="stylesheet"/>
     <link href="<?php echo site_url(); ?>assets/assets/jqvmap/jqvmap/jqvmap.css" media="screen" rel="stylesheet" type="text/css"/>
     <style>
         #content1, #content2, #content3 {
@@ -263,6 +264,8 @@
     <script type="text/javascript" src="<?php echo base_url(); ?>assets/assets/uniform/jquery.uniform.min.js"></script>
     <script type="text/javascript" src="<?php echo base_url(); ?>assets/assets/data-tables/jquery.dataTables.js"></script>
     <script type="text/javascript" src="<?php echo base_url(); ?>assets/assets/data-tables/DT_bootstrap.js"></script>
+    <script type="text/javascript" src="<?php echo base_url(); ?>assets/js/bootstrap-notify.min.js"></script>
+    <script type="text/javascript" src="<?php echo base_url(); ?>assets/js/bootstrap-dialog.min.js"></script>
     <script src="<?php echo base_url(); ?>assets/js/scripts.js"></script>
     <script>
         jQuery(document).ready(function () {
@@ -432,6 +435,11 @@
             });
             input['goods'] = goods;
             input          = removeEmptyValues(input);
+            if (payback < 0)
+            {
+                BootstrapDialog.alert('Pembayaran Anda Kurang');
+                return;
+            }
             $.post(
                 form.attr('action'),
                 input,
@@ -440,12 +448,15 @@
                 .done(function (response) {
                     if (response !== undefined)
                     {
-                        if (response['m'] !== undefined)
+                        if (response['n'] !== undefined)
                         {
-                            alert(response['m']);
-                            for (var i = -1, is = response['m'].length; ++i < is;)
+                            for (var i = -1, is = response['n'].length; ++i < is;)
                             {
-                                console.log(response['m'][i]);
+                                $.notify({
+                                    message: response['n'][i]
+                                }, {
+                                    type: 'info'
+                                });
                             }
                         }
                         if (response['s'] !== undefined)
@@ -454,7 +465,24 @@
                             {
                                 case 1 :
                                 {
-                                    location.reload();
+                                    setTimeout(function () {
+                                        location.reload();
+                                    }, 7500);
+
+                                    BootstrapDialog.show({
+                                        title: 'Pengumuman',
+                                        message: 'Nomor Antrian Anda  : ' + response['r']['q'] + "<br>" + 'Kembalian Anda : ' + indonesian(payback).format(),
+                                        closable: false,
+                                        closeByBackdrop: false,
+                                        closeByKeyboard: false,
+                                        buttons: [{
+                                            label: 'Close the dialog',
+                                            action: function (dialogRef) {
+                                                dialogRef.close();
+                                                location.reload();
+                                            }
+                                        }]
+                                    });
                                 }
                                     break;
                             }
