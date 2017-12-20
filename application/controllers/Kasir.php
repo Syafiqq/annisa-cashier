@@ -46,21 +46,35 @@ class Kasir extends CI_Controller
             $data['id_user']     = $this->session->userdata('id');
             $data['id_outlet']   = $this->session->userdata('outlet');
 
-            $id = $this->m_transaksi_m->insert($data);
-            foreach ($this->input->post('goods') as $item)
+            if ($this->m_transaksi_m->insert($data))
             {
-                $data                = [];
-                $data['transaction'] = $id;
-                $data['product']     = $item['i'];
-                $data['quantity']    = $item['q'];
-                $data['total']       = intval($item['q']) * intval($item['c']);
-                $this->m_transaksi_d->insert($data);
+                $id = $this->m_transaksi_m->getInsertId();
+                foreach ($this->input->post('goods') as $item)
+                {
+                    $data                = [];
+                    $data['transaction'] = $id;
+                    $data['product']     = $item['i'];
+                    $data['quantity']    = $item['q'];
+                    $data['total']       = intval($item['q']) * intval($item['c']);
+                    $this->m_transaksi_d->insert($data);
+                }
+                $this->m_transaksi_m->find(function (CI_DB_query_builder $db) use ($id) {
+                    $db->select("COUNT(`id_tm`) AS 'queue'", false);
+                    $db->where('`id_tm` <=', $id);
+                    $db->where('DATE(`tanggal`) = DATE(NOW())', null, false);
+                });
+                $queue = $this->m_transaksi_m->getResult()->result_array()[0]['queue'];
+
+                echo json_encode(['n' => ['Transaksi Berhasil'], 's' => 1, 'r' => ['q' => $queue]]);
             }
-            echo json_encode(['m' => ['Transaksi Berhasil'], 's' => 1]);
+            else
+            {
+                echo json_encode(['n' => ['Transaksi Gagal'], 's' => 0]);
+            }
         }
         else
         {
-            echo json_encode(['m' => ['Akses Ditolak'], 's' => 0]);
+            echo json_encode(['n' => ['Akses Ditolak'], 's' => 0]);
         }
     }
 
