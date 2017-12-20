@@ -4,8 +4,10 @@
  * @property CI_Session session
  * @property M_transaksi m_transaksi
  * @property CI_Input input
+ * @property CI_Loader load
  * @property M_transaksi_m m_transaksi_m
  * @property M_transaksi_d m_transaksi_d
+ * @property Pusher_library pusher_library
  */
 class Kasir extends CI_Controller
 {
@@ -64,6 +66,9 @@ class Kasir extends CI_Controller
                     $db->where('DATE(`tanggal`) = DATE(NOW())', null, false);
                 });
                 $queue = $this->m_transaksi_m->getResult()->result_array()[0]['queue'];
+
+                $this->load->library('pusher_library');
+                $this->pusher_library->publish('queue', 'created', ['q' => $queue]);
 
                 echo json_encode(['n' => ['Transaksi Berhasil'], 's' => 1, 'r' => ['q' => $queue]]);
             }
