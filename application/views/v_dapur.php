@@ -28,11 +28,12 @@ Website: http://thevectorlab.net/
     <link href="<?php echo site_url(); ?>assets/css/bootstrap-dialog.min.css" rel="stylesheet"/>
     <style>
         div.queue-container {
-            margin: 40px
+            margin: 32px 0;
+            padding-left: 32px;
         }
 
         div.request-container {
-            margin: 40px 0;
+            margin: 32px 0;
             background: whitesmoke;
         }
 
@@ -58,9 +59,25 @@ Website: http://thevectorlab.net/
     <?php $this->load->view('headerDapur.php') ?>
 </div>
 <button id="dummy-load" class="button">Load</button>
-<div class="container" style="width: 100%">
-    <div class="row">
-        <div class="span12">
+<div class="container-fluid" style="width: inherit; padding: 0 32px;">
+    <div class="row-fluid">
+        <div class="span3">
+            <div class="request-container">
+                <table id="request-list" class="table">
+                    <thead>
+                    <tr>
+                        <th>Pesanan</th>
+                        <th>Qty</th>
+                        <th>Aksi</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+
+                    </tbody>
+                </table>
+            </div>
+        </div>
+        <div class="span9">
             <div class="queue-container">
                 <div class="row">
                     <div class="overflow_queue">
@@ -109,22 +126,6 @@ Website: http://thevectorlab.net/
                         <?php } ?>
                     </div>
                 </div>
-            </div>
-        </div>
-        <div class="span4">
-            <div class="request-container">
-                <table id="request-list" class="table">
-                    <thead>
-                    <tr>
-                        <th>Pesanan</th>
-                        <th>Qty</th>
-                        <th>Aksi</th>
-                    </tr>
-                    </thead>
-                    <tbody>
-
-                    </tbody>
-                </table>
             </div>
         </div>
     </div>
@@ -204,16 +205,16 @@ Website: http://thevectorlab.net/
                     {
                         s_request_body.append(''
                             //@formatter:off
-                        +'<tr data-id="'+rk+'">'
-                        +    '<td class="p-name">'+ products['p_' + rv['id_produk']]['nama_produk'] +'</td>'
-                        +    '<td class="p-qty">'+ rv['qty'] +'</td>'
-                        +    '<td>'
-                        +        '<button class="btn p-dcs">'
-                        +            '<i class="icon-minus icon-black"></i>'
-                        +        '</button>'
-                        +    '</td>'
-                        +'</tr>'
-                        //@formatter:on
+                            +'<tr data-id="'+rk+'">'
+                            +    '<td class="p-name">'+ products['p_' + rv['id_produk']]['nama_produk'] +'</td>'
+                            +    '<td class="p-qty">'+ rv['qty'] +'</td>'
+                            +    '<td>'
+                            +        '<button class="btn p-dcs">'
+                            +            '<i class="icon-minus icon-black"></i>'
+                            +        '</button>'
+                            +    '</td>'
+                            +'</tr>'
+                            //@formatter:on
                         )
                     }
                 });
