@@ -257,11 +257,11 @@ Website: http://thevectorlab.net/
                             {
                                 for (var i = -1, is = response['n'].length; ++i < is;)
                                 {
-                                    $.notify({
+                                    /*$.notify({
                                         message: response['n'][i]
                                     }, {
                                         type: 'info'
-                                    });
+                                    });*/
                                 }
                             }
                             if ((response['r'] !== undefined) && (response['r']['pesanan'] !== undefined))
