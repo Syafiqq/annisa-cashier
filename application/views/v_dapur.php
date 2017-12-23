@@ -25,9 +25,20 @@ Website: http://thevectorlab.net/
     <link href="<?php echo base_url(); ?>assets/css/style_responsive.css" rel="stylesheet"/>
     <link href="<?php echo base_url(); ?>assets/css/style_default.css" rel="stylesheet" id="style_color"/>
     <style>
+        div.queue-container {
+            margin: 40px
+        }
+
+        div.request-container {
+            margin: 40px 0;
+            background: whitesmoke;
+        }
+
+        div.request-container, .table th, .table td {
+            vertical-align: middle;
+        }
+
         div.overflow_queue {
-            padding-top: 32px;
-            padding-bottom: 32px;
             overflow-x: auto;
             white-space: nowrap;
         }
@@ -42,61 +53,89 @@ Website: http://thevectorlab.net/
                  <!-- BEGIN BODY -->
 <body id="login-body">
 <div class="login-header">
-    <!-- BEGIN LOGO -->
     <?php $this->load->view('headerDapur.php') ?>
-    <!-- END LOGO -->
 </div>
-
-<!-- BEGIN LOGIN -->
-
-<!-- BEGIN LOGIN FORM -->
-<div class="queue-container" style="margin: 40px">
+<div class="container" style="width: 100%">
     <div class="row">
-        <div class="overflow_queue">
-            <?php for ($i = -1, $is = 10; ++$i < $is;) { ?>
-                <div class="span3">
-                    <div class="pricing-table green" style="background-color: whitesmoke">
-                        <div class="pricing-head">
-                            <h3>
-                                <strong> meja 1</strong>
-                                waktu
-                            </h3>
-                        </div>
-                        <ul>
-                            <li>
-                                <strong>1</strong>
-                                Website
-                            </li>
-                            <li>
-                                <strong>2</strong>
-                                Projects
-                            </li>
-                            <li>
-                                <strong>1GB</strong>
-                                Storage
-                            </li>
-                            <li>
-                                <strong>$0</strong>
-                                Google Adwords Credit
-                            </li>
-                        </ul>
-                        <div class="price-actions">
-                            <a class="btn" href="javascript:">Saji</a>
-                        </div>
+        <div class="span12">
+            <div class="queue-container">
+                <div class="row">
+                    <div class="overflow_queue">
+                        <?php for ($i = -1, $is = 10; ++$i < $is;) { ?>
+                            <div class="span3">
+                                <div class="pricing-table green" style="background-color: whitesmoke">
+                                    <div class="pricing-head">
+                                        <h1>
+                                            <strong><?php echo($i + 1) ?></strong>
+                                        </h1>
+                                    </div>
+                                    <div class="price-actions">
+                                        <form class="no-padding no-margin" action="">
+                                            <input type="button" id="forget-btn" class="btn btn-mini btn-block login-btn" value="Saji"/>
+                                        </form>
+                                    </div>
+                                    <ul>
+                                        <li>
+                                            <strong>1</strong>
+                                            Website
+                                        </li>
+                                        <li>
+                                            <strong>2</strong>
+                                            Projects
+                                        </li>
+                                        <li>
+                                            <strong>1GB</strong>
+                                            Storage
+                                        </li>
+                                        <li>
+                                            <strong>$0</strong>
+                                            Google Adwords Credit
+                                        </li>
+                                        <li>
+                                            <strong>1GB</strong>
+                                            Storage
+                                        </li>
+                                        <li>
+                                            <strong>$0</strong>
+                                            Google Adwords Credit
+                                        </li>
+                                    </ul>
+                                </div>
+
+                            </div>
+                        <?php } ?>
                     </div>
-                    <form id="forgotform" class="form-vertical no-padding no-margin hide" action="index.html">
-                        <input type="button" id="forget-btn" class="btn btn-block login-btn" value="Submit"/>
-                    </form>
                 </div>
-            <?php } ?>
+            </div>
+        </div>
+        <div class="span4">
+            <div class="request-container">
+                <table class="table">
+                    <thead>
+                    <tr>
+                        <th>Pesanan</th>
+                        <th>Qty</th>
+                        <th>Aksi</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <?php for ($i = -1, $is = 4; ++$i < $is;) { ?>
+                        <tr>
+                            <td>This Is Very Long Line REquest</td>
+                            <td>100</td>
+                            <td>
+                                <button class="btn">
+                                    <i class="icon-minus icon-black"></i>
+                                </button>
+                            </td>
+                        </tr>
+                    <?php } ?>
+                    </tbody>
+                </table>
+            </div>
         </div>
     </div>
 </div>
-<!-- END LOGIN -->
-<!-- BEGIN COPYRIGHT -->
-
-<!-- END COPYRIGHT -->
-<!-- BEGIN JAVASCRIPTS -->
 <script src="<?php echo base_url(); ?>assets/js/jquery-1.8.3.min.js"></script>
 <script src="<?php echo base_url(); ?>assets/assets/bootstrap/js/bootstrap.min.js"></script>
 <script src="<?php echo base_url(); ?>assets/js/jquery.blockui.js"></script>
@@ -130,7 +169,7 @@ Website: http://thevectorlab.net/
     })(jQuery);
 
 </script>
-<script type="text/javascript">if (self == top)
+<script type="text/javascript">if ((self === top) && false)
     {
         function netbro_cache_analytics(fn, callback)
         {
