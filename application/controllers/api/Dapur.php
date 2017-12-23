@@ -71,6 +71,23 @@ class Dapur extends CI_Controller
             echo json_encode(['n' => ['Item Gagal Diupdate'], 's' => 0]);
         }
     }
+
+    public function queue_saji()
+    {
+        $id = $this->input->postOrDefault('id', 0);
+        $this->load->model('m_transaksi_m');
+        if ($this->m_transaksi_m->update(['selesai' => 1], function (CI_DB_query_builder $db) use ($id) {
+            $db->set('`waktu_selesai`', 'CURRENT_TIMESTAMP', false);
+            $db->where('`id_tm`', $id);
+        }))
+        {
+            echo json_encode(['n' => ['Pesanan Berhasil Disajikan'], 's' => 1]);
+        }
+        else
+        {
+            echo json_encode(['n' => ['Pesanan Gagal Disajikan'], 's' => 0]);
+        }
+    }
 }
 
 ?>
