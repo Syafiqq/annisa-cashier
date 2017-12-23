@@ -196,6 +196,11 @@ Website: http://thevectorlab.net/
             }
 
             $('button#dummy-load').on('click', function () {
+                dummyLoad();
+            });
+
+            function dummyLoad()
+            {
                 $.post(
                     $('meta[name=base-url]').attr('content') + 'api/dapur/load',
                     null,
@@ -226,7 +231,7 @@ Website: http://thevectorlab.net/
                     })
                     .always(function (error) {
                     });
-            })
+            }
 // Enable pusher logging - don't include this in production
             /*Pusher.logToConsole = true;
 
