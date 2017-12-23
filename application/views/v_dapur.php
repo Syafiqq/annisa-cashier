@@ -82,7 +82,7 @@ Website: http://thevectorlab.net/
                 <div class="row">
                     <div class="overflow_queue">
                         <?php for ($i = -1, $is = 10; ++$i < $is;) { ?>
-                            <div class="span3">
+                            <div class="span3 queue-wrapper">
                                 <div class="pricing-table green" style="background-color: whitesmoke">
                                     <div class="pricing-head">
                                         <h1>
@@ -148,6 +148,7 @@ Website: http://thevectorlab.net/
         $(function () {
 
             var s_request = 'table#request-list';
+            var s_ovr_qq  = 'div.overflow_queue';
             var products  = <?php echo json_encode(isset($products) ? $products : [])?>;
             var queues    = {};
             var request   = {};
@@ -220,6 +221,11 @@ Website: http://thevectorlab.net/
                 });
             }
 
+            function viewQueue()
+            {
+                $(s_ovr_qq).find('div.queue-wrapper').remove();
+            }
+
             function update()
             {
                 request = {};
@@ -241,6 +247,7 @@ Website: http://thevectorlab.net/
                     })
                 });
                 viewRequest();
+                viewQueue();
             }
 
             $('button#dummy-load').on('click', function () {
