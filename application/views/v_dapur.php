@@ -137,7 +137,7 @@ Website: http://thevectorlab.net/
                             }
                             if ((response['s'] !== undefined) && (parseInt(response['s']) === 1))
                             {
-                                dummyLoad();
+                                loadQueue();
                             }
                         }
                     })
@@ -182,6 +182,60 @@ Website: http://thevectorlab.net/
                 });
             }
 
+            function sajiQueue(qID)
+            {
+                $.post(
+                    $('meta[name=base-url]').attr('content') + 'api/dapur/queue/saji',
+                    {id: qID},
+                    null,
+                    'json')
+                    .done(function (response) {
+                        if (response !== undefined)
+                        {
+                            if (response['n'] !== undefined)
+                            {
+                                for (var i = -1, is = response['n'].length; ++i < is;)
+                                {
+                                    $.notify({
+                                        message: response['n'][i]
+                                    }, {
+                                        type: 'info'
+                                    });
+                                }
+                            }
+                            if ((response['s'] !== undefined) && (parseInt(response['s']) === 1))
+                            {
+                                loadQueue();
+                            }
+                        }
+                    })
+                    .fail(function (error) {
+                    })
+                    .always(function (error) {
+                    });
+            }
+
+            $(s_ovr_qq).on('click', 'input.queue-saji', function () {
+                var _selectedItem = $(this).data('id');
+                BootstrapDialog.show({
+                    title: 'Pengumuman',
+                    message: 'Apakah anda yakin akan menyajikan makanan ini ?',
+                    buttons: [{
+                        label: 'Ya',
+                        action: function (dialogRef) {
+                            dialogRef.close();
+                            sajiQueue(_selectedItem);
+                        }
+                    }, {
+                        label: 'Tidak',
+                        action: function (dialogRef) {
+                            dialogRef.close();
+                        }
+                    }
+                    ]
+                });
+            });
+
             function viewQueue()
             {
                 $(s_ovr_qq).find('div.queue-wrapper').remove();
@@ -211,7 +265,7 @@ Website: http://thevectorlab.net/
                             +            '<h1><strong>'+(++i+1)+'</strong></h1>'
                             +        '</div>'
                             +        '<div class="price-actions">'
-                            +            '<input type="button" class="queue-approval btn btn-mini btn-block '+_approve_button+'" value="Saji"/>'
+                            +            '<input type="button" data-id="'+qv['id_tm']+'" class="queue-saji btn btn-mini btn-block '+_approve_button+'" value="Saji"/>'
                             +        '</div>'
                             +        '<ul>'
                             +           _r_template
@@ -248,10 +302,10 @@ Website: http://thevectorlab.net/
             }
 
             $('button#dummy-load').on('click', function () {
-                dummyLoad();
+                loadQueue();
             });
 
-            function dummyLoad()
+            function loadQueue()
             {
                 $.post(
                     $('meta[name=base-url]').attr('content') + 'api/dapur/load',
