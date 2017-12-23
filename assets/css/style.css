@@ -2980,12 +2980,12 @@ div.tagsinput .not_valid {
     margin: 0;
 }
 
-.green .pricing-head h3 {
+.green .pricing-head h1 {
     background: #93bf40;
     border-bottom: 1px solid #598011;
     color: #fff;
-    font-size: 18px;
-    font-weight: 300;
+    font-size: 26px;
+    font-weight: bolder;
     margin: 0;
 }
 
