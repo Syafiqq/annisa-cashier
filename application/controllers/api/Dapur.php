@@ -35,6 +35,7 @@ class Dapur extends CI_Controller
         $this->m_transaksi_m->find(function (CI_DB_query_builder $db) {
             $db->select();
             $db->where('DATE(`tanggal`) = DATE(NOW())', null, false);
+            $db->where('`selesai`', 0);
             $db->order_by('`tanggal`', 'ASC');
         });
         $queues = [];
