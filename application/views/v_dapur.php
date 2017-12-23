@@ -37,6 +37,10 @@ Website: http://thevectorlab.net/
             background: whitesmoke;
         }
 
+        div.queue-wrapper {
+            vertical-align: top;
+        }
+
         div.request-container, .table th, .table td {
             vertical-align: middle;
         }
@@ -81,49 +85,6 @@ Website: http://thevectorlab.net/
             <div class="queue-container">
                 <div class="row">
                     <div class="overflow_queue">
-                        <?php for ($i = -1, $is = 10; ++$i < $is;) { ?>
-                            <div class="span3 queue-wrapper">
-                                <div class="pricing-table green" style="background-color: whitesmoke">
-                                    <div class="pricing-head">
-                                        <h1>
-                                            <strong><?php echo($i + 1) ?></strong>
-                                        </h1>
-                                    </div>
-                                    <div class="price-actions">
-                                        <form class="no-padding no-margin" action="">
-                                            <input type="button" id="forget-btn" class="btn btn-mini btn-block login-btn" value="Saji"/>
-                                        </form>
-                                    </div>
-                                    <ul>
-                                        <li>
-                                            <strong>1</strong>
-                                            Website
-                                        </li>
-                                        <li>
-                                            <strong>2</strong>
-                                            Projects
-                                        </li>
-                                        <li>
-                                            <strong>1GB</strong>
-                                            Storage
-                                        </li>
-                                        <li>
-                                            <strong>$0</strong>
-                                            Google Adwords Credit
-                                        </li>
-                                        <li>
-                                            <strong>1GB</strong>
-                                            Storage
-                                        </li>
-                                        <li>
-                                            <strong>$0</strong>
-                                            Google Adwords Credit
-                                        </li>
-                                    </ul>
-                                </div>
-
-                            </div>
-                        <?php } ?>
                     </div>
                 </div>
             </div>
@@ -224,6 +185,42 @@ Website: http://thevectorlab.net/
             function viewQueue()
             {
                 $(s_ovr_qq).find('div.queue-wrapper').remove();
+                var i = -1;
+                $.each(queues, function (qk, qv) {
+                    var _r_template     = '';
+                    var _approve_button = 'approve-c-btn';
+                    $.each(qv['pesanan'], function (rk, rv) {
+                        _r_template += ''
+                            //@formatter:off
+                            + '<li>'
+                            +   '<strong>[' + rv['diproses'] + '] ' + rv['jumlah'] + '</strong> ' + products['p_' + rv['id_produk']]['nama_produk']
+                            + '</li>';
+                            //@formatter:on
+                        if ((_approve_button !== 'approve-n-btn') && (rv['diproses'] < rv['jumlah']))
+                        {
+                            _approve_button = 'approve-n-btn';
+                        }
+                    });
+
+                    $(s_ovr_qq)
+                        .append(''
+                            //@formatter:off
+                            +'<div class="span4 queue-wrapper">'
+                            +    '<div class="pricing-table green" style="background-color: whitesmoke">'
+                            +        '<div class="pricing-head">'
+                            +            '<h1><strong>'+(++i+1)+'</strong></h1>'
+                            +        '</div>'
+                            +        '<div class="price-actions">'
+                            +            '<input type="button" class="queue-approval btn btn-mini btn-block '+_approve_button+'" value="Saji"/>'
+                            +        '</div>'
+                            +        '<ul>'
+                            +           _r_template
+                            +        '</ul>'
+                            +    '</div>'
+                            +'</div>'
+                            //@formatter:on
+                        );
+                });
             }
 
             function update()
