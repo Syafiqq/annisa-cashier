@@ -50,6 +50,11 @@ class MY_Model extends CI_Model
     protected $table;
 
     /**
+     * @var array
+     */
+    private $last_data;
+
+    /**
      * MY_Model constructor.
      */
     public function __construct($table = null)
@@ -64,20 +69,6 @@ class MY_Model extends CI_Model
         $this->table     = $table;
 
         $this->_hook = new stdClass();
-    }
-
-    /**
-     * @param \Closure $function
-     * @return bool
-     */
-    public function find($function)
-    {
-        $function($this->db);
-        $this->db->from($this->table);
-        $this->result = $this->db->get();
-        $this->query  = $this->db->last_query();
-
-        return true;
     }
 
     /**
@@ -227,6 +218,59 @@ class MY_Model extends CI_Model
     public function getInsertId()
     {
         return $this->insert_id;
+    }
+
+    /**
+     * @return array
+     */
+    public function getLastData()
+    {
+        return $this->last_data;
+    }
+
+
+    /**
+     * @param \Closure $function
+     * @return bool
+     */
+    public function find($function)
+    {
+        $function($this->db);
+        $this->db->from($this->table);
+        $this->result = $this->db->get();
+        $this->query  = $this->db->last_query();
+
+        return true;
+    }
+
+    /**
+     * @param array $data
+     * @return bool
+     */
+    public function insert($data)
+    {
+        $status          = $this->db->insert($this->table);
+        $this->query     = $this->db->last_query();
+        $this->insert_id = $this->db->insert_id("{$this->table}_id_seq");
+        $this->last_data = $data;
+
+        return $status;
+    }
+
+    /**
+     * @param array $data
+     * @param Closure $constraint
+     * @return bool
+     */
+    public function update($data, \Closure $constraint)
+    {
+        $this->db->set($data);
+        $constraint($this->db);
+        $status          = $this->db->update($this->table);
+        $this->query     = $this->db->last_query();
+        $this->last_data = $data;
+
+        return $status;
     }
 }
 
