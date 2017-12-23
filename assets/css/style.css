@@ -3038,8 +3038,8 @@ div.tagsinput .not_valid {
 .pricing-table ul li {
     border-bottom: 1px dotted #CCCCCC;
     margin: 0 2em;
-    padding: 1em 0;
-    text-align: center;
+    padding: 0.5em 0;
+    text-align: left;
 }
 
 .pricing-table ul li i {
