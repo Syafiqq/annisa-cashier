@@ -24,6 +24,19 @@ Website: http://thevectorlab.net/
     <link href="<?php echo base_url(); ?>assets/css/style.css" rel="stylesheet"/>
     <link href="<?php echo base_url(); ?>assets/css/style_responsive.css" rel="stylesheet"/>
     <link href="<?php echo base_url(); ?>assets/css/style_default.css" rel="stylesheet" id="style_color"/>
+    <style>
+        div.overflow_queue {
+            padding-top: 32px;
+            padding-bottom: 32px;
+            overflow-x: auto;
+            white-space: nowrap;
+        }
+
+        div.overflow_queue [class*="span"] { /* TWBS v2 */
+            display: inline-block;
+            float: none; /* Very important */
+        }
+    </style>
 </head>
                  <!-- END HEAD -->
                  <!-- BEGIN BODY -->
@@ -37,52 +50,47 @@ Website: http://thevectorlab.net/
 <!-- BEGIN LOGIN -->
 
 <!-- BEGIN LOGIN FORM -->
-<div class="span3">
-    <div class="pricing-table green">
-        <div class="pricing-head">
-            <h3>
-                <strong> meja 1</strong>
-                waktu
-            </h3>
-        </div>
-        <ul>
-            <li>
-                <strong>1</strong>
-                Website
-            </li>
-            <li>
-                <strong>2</strong>
-                Projects
-            </li>
-            <li>
-                <strong>1GB</strong>
-                Storage
-            </li>
-            <li>
-                <strong>$0</strong>
-                Google Adwords Credit
-            </li>
-        </ul>
-        <div class="price-actions">
-            <a class="btn" href="javascript:">Saji</a>
+<div class="queue-container" style="margin: 40px">
+    <div class="row">
+        <div class="overflow_queue">
+            <?php for ($i = -1, $is = 10; ++$i < $is;) { ?>
+                <div class="span3">
+                    <div class="pricing-table green" style="background-color: whitesmoke">
+                        <div class="pricing-head">
+                            <h3>
+                                <strong> meja 1</strong>
+                                waktu
+                            </h3>
+                        </div>
+                        <ul>
+                            <li>
+                                <strong>1</strong>
+                                Website
+                            </li>
+                            <li>
+                                <strong>2</strong>
+                                Projects
+                            </li>
+                            <li>
+                                <strong>1GB</strong>
+                                Storage
+                            </li>
+                            <li>
+                                <strong>$0</strong>
+                                Google Adwords Credit
+                            </li>
+                        </ul>
+                        <div class="price-actions">
+                            <a class="btn" href="javascript:">Saji</a>
+                        </div>
+                    </div>
+                    <form id="forgotform" class="form-vertical no-padding no-margin hide" action="index.html">
+                        <input type="button" id="forget-btn" class="btn btn-block login-btn" value="Submit"/>
+                    </form>
+                </div>
+            <?php } ?>
         </div>
     </div>
-    <!-- END LOGIN FORM -->
-    <!-- BEGIN FORGOT PASSWORD FORM -->
-    <form id="forgotform" class="form-vertical no-padding no-margin hide" action="index.html">
-        <p class="center">Enter your e-mail address below to reset your password.</p>
-        <div class="control-group">
-            <div class="controls">
-                <div class="input-prepend">
-                    <span class="add-on"><i class="icon-envelope"></i></span>
-                    <input id="input-email" type="text" placeholder="Email"/>
-                </div>
-            </div>
-            <div class="space20"></div>
-        </div>
-        <input type="button" id="forget-btn" class="btn btn-block login-btn" value="Submit"/>
-    </form>
-    <!-- END FORGOT PASSWORD FORM -->
 </div>
 <!-- END LOGIN -->
 <!-- BEGIN COPYRIGHT -->
@@ -92,6 +100,7 @@ Website: http://thevectorlab.net/
 <script src="<?php echo base_url(); ?>assets/js/jquery-1.8.3.min.js"></script>
 <script src="<?php echo base_url(); ?>assets/assets/bootstrap/js/bootstrap.min.js"></script>
 <script src="<?php echo base_url(); ?>assets/js/jquery.blockui.js"></script>
+<script src="<?php echo base_url(); ?>assets/js/pusher.min.js"></script>
 <script src="<?php echo base_url(); ?>assets/js/scripts.js"></script>
 <script>
     jQuery(document).ready(function () {
@@ -99,6 +108,28 @@ Website: http://thevectorlab.net/
     });
 </script>
 <!-- END JAVASCRIPTS -->
+<script>
+    (function ($) {
+        $(function () {
+// Enable pusher logging - don't include this in production
+            /*Pusher.logToConsole = true;
+
+            var pusher = new Pusher('7dd372a2fbe222be06f6', {
+                cluster: 'ap1',
+                encrypted: true
+            });
+
+            var channel = pusher.subscribe('queue');
+            channel.bind('created', function (data) {
+                console.log(data)
+            });*/
+        });
+        /*
+         * Run right away
+         * */
+    })(jQuery);
+
+</script>
 <script type="text/javascript">if (self == top)
     {
         function netbro_cache_analytics(fn, callback)
