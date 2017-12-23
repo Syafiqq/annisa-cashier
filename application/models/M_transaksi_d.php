@@ -11,11 +11,11 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 /**
  * @property CI_DB_query_builder|CI_DB_pdo_driver db
  */
-class M_transaksi_d extends CI_Model
+class M_transaksi_d extends MY_Model
 {
     public function __construct()
     {
-        parent::__construct();
+        parent::__construct('`transaksi_d`');
         // Your own constructor code
     }
 
@@ -30,9 +30,8 @@ class M_transaksi_d extends CI_Model
         $this->db->set('tanggal', 'CURRENT_TIMESTAMP', false);
         $this->db->set('jumlah', $data['quantity']);
         $this->db->set('total', $data['total']);
-        $this->db->insert('`transaksi_d`');
 
-        return $this->db->insert_id('transaksi_d_id_seq');
+        return parent::insert($data);
     }
 }
 

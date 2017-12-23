@@ -21,7 +21,7 @@ class M_transaksi_m extends MY_Model
     }
 
     /**
-     * @param $data
+     * @param array $data
      * @return bool
      */
     public function insert($data)
@@ -35,10 +35,8 @@ class M_transaksi_m extends MY_Model
         $this->db->set('grand_total', $data['grand_total']);
         $this->db->set('id_user', $data['id_user']);
         $this->db->set('id_outlet', $data['id_outlet']);
-        $status          = $this->db->insert($this->table);
-        $this->insert_id = $this->db->insert_id("{$this->table}_id_seq");
 
-        return $status;
+        return parent::insert($data);
     }
 }
 
