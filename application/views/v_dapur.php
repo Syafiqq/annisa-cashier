@@ -200,8 +200,10 @@ Website: http://thevectorlab.net/
                 var s_request_body = $(s_request).find('tbody');
                 s_request_body.find('tr').remove();
                 $.each(request, function (rk, rv) {
-                    s_request_body.append(''
-                        //@formatter:off
+                    if (parseInt(rv['qty']) > 0)
+                    {
+                        s_request_body.append(''
+                            //@formatter:off
                         +'<tr data-id="'+rk+'">'
                         +    '<td class="p-name">'+ products['p_' + rv['id_produk']]['nama_produk'] +'</td>'
                         +    '<td class="p-qty">'+ rv['qty'] +'</td>'
@@ -212,7 +214,8 @@ Website: http://thevectorlab.net/
                         +    '</td>'
                         +'</tr>'
                         //@formatter:on
-                    )
+                        )
+                    }
                 });
             }
 
