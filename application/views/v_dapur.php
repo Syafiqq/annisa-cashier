@@ -151,6 +151,17 @@ Website: http://thevectorlab.net/
             var queues    = {};
             var request   = {};
 
+            $(s_request).on('click', 'button.p-dcs', function () {
+                var _selectedItem = $(this).parents('tr').data('id');
+                $.each(queues, function (qk, qv) {
+                    if ((qv['pesanan'][_selectedItem] !== undefined) && (qv['pesanan'][_selectedItem]['diproses'] < qv['pesanan'][_selectedItem]['jumlah']))
+                    {
+                        console.log(qk);
+                        return false;
+                    }
+                });
+            });
+
             function viewRequest()
             {
                 var s_request_body = $(s_request).find('tbody');
@@ -232,6 +243,7 @@ Website: http://thevectorlab.net/
                     .always(function (error) {
                     });
             }
+
 // Enable pusher logging - don't include this in production
             /*Pusher.logToConsole = true;
 
