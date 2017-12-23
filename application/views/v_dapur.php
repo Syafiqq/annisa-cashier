@@ -151,12 +151,45 @@ Website: http://thevectorlab.net/
             var queues    = {};
             var request   = {};
 
+            function updateSelectedItem(iID)
+            {
+                $.post(
+                    $('meta[name=base-url]').attr('content') + 'api/dapur/item/update',
+                    {id: iID},
+                    null,
+                    'json')
+                    .done(function (response) {
+                        if (response !== undefined)
+                        {
+                            if (response['n'] !== undefined)
+                            {
+                                for (var i = -1, is = response['n'].length; ++i < is;)
+                                {
+                                    $.notify({
+                                        message: response['n'][i]
+                                    }, {
+                                        type: 'info'
+                                    });
+                                }
+                            }
+                            if ((response['s'] !== undefined) && (parseInt(response['s']) === 1))
+                            {
+                                dummyLoad();
+                            }
+                        }
+                    })
+                    .fail(function (error) {
+                    })
+                    .always(function (error) {
+                    });
+            }
+
             $(s_request).on('click', 'button.p-dcs', function () {
                 var _selectedItem = $(this).parents('tr').data('id');
-                $.each(queues, function (qk, qv) {
+                $.each(queues, function (qId, qv) {
                     if ((qv['pesanan'][_selectedItem] !== undefined) && (qv['pesanan'][_selectedItem]['diproses'] < qv['pesanan'][_selectedItem]['jumlah']))
                     {
-                        console.log(qk);
+                        updateSelectedItem(qv['pesanan'][_selectedItem]['id_td']);
                         return false;
                     }
                 });
