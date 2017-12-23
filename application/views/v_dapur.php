@@ -161,6 +161,28 @@ Website: http://thevectorlab.net/
             var queues    = {};
             var request   = {};
 
+            function update()
+            {
+                request = {};
+                $.each(queues, function (qk, qv) {
+                    $.each(qv['pesanan'], function (pk, pv) {
+                        var ___req = request['r_' + pv['id_produk']];
+                        if (___req === undefined)
+                        {
+                            ___req = {
+                                id_produk: pv['id_produk'],
+                                qty: (pv['jumlah'] - pv['diproses'])
+                            }
+                        }
+                        else
+                        {
+                            ___req['qty'] += (pv['jumlah'] - pv['diproses']);
+                        }
+                        request['r_' + pv['id_produk']] = ___req;
+                    })
+                });
+            }
+
             $('button#dummy-load').on('click', function () {
                 $.post(
                     $('meta[name=base-url]').attr('content') + 'api/dapur/load',
@@ -184,6 +206,7 @@ Website: http://thevectorlab.net/
                             if ((response['r'] !== undefined) && (response['r']['pesanan'] !== undefined))
                             {
                                 queues = response['r']['pesanan'];
+                                update();
                             }
                         }
                     })
