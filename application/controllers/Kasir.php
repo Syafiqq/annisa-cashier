@@ -66,6 +66,9 @@ class Kasir extends CI_Controller
                     $db->where('DATE(`tanggal`) = DATE(NOW())', null, false);
                 });
                 $queue = $this->m_transaksi_m->getResult()->result_array()[0]['queue'];
+                $this->m_transaksi_m->update(['antrian' => $queue], function (CI_DB_query_builder $db) use ($id) {
+                    $db->where('`id_tm` <=', $id);
+                });
 
                 $this->load->library('pusher_library');
                 $this->pusher_library->publish('queue', 'created', ['q' => $queue]);
