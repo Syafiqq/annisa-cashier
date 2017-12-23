@@ -1,5 +1,8 @@
 <?php
 
+/**
+ * @property M_produk m_produk
+ * */
 class Dapur extends CI_Controller
 {
 
@@ -14,8 +17,18 @@ class Dapur extends CI_Controller
 
     function index()
     {
+        $this->load->model('m_produk');
+        $this->m_produk->find(function (CI_DB_query_builder $db) {
+            $db->select();
+        });
 
-        $this->load->view('v_dapur');
+        $products = [];
+        foreach ($this->m_produk->getResult()->result_array() as $product)
+        {
+            $products["p_{$product['id_produk']}"] = $product;
+        }
+
+        $this->load->view('v_dapur', compact('products'));
     }
 
     function transaksi()
