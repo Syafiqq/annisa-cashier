@@ -13,7 +13,7 @@
  * @property CI_Loader load
  * @property M_transaksi_m m_transaksi_m
  * @property M_transaksi_d m_transaksi_d
- * @property CI_Input input
+ * @property MY_Input input
  */
 class Dapur extends CI_Controller
 {
@@ -54,7 +54,22 @@ class Dapur extends CI_Controller
         echo json_encode(['n' => ['Antrian Ditambahkan'], 'r' => ['pesanan' => $queues], 's' => 1]);
     }
 
-
+    public function item_update()
+    {
+        $id = $this->input->postOrDefault('id', 0);
+        $this->load->model('m_transaksi_d');
+        if ($this->m_transaksi_d->update([], function (CI_DB_query_builder $db) use ($id) {
+            $db->set('`diproses`', '`diproses` + 1', false);
+            $db->where('`id_td`', $id);
+        }))
+        {
+            echo json_encode(['n' => ['Item Berhasil Diupdate'], 's' => 1]);
+        }
+        else
+        {
+            echo json_encode(['n' => ['Item Gagal Diupdate'], 's' => 0]);
+        }
+    }
 }
 
 ?>
