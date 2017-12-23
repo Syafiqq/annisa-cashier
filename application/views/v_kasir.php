@@ -476,7 +476,7 @@
                                         closeByBackdrop: false,
                                         closeByKeyboard: false,
                                         buttons: [{
-                                            label: 'Close the dialog',
+                                            label: 'Close',
                                             action: function (dialogRef) {
                                                 dialogRef.close();
                                                 location.reload();
