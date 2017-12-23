@@ -3,7 +3,7 @@
 /**
  * @property CI_Session session
  * @property M_transaksi m_transaksi
- * @property CI_Input input
+ * @property MY_Input input
  * @property CI_Loader load
  * @property M_transaksi_m m_transaksi_m
  * @property M_transaksi_d m_transaksi_d
@@ -71,7 +71,7 @@ class Kasir extends CI_Controller
                 });
 
                 $this->load->library('pusher_library');
-                $this->pusher_library->publish('queue', 'created', ['q' => $queue]);
+                $this->pusher_library->publish('queue', 'created', []);
 
                 echo json_encode(['n' => ['Transaksi Berhasil'], 's' => 1, 'r' => ['q' => $queue]]);
             }
