@@ -51,5 +51,6 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 */
 $route['default_controller']    = 'Login';
 $route['api/dapur/item/update'] = 'api/dapur/item_update';
+$route['api/dapur/queue/saji']  = 'api/dapur/queue_saji';
 $route['404_override']          = '';
 $route['translate_uri_dashes']  = false;
