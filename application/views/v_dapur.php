@@ -122,17 +122,7 @@ Website: http://thevectorlab.net/
                     </tr>
                     </thead>
                     <tbody>
-                    <?php for ($i = -1, $is = 4; ++$i < $is;) { ?>
-                        <tr>
-                            <td>This Is Very Long Line REquest</td>
-                            <td>100</td>
-                            <td>
-                                <button class="btn">
-                                    <i class="icon-minus icon-black"></i>
-                                </button>
-                            </td>
-                        </tr>
-                    <?php } ?>
+
                     </tbody>
                 </table>
             </div>
@@ -161,6 +151,27 @@ Website: http://thevectorlab.net/
             var queues    = {};
             var request   = {};
 
+            function viewRequest()
+            {
+                var s_request_body = $(s_request).find('tbody');
+                s_request_body.find('tr').remove();
+                $.each(request, function (rk, rv) {
+                    s_request_body.append(''
+                        //@formatter:off
+                        +'<tr data-id="'+rk+'">'
+                        +    '<td class="p-name">'+ products['p_' + rv['id_produk']]['nama_produk'] +'</td>'
+                        +    '<td class="p-qty">'+ rv['qty'] +'</td>'
+                        +    '<td>'
+                        +        '<button class="btn p-dcs">'
+                        +            '<i class="icon-minus icon-black"></i>'
+                        +        '</button>'
+                        +    '</td>'
+                        +'</tr>'
+                        //@formatter:on
+                    )
+                });
+            }
+
             function update()
             {
                 request = {};
@@ -181,6 +192,7 @@ Website: http://thevectorlab.net/
                         request['r_' + pv['id_produk']] = ___req;
                     })
                 });
+                viewRequest();
             }
 
             $('button#dummy-load').on('click', function () {
