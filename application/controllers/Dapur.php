@@ -64,12 +64,19 @@ class Dapur extends CI_Controller
         $this->load->view('v_dapurStok', compact('materials'));
     }
 
-    public function stok_masuk()
+    public function stok_masuk($id)
     {
-        $this->load->view('v_dapurSM');
+        $this->load->model('m_bahan');
+        $this->m_bahan->find(function (CI_DB_query_builder $db) use ($id) {
+            $db->select();
+            $db->where('`id_bahan`', $id);
+        });
+        $material = $this->m_bahan->getResult()->row_array();
+
+        $this->load->view('v_dapurSM', compact('material'));
     }
 
-    public function stok_keluar()
+    public function stok_keluar($id)
     {
         $this->load->view('v_dapurSK');
     }
