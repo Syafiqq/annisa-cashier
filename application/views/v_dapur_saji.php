@@ -107,141 +107,16 @@ Website: http://thevectorlab.net/
     (function ($) {
         $(function () {
 
-            var s_request = 'table#request-list';
-            var s_ovr_qq  = 'div.overflow_queue';
-            var products  = <?php echo json_encode(isset($products) ? $products : [])?>;
-            var queues    = {};
-            var request   = {};
-
-            function updateSelectedItem(iID)
-            {
-                $.post(
-                    $('meta[name=base-url]').attr('content') + 'api/dapur/item/update',
-                    {id: iID},
-                    null,
-                    'json')
-                    .done(function (response) {
-                        if (response !== undefined)
-                        {
-                            if (response['n'] !== undefined)
-                            {
-                                for (var i = -1, is = response['n'].length; ++i < is;)
-                                {
-                                    $.notify({
-                                        message: response['n'][i]
-                                    }, {
-                                        type: 'info'
-                                    });
-                                }
-                            }
-                            if ((response['s'] !== undefined) && (parseInt(response['s']) === 1))
-                            {
-                                loadQueue();
-                            }
-                        }
-                    })
-                    .fail(function (error) {
-                    })
-                    .always(function (error) {
-                    });
-            }
-
-            $(s_request).on('click', 'button.p-dcs', function () {
-                var _selectedItem = $(this).parents('tr').data('id');
-                $.each(queues, function (qId, qv) {
-                    if ((qv['pesanan'][_selectedItem] !== undefined) && (qv['pesanan'][_selectedItem]['diproses'] < qv['pesanan'][_selectedItem]['jumlah']))
-                    {
-                        updateSelectedItem(qv['pesanan'][_selectedItem]['id_td']);
-                        return false;
-                    }
-                });
-            });
-
-            function viewRequest()
-            {
-                var s_request_body = $(s_request).find('tbody');
-                s_request_body.find('tr').remove();
-                $.each(request, function (rk, rv) {
-                    if (parseInt(rv['qty']) > 0)
-                    {
-                        s_request_body.append(''
-                            //@formatter:off
-                            +'<tr data-id="'+rk+'">'
-                            +    '<td class="p-name">'+ products['p_' + rv['id_produk']]['nama_produk'] +'</td>'
-                            +    '<td class="p-qty">'+ rv['qty'] +'</td>'
-                            +    '<td>'
-                            +        '<button class="btn p-dcs">'
-                            +            '<i class="icon-minus icon-black"></i>'
-                            +        '</button>'
-                            +    '</td>'
-                            +'</tr>'
-                            //@formatter:on
-                        )
-                    }
-                });
-            }
-
-            function sajiQueue(qID)
-            {
-                $.post(
-                    $('meta[name=base-url]').attr('content') + 'api/dapur/queue/saji',
-                    {id: qID},
-                    null,
-                    'json')
-                    .done(function (response) {
-                        if (response !== undefined)
-                        {
-                            if (response['n'] !== undefined)
-                            {
-                                for (var i = -1, is = response['n'].length; ++i < is;)
-                                {
-                                    $.notify({
-                                        message: response['n'][i]
-                                    }, {
-                                        type: 'info'
-                                    });
-                                }
-                            }
-                            if ((response['s'] !== undefined) && (parseInt(response['s']) === 1))
-                            {
-                                loadQueue();
-                            }
-                        }
-                    })
-                    .fail(function (error) {
-                    })
-                    .always(function (error) {
-                    });
-            }
-
-            $(s_ovr_qq).on('click', 'input.queue-saji', function () {
-                var _selectedItem = $(this).data('id');
-                BootstrapDialog.show({
-                    title: 'Pengumuman',
-                    message: 'Apakah anda yakin akan menyajikan makanan ini ?',
-                    buttons: [{
-                        label: 'Ya',
-                        action: function (dialogRef) {
-                            dialogRef.close();
-                            sajiQueue(_selectedItem);
-                        }
-                    }, {
-                        label: 'Tidak',
-                        action: function (dialogRef) {
-                            dialogRef.close();
-                        }
-                    }
-                    ]
-                });
-            });
+            var s_ovr_qq = 'div.overflow_queue';
+            var products = <?php echo json_encode(isset($products) ? $products : [])?>;
+            var queues   = {};
 
             function viewQueue()
             {
                 $(s_ovr_qq).find('div.queue-wrapper').remove();
                 var i = -1;
                 $.each(queues, function (qk, qv) {
-                    var _r_template     = '';
-                    var _approve_button = 'approve-c-btn';
+                    var _r_template = '';
                     $.each(qv['pesanan'], function (rk, rv) {
                         _r_template += ''
                             //@formatter:off
@@ -249,10 +124,6 @@ Website: http://thevectorlab.net/
                             +   '<strong>[' + rv['diproses'] + '] ' + rv['jumlah'] + '</strong> ' + products['p_' + rv['id_produk']]['nama_produk']
                             + '</li>';
                             //@formatter:on
-                        if ((_approve_button !== 'approve-n-btn') && (rv['diproses'] < rv['jumlah']))
-                        {
-                            _approve_button = 'approve-n-btn';
-                        }
                     });
 
                     $(s_ovr_qq)
@@ -263,9 +134,6 @@ Website: http://thevectorlab.net/
                             +        '<div class="pricing-head">'
                             +            '<h1><strong>'+(++i+1)+'</strong></h1>'
                             +        '</div>'
-                            +        '<div class="price-actions">'
-                            +            '<input type="button" data-id="'+qv['id_tm']+'" class="queue-saji btn btn-mini btn-block '+_approve_button+'" value="Saji"/>'
-                            +        '</div>'
                             +        '<ul>'
                             +           _r_template
                             +        '</ul>'
@@ -274,30 +142,6 @@ Website: http://thevectorlab.net/
                             //@formatter:on
                         );
                 });
-            }
-
-            function update()
-            {
-                request = {};
-                $.each(queues, function (qk, qv) {
-                    $.each(qv['pesanan'], function (pk, pv) {
-                        var ___req = request['r_' + pv['id_produk']];
-                        if (___req === undefined)
-                        {
-                            ___req = {
-                                id_produk: pv['id_produk'],
-                                qty: (pv['jumlah'] - pv['diproses'])
-                            }
-                        }
-                        else
-                        {
-                            ___req['qty'] += (pv['jumlah'] - pv['diproses']);
-                        }
-                        request['r_' + pv['id_produk']] = ___req;
-                    })
-                });
-                viewRequest();
-                viewQueue();
             }
 
             function loadQueue()
@@ -313,7 +157,7 @@ Website: http://thevectorlab.net/
                             if ((response['r'] !== undefined) && (response['r']['pesanan'] !== undefined))
                             {
                                 queues = response['r']['pesanan'];
-                                update();
+                                viewQueue();
                             }
                         }
                     })
