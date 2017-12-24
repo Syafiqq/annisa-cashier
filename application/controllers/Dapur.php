@@ -49,7 +49,7 @@ class Dapur extends CI_Controller
 
     public function stok()
     {
-
+        $this->load->view('v_dapurStok');
     }
 
     public function logout()
