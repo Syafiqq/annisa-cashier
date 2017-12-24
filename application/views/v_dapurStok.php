@@ -24,7 +24,8 @@ Website: http://thevectorlab.net/
     <link href="<?php echo base_url(); ?>assets/assets/font-awesome/css/font-awesome.css" rel="stylesheet"/>
     <link href="<?php echo base_url(); ?>assets/css/style.css" rel="stylesheet"/>
     <link href="<?php echo base_url(); ?>assets/css/style_responsive.css" rel="stylesheet"/>
-    <link href="<?php echo base_url(); ?>assets/css/style_default.css" rel="stylesheet" id="style_color"/>
+    <link href="<?php echo base_url(); ?>assets/css/style_responsive.css" rel="stylesheet"/>
+    <link href="<?php echo base_url(); ?>assets/css/datatables.min.css" rel="stylesheet" id="style_color"/>
 </head>
 <body id="login-body">
 <div class="login-header">
@@ -39,12 +40,6 @@ Website: http://thevectorlab.net/
                     Arsip Stok
                 </h4>
             </div>
-            <form class="hidden-phone" action="">
-                <div class="search-input-area">
-                    <input id=" " class="search-query" type="text" placeholder="Search">
-                    <i class="icon-search"></i>
-                </div>
-            </form>
             <div class="widget-body">
                 <div class="space15"></div>
                 <table class="table table-striped table-hover table-bordered" id="stocks">
@@ -68,6 +63,7 @@ Website: http://thevectorlab.net/
 <script src="<?php echo base_url(); ?>assets/js/jquery-1.8.3.min.js"></script>
 <script src="<?php echo base_url(); ?>assets/assets/bootstrap/js/bootstrap.min.js"></script>
 <script src="<?php echo base_url(); ?>assets/js/jquery.blockui.js"></script>
+<script src="<?php echo base_url(); ?>assets/js/datatables.min.js"></script>
 <script src="<?php echo base_url(); ?>assets/js/scripts.js"></script>
 <script>
     jQuery(document).ready(function () {
@@ -81,9 +77,11 @@ Website: http://thevectorlab.net/
             var s_stocks  = 'table#stocks';
             var materials = <?php echo json_encode(isset($materials) ? $materials : [])?>;
             var stocks    = {};
+            var dt_stocks = $(s_stocks).DataTable();
 
             function update()
             {
+                return;
                 var s_stocks_body = $(s_stocks).find('tbody');
                 s_stocks_body.find('tr').remove();
                 $.each(stocks, function (sk, sv) {
