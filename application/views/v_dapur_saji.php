@@ -36,6 +36,15 @@ Website: http://thevectorlab.net/
             vertical-align: top;
         }
 
+        .dl-horizontal dt {
+            margin-left: 32px;
+            width: inherit;
+        }
+
+        .dl-horizontal dd {
+            margin-left: 100px;
+        }
+
         div.overflow_queue {
             overflow-x: auto;
             white-space: nowrap;
@@ -70,6 +79,8 @@ Website: http://thevectorlab.net/
 <script src="<?php echo base_url(); ?>assets/js/jquery.blockui.js"></script>
 <script src="<?php echo base_url(); ?>assets/js/pusher.min.js"></script>
 <script src="<?php echo base_url(); ?>assets/js/scripts.js"></script>
+<script type="text/javascript" src="<?php echo base_url(); ?>assets/js/moment-with-locales.min.js"></script>
+<script type="text/javascript" src="<?php echo base_url(); ?>assets/js/moment-timezone-with-data.min.js"></script>
 <script type="text/javascript" src="<?php echo base_url(); ?>assets/js/bootstrap-notify.min.js"></script>
 <script type="text/javascript" src="<?php echo base_url(); ?>assets/js/bootstrap-dialog.min.js"></script>
 <script>
@@ -107,7 +118,21 @@ Website: http://thevectorlab.net/
                             +'<div class="span3 queue-wrapper">'
                             +    '<div class="pricing-table green" style="background-color: whitesmoke">'
                             +        '<div class="pricing-head">'
-                            +            '<h1><strong>'+(++i+1)+'</strong></h1>'
+                            +            '<h1><strong>'+(++i+1)+' [#' +qv['antrian'] + '] </strong></h1>'
+                            +        '</div>'
+                            +        '<div class="pricing-subhead">'
+                            +            '<dl class="dl-horizontal" style="padding: 15px 0; margin: 0">'
+                            +                '<dt>ID</dt>'
+                            +                '<dd>#'+qv['id_tm']+'</dd>'
+                            +                '<dt>Meja</dt>'
+                            +                '<dd>'+(qv['no_meja'] == null ? 'Dibawa Pulang' : '#' + qv['no_meja'])+'</dd>'
+                            +                '<dt>Antri</dt>'
+                            +                '<dd>'+qv['antrian']+'</dd>'
+                            +                '<dt>Pesan</dt>'
+                            +                '<dd>'+moment(qv['tanggal'], "YYYY-MM-DD HH:mm:ss").tz('Asia/Jakarta').format('HH:mm:ss')+'</dd>'
+                            +                '<dt>Saji</dt>'
+                            +                '<dd>'+moment(qv['waktu_selesai'], "YYYY-MM-DD HH:mm:ss").tz('Asia/Jakarta').format('HH:mm:ss')+'</dd>'
+                            +            '</dl>'
                             +        '</div>'
                             +        '<ul>'
                             +           _r_template
@@ -115,7 +140,8 @@ Website: http://thevectorlab.net/
                             +    '</div>'
                             +'</div>'
                             //@formatter:on
-                        );
+                        )
+                    ;
                 });
             }
 
@@ -143,7 +169,7 @@ Website: http://thevectorlab.net/
             }
 
             // Enable pusher logging - don't include this in production
-            /*Pusher.logToConsole = true;
+            Pusher.logToConsole = true;
 
             var pusher = new Pusher('7dd372a2fbe222be06f6', {
                 cluster: 'ap1',
@@ -153,7 +179,7 @@ Website: http://thevectorlab.net/
             var channel = pusher.subscribe('queue');
             channel.bind('saji_updated', function (data) {
                 loadQueue()
-            });*/
+            });
 
             loadQueue();
         });
