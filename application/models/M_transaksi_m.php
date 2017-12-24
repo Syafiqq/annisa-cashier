@@ -27,7 +27,7 @@ class M_transaksi_m extends MY_Model
     public function insert($data)
     {
         $this->db->set('tanggal', 'CURRENT_TIMESTAMP', false);
-        if ($data['no_meja'])
+        if (isset($data['no_meja']))
         {
             $this->db->set('no_meja', $data['no_meja']);
         }
