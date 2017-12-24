@@ -231,12 +231,16 @@ class MY_Model extends CI_Model
 
     /**
      * @param \Closure $function
+     * @param bool $isRaw
      * @return bool
      */
-    public function find($function)
+    public function find($function, $isRaw = false)
     {
         $function($this->db);
-        $this->db->from($this->table);
+        if (!$isRaw)
+        {
+            $this->db->from($this->table);
+        }
         $this->result = $this->db->get();
         $this->query  = $this->db->last_query();
 
