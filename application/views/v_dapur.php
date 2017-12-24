@@ -62,7 +62,6 @@ Website: http://thevectorlab.net/
 <div class="login-header">
     <?php $this->load->view('headerDapur.php') ?>
 </div>
-<button id="dummy-load" class="button">Load</button>
 <div class="container-fluid" style="width: inherit; padding: 0 32px;">
     <div class="row-fluid">
         <div class="span3">
@@ -301,10 +300,6 @@ Website: http://thevectorlab.net/
                 viewQueue();
             }
 
-            $('button#dummy-load').on('click', function () {
-                loadQueue();
-            });
-
             function loadQueue()
             {
                 $.post(
@@ -339,8 +334,8 @@ Website: http://thevectorlab.net/
                     });
             }
 
-// Enable pusher logging - don't include this in production
-            /*Pusher.logToConsole = true;
+            // Enable pusher logging - don't include this in production
+            Pusher.logToConsole = true;
 
             var pusher = new Pusher('7dd372a2fbe222be06f6', {
                 cluster: 'ap1',
@@ -349,8 +344,10 @@ Website: http://thevectorlab.net/
 
             var channel = pusher.subscribe('queue');
             channel.bind('created', function (data) {
-                console.log(data)
-            });*/
+                loadQueue()
+            });
+
+            loadQueue();
         });
         /*
          * Run right away
