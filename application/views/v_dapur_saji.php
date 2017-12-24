@@ -303,24 +303,13 @@ Website: http://thevectorlab.net/
             function loadQueue()
             {
                 $.post(
-                    $('meta[name=base-url]').attr('content') + 'api/dapur/load',
+                    $('meta[name=base-url]').attr('content') + 'api/dapur/saji',
                     null,
                     null,
                     'json')
                     .done(function (response) {
                         if (response !== undefined)
                         {
-                            if (response['n'] !== undefined)
-                            {
-                                for (var i = -1, is = response['n'].length; ++i < is;)
-                                {
-                                    /*$.notify({
-                                        message: response['n'][i]
-                                    }, {
-                                        type: 'info'
-                                    });*/
-                                }
-                            }
                             if ((response['r'] !== undefined) && (response['r']['pesanan'] !== undefined))
                             {
                                 queues = response['r']['pesanan'];
