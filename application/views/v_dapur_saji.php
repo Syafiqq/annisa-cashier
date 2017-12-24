@@ -32,17 +32,8 @@ Website: http://thevectorlab.net/
             padding-left: 32px;
         }
 
-        div.request-container {
-            margin: 32px 0;
-            background: whitesmoke;
-        }
-
         div.queue-wrapper {
             vertical-align: top;
-        }
-
-        div.request-container, .table th, .table td {
-            vertical-align: middle;
         }
 
         div.overflow_queue {
@@ -64,23 +55,7 @@ Website: http://thevectorlab.net/
 </div>
 <div class="container-fluid" style="width: inherit; padding: 0 32px;">
     <div class="row-fluid">
-        <div class="span3">
-            <div class="request-container">
-                <table id="request-list" class="table">
-                    <thead>
-                    <tr>
-                        <th>Pesanan</th>
-                        <th>Qty</th>
-                        <th>Aksi</th>
-                    </tr>
-                    </thead>
-                    <tbody>
-
-                    </tbody>
-                </table>
-            </div>
-        </div>
-        <div class="span9">
+        <div class="span12">
             <div class="queue-container">
                 <div class="row">
                     <div class="overflow_queue">
@@ -129,7 +104,7 @@ Website: http://thevectorlab.net/
                     $(s_ovr_qq)
                         .append(''
                             //@formatter:off
-                            +'<div class="span4 queue-wrapper">'
+                            +'<div class="span3 queue-wrapper">'
                             +    '<div class="pricing-table green" style="background-color: whitesmoke">'
                             +        '<div class="pricing-head">'
                             +            '<h1><strong>'+(++i+1)+'</strong></h1>'
