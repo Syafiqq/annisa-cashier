@@ -55,6 +55,33 @@ class Dapur extends CI_Controller
         echo json_encode(['n' => ['Antrian Ditambahkan'], 'r' => ['pesanan' => $queues], 's' => 1]);
     }
 
+    public function saji()
+    {
+        /** @noinspection PhpParamsInspection */
+        $this->load->model(['m_transaksi_m', 'm_transaksi_d']);
+        $this->m_transaksi_m->find(function (CI_DB_query_builder $db) {
+            $db->select();
+            $db->where('DATE(`tanggal`) = DATE(NOW())', null, false);
+            $db->where('`selesai`', 1);
+            $db->order_by('`waktu_selesai`', 'DESC');
+        });
+        $queues = [];
+        foreach ($this->m_transaksi_m->getResult()->result_array() as $queue)
+        {
+            $this->m_transaksi_d->find(function (CI_DB_query_builder $db) use ($queue) {
+                $db->select();
+                $db->where('`id_tm`', $queue['id_tm']);
+            });
+            $queue['pesanan'] = [];
+            foreach ($this->m_transaksi_d->getResult()->result_array() as $request)
+            {
+                $queue['pesanan']["r_{$request['id_produk']}"] = $request;
+            }
+            $queues["q_{$queue['id_tm']}"] = $queue;
+        }
+        echo json_encode(['n' => ['Antrian Ditambahkan'], 'r' => ['pesanan' => $queues], 's' => 1]);
+    }
+
     public function item_update()
     {
         $id = $this->input->postOrDefault('id', 0);
@@ -88,6 +115,8 @@ class Dapur extends CI_Controller
             echo json_encode(['n' => ['Pesanan Gagal Disajikan'], 's' => 0]);
         }
     }
+
+
 }
 
 ?>
