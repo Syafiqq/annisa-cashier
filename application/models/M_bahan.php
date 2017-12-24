@@ -1,8 +1,15 @@
 <?php
 defined('BASEPATH') OR exit('No direct script access allowed');
 
-class M_bahan extends CI_Model
+class M_bahan extends MY_Model
 {
+    /**
+     * M_bahan constructor.
+     */
+    public function __construct()
+    {
+        parent::__construct('`bahanbaku`');
+    }
 
     function getBahan()
     {
