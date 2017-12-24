@@ -52,6 +52,16 @@ class Dapur extends CI_Controller
         $this->load->view('v_dapurStok');
     }
 
+    public function stok_masuk()
+    {
+        $this->load->view('v_dapurStok');
+    }
+
+    public function stok_keluar()
+    {
+        $this->load->view('v_dapurStok');
+    }
+
     public function logout()
     {
         $this->session->unset_userdata('username');
