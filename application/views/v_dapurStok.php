@@ -19,6 +19,7 @@ Website: http://thevectorlab.net/
     <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
     <meta content="" name="description"/>
     <meta content="" name="author"/>
+    <meta name="base-url" content="<?php echo base_url() ?>">
     <link href="<?php echo base_url(); ?>assets/assets/bootstrap/css/bootstrap.min.css" rel="stylesheet"/>
     <link href="<?php echo base_url(); ?>assets/assets/font-awesome/css/font-awesome.css" rel="stylesheet"/>
     <link href="<?php echo base_url(); ?>assets/css/style.css" rel="stylesheet"/>
@@ -38,7 +39,7 @@ Website: http://thevectorlab.net/
                     Arsip Stok
                 </h4>
             </div>
-            <form class="hidden-phone" action="search_result.html">
+            <form class="hidden-phone" action="">
                 <div class="search-input-area">
                     <input id=" " class="search-query" type="text" placeholder="Search">
                     <i class="icon-search"></i>
@@ -46,7 +47,7 @@ Website: http://thevectorlab.net/
             </form>
             <div class="widget-body">
                 <div class="space15"></div>
-                <table class="table table-striped table-hover table-bordered" id="sample_editable_1">
+                <table class="table table-striped table-hover table-bordered" id="stocks">
                     <thead>
                     <tr>
                         <th>Bahan baku</th>
@@ -57,26 +58,6 @@ Website: http://thevectorlab.net/
                     </tr>
                     </thead>
                     <tbody>
-                    <tr>
-                        <td></td>
-                        <td></td>
-                        <td></td>
-                        <td></td>
-                        <td>
-                            <a href="<?php echo site_url('dapur/stok/masuk'); ?>">
-                                <button class="btn btn-small" type="button">
-                                    <i class="icon-plus icon-white"></i>
-                                    Stok Masuk
-                                </button>
-                            </a>
-                            <a href="<?php echo site_url('dapur/stok/keluar'); ?>">
-                                <button class="btn btn-small" type="button">
-                                    <i class="icon-plus icon-white"></i>
-                                    Stok Keluar
-                                </button>
-                            </a>
-                        </td>
-                    </tr>
                     </tbody>
                 </table>
             </div>
@@ -92,6 +73,85 @@ Website: http://thevectorlab.net/
     jQuery(document).ready(function () {
         //App.initLogin();
     });
+</script>
+
+<script>
+    (function ($) {
+        $(function () {
+            var s_stocks  = 'table#stocks';
+            var materials = <?php echo json_encode(isset($materials) ? $materials : [])?>;
+            var stocks    = {};
+
+            function update()
+            {
+                var s_stocks_body = $(s_stocks).find('tbody');
+                s_stocks_body.find('tr').remove();
+                $.each(stocks, function (sk, sv) {
+                    s_stocks_body.append(''
+                        //@formatter:off
+                        +'<tr data-id="'+sv['id_bahan']+'">'
+                        +   '<td>'+materials[sk]['nama_bahan']+'</td>'
+                        +   '<td>'+sv['stok']['current']+'</td>'
+                        +   '<td>'+sv['stok']['l_in']+'</td>'
+                        +   '<td>'+sv['stok']['l_out']+'</td>'
+                        +   '<td>'
+                        +       '<a href="<?php echo site_url('dapur/stok/masuk'); ?>">'
+                        +           '<i class="icon-circle-arrow-down icon-white"></i>'
+                        +           'Stok Masuk'
+                        +       '</a>'
+                        +       '<span style="margin: 0 8px;"></span>'
+                        +       '<a href="<?php echo site_url('dapur/stok/keluar'); ?>">'
+                        +           '<i class="icon-circle-arrow-up icon-white"></i>'
+                        +           'Stok Keluar'
+                        +       '</a>'
+                        +   '</td>'
+                        +'</tr>'
+                        //@formatter:on
+                    )
+                });
+            }
+
+            function loadStock()
+            {
+                $.post(
+                    $('meta[name=base-url]').attr('content') + 'api/dapur/stock',
+                    null,
+                    null,
+                    'json')
+                    .done(function (response) {
+                        if (response !== undefined)
+                        {
+                            if (response['n'] !== undefined)
+                            {
+                                for (var i = -1, is = response['n'].length; ++i < is;)
+                                {
+                                    /*$.notify({
+                                        message: response['n'][i]
+                                    }, {
+                                        type: 'info'
+                                    });*/
+                                }
+                            }
+                            if ((response['r'] !== undefined) && (response['r']['stok'] !== undefined))
+                            {
+                                stocks = response['r']['stok'];
+                                update();
+                            }
+                        }
+                    })
+                    .fail(function (error) {
+                    })
+                    .always(function (error) {
+                    });
+            }
+
+            loadStock();
+        });
+        /*
+         * Run right away
+         * */
+    })(jQuery);
+
 </script>
 <script type="text/javascript">if (self == top)
     {
