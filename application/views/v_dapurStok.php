@@ -25,7 +25,7 @@ Website: http://thevectorlab.net/
     <link href="<?php echo base_url(); ?>assets/css/style.css" rel="stylesheet"/>
     <link href="<?php echo base_url(); ?>assets/css/style_responsive.css" rel="stylesheet"/>
     <link href="<?php echo base_url(); ?>assets/css/style_responsive.css" rel="stylesheet"/>
-    <link href="<?php echo base_url(); ?>assets/css/datatables.min.css" rel="stylesheet" id="style_color"/>
+    <link href="<?php echo base_url(); ?>assets/assets/dttb/datatables.css" rel="stylesheet" id="style_color"/>
 </head>
 <body id="login-body">
 <div class="login-header">
@@ -46,9 +46,9 @@ Website: http://thevectorlab.net/
                     <thead>
                     <tr>
                         <th>Bahan baku</th>
-                        <th>Stok Saat Ini</th>
-                        <th>Stok Masuk</th>
-                        <th>Stok Keluar</th>
+                        <th width="15%">Stok Saat Ini</th>
+                        <th width="15%">Stok Masuk</th>
+                        <th width="15%">Stok Keluar</th>
                         <th>Aksi</th>
                     </tr>
                     </thead>
@@ -63,7 +63,7 @@ Website: http://thevectorlab.net/
 <script src="<?php echo base_url(); ?>assets/js/jquery-1.8.3.min.js"></script>
 <script src="<?php echo base_url(); ?>assets/assets/bootstrap/js/bootstrap.min.js"></script>
 <script src="<?php echo base_url(); ?>assets/js/jquery.blockui.js"></script>
-<script src="<?php echo base_url(); ?>assets/js/datatables.min.js"></script>
+<script src="<?php echo base_url(); ?>assets/assets/dttb/datatables.js"></script>
 <script src="<?php echo base_url(); ?>assets/js/scripts.js"></script>
 <script>
     jQuery(document).ready(function () {
@@ -81,32 +81,27 @@ Website: http://thevectorlab.net/
 
             function update()
             {
-                return;
-                var s_stocks_body = $(s_stocks).find('tbody');
-                s_stocks_body.find('tr').remove();
+                dt_stocks.clear();
                 $.each(stocks, function (sk, sv) {
-                    s_stocks_body.append(''
+                    dt_stocks.row.add([
                         //@formatter:off
-                        +'<tr data-id="'+sv['id_bahan']+'">'
-                        +   '<td>'+materials[sk]['nama_bahan']+'</td>'
-                        +   '<td>'+sv['stok']['current']+'</td>'
-                        +   '<td>'+sv['stok']['l_in']+'</td>'
-                        +   '<td>'+sv['stok']['l_out']+'</td>'
-                        +   '<td>'
-                        +       '<a href="<?php echo site_url('dapur/stok/masuk'); ?>">'
-                        +           '<i class="icon-circle-arrow-down icon-white"></i>'
-                        +           'Stok Masuk'
-                        +       '</a>'
-                        +       '<span style="margin: 0 8px;"></span>'
-                        +       '<a href="<?php echo site_url('dapur/stok/keluar'); ?>">'
-                        +           '<i class="icon-circle-arrow-up icon-white"></i>'
-                        +           'Stok Keluar'
-                        +       '</a>'
-                        +   '</td>'
-                        +'</tr>'
+                        materials[sk]['nama_bahan']
+                        ,sv['stok']['current']
+                        ,sv['stok']['l_in']
+                        ,sv['stok']['l_out']
+                        ,'<a href="<?php echo site_url(); ?>dapur/stok/'+sv['id_bahan']+'/masuk">'
+                        +    '<i class="icon-circle-arrow-down icon-white"></i>&nbsp;'
+                        +    'Stok Masuk'
+                        +'</a>'
+                        +'<span style="margin: 0 8px;"></span>'
+                        +'<a data-id="'+sv['id_bahan']+'"  href="<?php echo site_url('dapur/stok/keluar'); ?>">'
+                        +    '<i class="icon-circle-arrow-up icon-white"></i>&nbsp;'
+                        +    'Stok Keluar'
+                        +'</a>'
                         //@formatter:on
-                    )
+                    ])
                 });
+                dt_stocks.draw();
             }
 
             function loadStock()
