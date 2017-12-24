@@ -19,7 +19,7 @@
             <div class="top-nav ">
                 <ul class="nav pull-right top-menu">
                     <li class="dropdown mtop5">
-                        <a class="dropdown-toggle element" data-placement="bottom" data-toggle="tooltip" href="#" data-original-title="Stok Bahan">
+                        <a class="dropdown-toggle element" data-placement="bottom" data-toggle="tooltip" href="<?php echo site_url('dapur/stok') ?>" data-original-title="Stok Bahan">
                             <i class="icon-fire"></i>
                         </a>
                     </li>
