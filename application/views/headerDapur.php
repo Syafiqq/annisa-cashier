@@ -8,15 +8,11 @@
             <div id="top_menu" class="nav notify-row">
                 <ul class="nav top-menu">
                     <td>
-                        <button type="button" class="btn btn-inverse">Saat Ini</button>
+                        <a href="<?php echo site_url('dapur') ?>" class="btn btn-inverse">Dimasak</a>
                     </td>
                     <td>
-                        <button type="button" class="btn btn-inverse">Dimasak</button>
+                        <a href="<?php echo site_url('dapur/saji') ?>" class="btn btn-inverse">Selesai</a>
                     </td>
-                    <td>
-                        <button type="button" class="btn btn-inverse">Selesai</button>
-                    </td>
-
                 </ul>
             </div>
 
