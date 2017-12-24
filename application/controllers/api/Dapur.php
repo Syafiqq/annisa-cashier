@@ -11,6 +11,7 @@
 /**
  * @property CI_Session session
  * @property CI_Loader load
+ * @property Pusher_library pusher_library
  * @property M_transaksi_m m_transaksi_m
  * @property M_transaksi_d m_transaksi_d
  * @property MY_Input input
@@ -108,6 +109,9 @@ class Dapur extends CI_Controller
             $db->where('`id_tm`', $id);
         }))
         {
+            $this->load->library('pusher_library');
+            $this->pusher_library->publish('queue', 'saji_updated', []);
+
             echo json_encode(['n' => ['Pesanan Berhasil Disajikan'], 's' => 1]);
         }
         else
