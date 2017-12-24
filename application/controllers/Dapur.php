@@ -56,7 +56,11 @@ class Dapur extends CI_Controller
             $db->select();
         });
 
-        $materials = $this->m_bahan->getResult()->result_array();
+        $materials = [];
+        foreach ($this->m_bahan->getResult()->result_array() as $material)
+        {
+            $materials["bk_{$material['id_bahan']}"] = $material;
+        }
         $this->load->view('v_dapurStok', compact('materials'));
     }
 
