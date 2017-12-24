@@ -15,7 +15,7 @@ class Dapur extends CI_Controller
         }
     }
 
-    function index()
+    public function index()
     {
         $this->load->model('m_produk');
         $this->m_produk->find(function (CI_DB_query_builder $db) {
@@ -31,7 +31,7 @@ class Dapur extends CI_Controller
         $this->load->view('v_dapur', compact('products'));
     }
 
-    function saji()
+    public function saji()
     {
         $this->load->model('m_produk');
         $this->m_produk->find(function (CI_DB_query_builder $db) {
@@ -45,6 +45,11 @@ class Dapur extends CI_Controller
         }
 
         $this->load->view('v_dapur_saji', compact('products'));
+    }
+
+    public function stok()
+    {
+
     }
 
     public function logout()
