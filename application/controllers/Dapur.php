@@ -54,12 +54,12 @@ class Dapur extends CI_Controller
 
     public function stok_masuk()
     {
-        $this->load->view('v_dapurStok');
+        $this->load->view('v_dapurSM');
     }
 
     public function stok_keluar()
     {
-        $this->load->view('v_dapurStok');
+        $this->load->view('v_dapurSK');
     }
 
     public function logout()
