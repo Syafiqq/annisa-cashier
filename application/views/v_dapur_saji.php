@@ -343,7 +343,7 @@ Website: http://thevectorlab.net/
             });
 
             var channel = pusher.subscribe('queue');
-            channel.bind('created', function (data) {
+            channel.bind('saji_updated', function (data) {
                 loadQueue()
             });*/
 
