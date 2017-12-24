@@ -3,6 +3,7 @@
 /**
  * @property M_produk m_produk
  * @property M_bahan m_bahan
+ * @property CI_Loader|object load
  * */
 class Dapur extends CI_Controller
 {
@@ -50,7 +51,7 @@ class Dapur extends CI_Controller
 
     public function stok()
     {
-        $this->load->model('`m_bahan`');
+        $this->load->model('m_bahan');
         $this->m_bahan->find(function (CI_DB_query_builder $db) {
             $db->select();
         });
