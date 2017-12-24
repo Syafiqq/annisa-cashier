@@ -31,12 +31,20 @@ class Dapur extends CI_Controller
         $this->load->view('v_dapur', compact('products'));
     }
 
-    function transaksi()
+    function saji()
     {
-        if ($this->session->userdata('status') == "login" and $this->session->userdata('level') == "dapur")
-        {
+        $this->load->model('m_produk');
+        $this->m_produk->find(function (CI_DB_query_builder $db) {
+            $db->select();
+        });
 
+        $products = [];
+        foreach ($this->m_produk->getResult()->result_array() as $product)
+        {
+            $products["p_{$product['id_produk']}"] = $product;
         }
+
+        $this->load->view('v_dapur_saji', compact('products'));
     }
 
     public function logout()
