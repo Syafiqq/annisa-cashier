@@ -105,6 +105,21 @@ class Dapur extends CI_Controller
         $this->load->view('v_dapurSK', compact('material'));
     }
 
+    public function stok_keluar_commit($id)
+    {
+        $this->load->model('m_stok');
+        $data             = [];
+        $data['id_bahan'] = $id;
+        $data['stok']     = doubleval($this->input->postOrDefault('jumlah', 0));
+        $data['harga']    = intval($this->input->postOrDefault('harga', 0));
+        $data['tipe']     = 'keluar';
+        $this->m_stok->insert($data, function (CI_DB_query_builder $db) {
+            $db->set('`tanggal`', 'CURRENT_TIMESTAMP', false);
+        });
+
+        echo json_encode(['n' => ['Stok Update'], 'rdr' => site_url("dapur/stok/"), 's' => 1]);
+    }
+
     public function logout()
     {
         $this->session->unset_userdata('username');
