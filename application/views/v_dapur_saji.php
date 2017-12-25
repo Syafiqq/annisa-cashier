@@ -134,6 +134,9 @@ Website: http://thevectorlab.net/
                             +                '<dd>'+moment(qv['waktu_saji'], "YYYY-MM-DD HH:mm:ss").tz('Asia/Jakarta').format('HH:mm:ss')+'</dd>'
                             +            '</dl>'
                             +        '</div>'
+                            +        '<div class="price-actions">'
+                            +            '<input type="button" data-id="'+qv['id_tm']+'" class="queue-finish btn btn-mini btn-block approve-c-btn" value="Selesai"/>'
+                            +        '</div>'
                             +        '<ul>'
                             +           _r_template
                             +        '</ul>'
@@ -143,6 +146,60 @@ Website: http://thevectorlab.net/
                         )
                     ;
                 });
+            }
+
+            $(s_ovr_qq).on('click', 'input.queue-finish', function () {
+                var _selectedItem = $(this).data('id');
+                BootstrapDialog.show({
+                    title: 'Pengumuman',
+                    message: 'Apakah anda yakin akan pesanan ini telah selesai ?',
+                    buttons: [{
+                        label: 'Ya',
+                        action: function (dialogRef) {
+                            dialogRef.close();
+                            finishQueue(_selectedItem);
+                        }
+                    }, {
+                        label: 'Tidak',
+                        action: function (dialogRef) {
+                            dialogRef.close();
+                        }
+                    }
+                    ]
+                });
+            });
+
+            function finishQueue(qID)
+            {
+                $.post(
+                    $('meta[name=base-url]').attr('content') + 'api/dapur/queue/finish',
+                    {id: qID},
+                    null,
+                    'json')
+                    .done(function (response) {
+                        if (response !== undefined)
+                        {
+                            if (response['n'] !== undefined)
+                            {
+                                for (var i = -1, is = response['n'].length; ++i < is;)
+                                {
+                                    $.notify({
+                                        message: response['n'][i]
+                                    }, {
+                                        type: 'info'
+                                    });
+                                }
+                            }
+                            if ((response['s'] !== undefined) && (parseInt(response['s']) === 1))
+                            {
+                                loadQueue();
+                            }
+                        }
+                    })
+                    .fail(function (error) {
+                    })
+                    .always(function (error) {
+                    });
             }
 
             function loadQueue()
