@@ -254,6 +254,7 @@ class MY_Model extends CI_Model
      */
     public function insert($data, \Closure $additional = null)
     {
+        $this->db->set($data);
         $additional($this->db);
         $status          = $this->db->insert($this->table);
         $this->query     = $this->db->last_query();
