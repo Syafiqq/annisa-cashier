@@ -66,7 +66,7 @@ class Dapur extends CI_Controller
             $db->select();
             $db->where('DATE(`tanggal`) = DATE(NOW())', null, false);
             $db->where('`selesai`', 1);
-            $db->order_by('`waktu_selesai`', 'DESC');
+            $db->order_by('`waktu_saji`', 'DESC');
         });
         $queues = [];
         foreach ($this->m_transaksi_m->getResult()->result_array() as $queue)
@@ -107,7 +107,7 @@ class Dapur extends CI_Controller
         $id = $this->input->postOrDefault('id', 0);
         $this->load->model('m_transaksi_m');
         if ($this->m_transaksi_m->update(['selesai' => 1], function (CI_DB_query_builder $db) use ($id) {
-            $db->set('`waktu_selesai`', 'CURRENT_TIMESTAMP', false);
+            $db->set('`waktu_saji`', 'CURRENT_TIMESTAMP', false);
             $db->where('`id_tm`', $id);
         }))
         {

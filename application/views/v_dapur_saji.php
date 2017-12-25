@@ -131,7 +131,7 @@ Website: http://thevectorlab.net/
                             +                '<dt>Pesan</dt>'
                             +                '<dd>'+moment(qv['tanggal'], "YYYY-MM-DD HH:mm:ss").tz('Asia/Jakarta').format('HH:mm:ss')+'</dd>'
                             +                '<dt>Saji</dt>'
-                            +                '<dd>'+moment(qv['waktu_selesai'], "YYYY-MM-DD HH:mm:ss").tz('Asia/Jakarta').format('HH:mm:ss')+'</dd>'
+                            +                '<dd>'+moment(qv['waktu_saji'], "YYYY-MM-DD HH:mm:ss").tz('Asia/Jakarta').format('HH:mm:ss')+'</dd>'
                             +            '</dl>'
                             +        '</div>'
                             +        '<ul>'
