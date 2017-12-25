@@ -176,23 +176,23 @@ class Dapur extends CI_Controller
         $this->m_bahan->find(function (CI_DB_query_builder $db) {
             $db->select('`id_bahan`');
         });
-        $stocks = [];
+        $stocks    = [];
+        $id_outlet = $this->session->userdata('outlet');
         foreach ($this->m_bahan->getResult()->result_array() as $material)
         {
-            $this->m_stok->find(function (CI_DB_query_builder $db) use ($material) {
+            $this->m_stok->find(function (CI_DB_query_builder $db) use ($id_outlet, $material) {
                 $db->select(//@formatter:off
                 /** @lang MySQL */
-                    "(SELECT COALESCE(SUM(`stok`), 0) AS 'g_in' FROM `stok` WHERE `stok`.`id_bahan` = '{$material['id_bahan']}' AND `stok`.`tipe` = 'masuk') AS 'g_in'"
-                    . ",(SELECT COALESCE(SUM(`stok`), 0) AS 'g_out' FROM `stok` WHERE `stok`.`id_bahan` = '{$material['id_bahan']}' AND `stok`.`tipe` = 'keluar') AS 'g_out'"
+                    "(SELECT COALESCE(SUM(`stok`), 0) AS 'g_in' FROM `stok` WHERE `stok`.`id_bahan` = '{$material['id_bahan']}' AND `stok`.`id_outlet` = '{$id_outlet}' AND `stok`.`tipe` = 'masuk') AS 'g_in'"
+                    . ",(SELECT COALESCE(SUM(`stok`), 0) AS 'g_out' FROM `stok` WHERE `stok`.`id_bahan` = '{$material['id_bahan']}' AND `stok`.`id_outlet` = '{$id_outlet}' AND `stok`.`tipe` = 'keluar') AS 'g_out'"
                     . ",(SELECT g_in - g_out) AS 'current'"
-                    . ",(SELECT COALESCE(SUM(`stok`), 0) AS 'l_in' FROM `stok` WHERE `stok`.`id_bahan` = '{$material['id_bahan']}' AND DATE(`tanggal`) = DATE(NOW()) AND `stok`.`tipe` = 'masuk') AS 'l_in'"
-                    . ",(SELECT COALESCE(SUM(`stok`), 0) AS 'l_out' FROM `stok` WHERE `stok`.`id_bahan` = '{$material['id_bahan']}' AND DATE(`tanggal`) = DATE(NOW()) AND `stok`.`tipe` = 'keluar') AS 'l_out'"
+                    . ",(SELECT COALESCE(SUM(`stok`), 0) AS 'l_in' FROM `stok` WHERE `stok`.`id_bahan` = '{$material['id_bahan']}' AND `stok`.`id_outlet` = '{$id_outlet}' AND DATE(`tanggal`) = DATE(NOW()) AND `stok`.`tipe` = 'masuk') AS 'l_in'"
+                    . ",(SELECT COALESCE(SUM(`stok`), 0) AS 'l_out' FROM `stok` WHERE `stok`.`id_bahan` = '{$material['id_bahan']}' AND `stok`.`id_outlet` = '{$id_outlet}' AND DATE(`tanggal`) = DATE(NOW()) AND `stok`.`tipe` = 'keluar') AS 'l_out'"
                     . "", false);
                 //@formatter:on
             }, true);
             $material['stok']                     = $this->m_stok->getResult()->row_array();
             $stocks["bk_{$material['id_bahan']}"] = $material;
-            log_message('ERROR', var_export($this->m_stok->getQuery(), true));
         }
         echo json_encode(['n' => ['Stok Diperbarui'], 'r' => ['stok' => $stocks], 's' => 1]);
     }
