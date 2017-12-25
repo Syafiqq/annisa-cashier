@@ -94,7 +94,7 @@ Website: http://thevectorlab.net/
                         +    'Stok Masuk'
                         +'</a>'
                         +'<span style="margin: 0 8px;"></span>'
-                        +'<a data-id="'+sv['id_bahan']+'"  href="<?php echo site_url('dapur/stok/keluar'); ?>">'
+                        +'<a href="<?php echo site_url(); ?>dapur/stok/'+sv['id_bahan']+'/keluar">'
                         +    '<i class="icon-circle-arrow-up icon-white"></i>&nbsp;'
                         +    'Stok Keluar'
                         +'</a>'
