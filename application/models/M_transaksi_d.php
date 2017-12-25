@@ -18,21 +18,6 @@ class M_transaksi_d extends MY_Model
         parent::__construct('`transaksi_d`');
         // Your own constructor code
     }
-
-    /**
-     * @param $data
-     * @return int
-     */
-    public function insert($data)
-    {
-        $this->db->set('id_tm', $data['transaction']);
-        $this->db->set('id_produk', $data['product']);
-        $this->db->set('tanggal', 'CURRENT_TIMESTAMP', false);
-        $this->db->set('jumlah', $data['quantity']);
-        $this->db->set('total', $data['total']);
-
-        return parent::insert($data, function () { });
-    }
 }
 
 ?>

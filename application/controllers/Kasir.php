@@ -53,12 +53,15 @@ class Kasir extends CI_Controller
                 $id = $this->m_transaksi_m->getInsertId();
                 foreach ($this->input->post('goods') as $item)
                 {
-                    $data                = [];
-                    $data['transaction'] = $id;
-                    $data['product']     = $item['i'];
-                    $data['quantity']    = $item['q'];
-                    $data['total']       = intval($item['q']) * intval($item['c']);
-                    $this->m_transaksi_d->insert($data);
+                    $data              = [];
+                    $data['id_tm']     = $id;
+                    $data['id_produk'] = $item['i'];
+                    $data['jumlah']    = $item['q'];
+                    $data['total']     = intval($item['q']) * intval($item['c']);
+
+                    $this->m_transaksi_d->insert($data, function (CI_DB_query_builder $db) {
+                        $db->set('tanggal', 'CURRENT_TIMESTAMP', false);
+                    });
                 }
                 $this->m_transaksi_m->find(function (CI_DB_query_builder $db) use ($id) {
                     $db->select("COUNT(`id_tm`) AS 'queue'", false);
