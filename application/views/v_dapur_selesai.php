@@ -131,6 +131,8 @@ Website: http://thevectorlab.net/
                             +                '<dt>Pesan</dt>'
                             +                '<dd>'+moment(qv['tanggal'], "YYYY-MM-DD HH:mm:ss").tz('Asia/Jakarta').format('HH:mm:ss')+'</dd>'
                             +                '<dt>Saji</dt>'
+                            +                '<dd>'+moment(qv['waktu_saji'], "YYYY-MM-DD HH:mm:ss").tz('Asia/Jakarta').format('HH:mm:ss')+'</dd>'
+                            +                '<dt>Selesai</dt>'
                             +                '<dd>'+moment(qv['waktu_selesai'], "YYYY-MM-DD HH:mm:ss").tz('Asia/Jakarta').format('HH:mm:ss')+'</dd>'
                             +            '</dl>'
                             +        '</div>'
@@ -148,7 +150,7 @@ Website: http://thevectorlab.net/
             function loadQueue()
             {
                 $.post(
-                    $('meta[name=base-url]').attr('content') + 'api/dapur/saji',
+                    $('meta[name=base-url]').attr('content') + 'api/dapur/finish',
                     null,
                     null,
                     'json')
@@ -177,7 +179,7 @@ Website: http://thevectorlab.net/
             });
 
             var channel = pusher.subscribe('queue');
-            channel.bind('saji_updated', function (data) {
+            channel.bind('finish_updated', function (data) {
                 loadQueue()
             });
 
