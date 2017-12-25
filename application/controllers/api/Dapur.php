@@ -122,6 +122,26 @@ class Dapur extends CI_Controller
         }
     }
 
+    public function queue_finish()
+    {
+        $id = $this->input->postOrDefault('id', 0);
+        $this->load->model('m_transaksi_m');
+        if ($this->m_transaksi_m->update(['selesai' => 2], function (CI_DB_query_builder $db) use ($id) {
+            $db->set('`waktu_selesai`', 'CURRENT_TIMESTAMP', false);
+            $db->where('`id_tm`', $id);
+        }))
+        {
+            $this->load->library('pusher_library');
+            $this->pusher_library->publish('queue', 'finish_updated', []);
+
+            echo json_encode(['n' => ['Pesanan Telah Selesai'], 's' => 1]);
+        }
+        else
+        {
+            echo json_encode(['n' => ['Pesanan Gagal Diselesaikan'], 's' => 0]);
+        }
+    }
+
     public function stock()
     {
         /** @noinspection PhpParamsInspection */
