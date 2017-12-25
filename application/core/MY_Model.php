@@ -252,7 +252,7 @@ class MY_Model extends CI_Model
      * @param Closure $additional
      * @return bool
      */
-    public function insert($data, \Closure $additional)
+    public function insert($data, \Closure $additional = null)
     {
         $additional($this->db);
         $status          = $this->db->insert($this->table);

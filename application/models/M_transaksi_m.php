@@ -36,7 +36,7 @@ class M_transaksi_m extends MY_Model
         $this->db->set('id_user', $data['id_user']);
         $this->db->set('id_outlet', $data['id_outlet']);
 
-        return parent::insert($data);
+        return parent::insert($data, function () { });
     }
 }
 

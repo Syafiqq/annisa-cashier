@@ -31,7 +31,7 @@ class M_transaksi_d extends MY_Model
         $this->db->set('jumlah', $data['quantity']);
         $this->db->set('total', $data['total']);
 
-        return parent::insert($data);
+        return parent::insert($data, function () { });
     }
 }
 
