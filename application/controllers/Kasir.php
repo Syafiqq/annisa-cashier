@@ -44,11 +44,17 @@ class Kasir extends CI_Controller
             {
                 $data['keterangan'] = $this->input->post('note');
             }
+            else
+            {
+                $data['keterangan'] = '-';
+            }
             $data['grand_total'] = $this->input->post('cost');
             $data['id_user']     = $this->session->userdata('id');
             $data['id_outlet']   = $this->session->userdata('outlet');
 
-            if ($this->m_transaksi_m->insert($data))
+            if ($this->m_transaksi_m->insert($data, function (CI_DB_query_builder $db) {
+                $db->set('tanggal', 'CURRENT_TIMESTAMP', false);
+            }))
             {
                 $id = $this->m_transaksi_m->getInsertId();
                 foreach ($this->input->post('goods') as $item)

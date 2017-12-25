@@ -19,25 +19,6 @@ class M_transaksi_m extends MY_Model
         parent::__construct('`transaksi_m`');
         // Your own constructor code
     }
-
-    /**
-     * @param array $data
-     * @return bool
-     */
-    public function insert($data)
-    {
-        $this->db->set('tanggal', 'CURRENT_TIMESTAMP', false);
-        if (isset($data['no_meja']))
-        {
-            $this->db->set('no_meja', $data['no_meja']);
-        }
-        $this->db->set('keterangan', isset($data['keterangan']) ? $data['keterangan'] : '-');
-        $this->db->set('grand_total', $data['grand_total']);
-        $this->db->set('id_user', $data['id_user']);
-        $this->db->set('id_outlet', $data['id_outlet']);
-
-        return parent::insert($data, function () { });
-    }
 }
 
 ?>
