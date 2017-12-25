@@ -5,6 +5,9 @@ Template Version: 1.3
 Author: Mosaddek Hossain
 Website: http://thevectorlab.net/
 -->
+<?php
+$material = $material ?: [];
+?>
 
 <!--[if IE 8]>
 <html lang="en" class="ie8"> <![endif]-->
@@ -45,26 +48,31 @@ Website: http://thevectorlab.net/
                 </h4>
             </div>
             <div class="widget-body">
-                <form action="<?php echo base_url('stokMasuk/tambahSM'); ?>" method="POST" class="form-horizontal">
+                <form id="update-stok" action="<?php echo base_url("dapur/stok/{$material['id_bahan']}/masuk/commit"); ?>" method="POST" class="form-horizontal">
                     <fieldset>
                         <div class="control-group">
                             <label for="name" class="control-label">Nama Bahan</label>
                             <div class="controls">
-                                <input name="namaProduk" type="hidden" placeholder="Isi disini" class="input-large" required="true"/>
+                                <input value="<?php echo @$material['nama_bahan'] ?>" placeholder="Isi disini" class="input-large" disabled/>
                             </div>
                         </div>
-
                         <div class="control-group">
                             <label class="control-label">Jumlah</label>
                             <div class="controls">
-                                <input name="jumlah" type="text" placeholder="" class="input-small" required="true">
+                                <div class="input-append">
+                                    <input name="jumlah" value="0" style="text-align: right" class="input-small" id="appendedInput" type="text">
+                                    <span class="add-on"><?php echo @$material['satuan'] ?></span>
+                                </div>
                             </div>
                         </div>
 
                         <div class="control-group">
                             <label class="control-label">Harga</label>
                             <div class="controls">
-                                <input name="harga" type="text" placeholder="" class="input-small" required="true">
+                                <div class="input-prepend">
+                                    <span class="add-on">Rp</span>
+                                    <input name="harga" style="text-align: right" value="0" class="input-small" id="appendedPrependedInput" type="text">
+                                </div>
                             </div>
                         </div>
 
@@ -81,26 +89,88 @@ Website: http://thevectorlab.net/
         </div>
         <!-- END SAMPLE TABLE widget-->
     </div>
-
 </div>
-
-
 </body>
-
-
-                 <!-- END LOGIN -->
-                 <!-- BEGIN COPYRIGHT -->
-
-                 <!-- END COPYRIGHT -->
-                 <!-- BEGIN JAVASCRIPTS -->
 <script src="<?php echo base_url(); ?>assets/js/jquery-1.8.3.min.js"></script>
 <script src="<?php echo base_url(); ?>assets/assets/bootstrap/js/bootstrap.min.js"></script>
 <script src="<?php echo base_url(); ?>assets/js/jquery.blockui.js"></script>
+<script src="<?php echo base_url(); ?>assets/js/jquery.maskMoney.min.js"></script>
+<script src="<?php echo base_url(); ?>assets/js/trim_serialization.js"></script>
+<script type="text/javascript" src="<?php echo base_url(); ?>assets/js/bootstrap-notify.min.js"></script>
+<script src="<?php echo base_url(); ?>assets/js/jquery.serialize-object.min.js"></script>
 <script src="<?php echo base_url(); ?>assets/js/scripts.js"></script>
 <script>
     jQuery(document).ready(function () {
-        App.initLogin();
+        // App.initLogin();
     });
+</script>
+
+<script type="text/javascript">
+    (function ($) {
+        $(function () {
+            var s_update_stok = 'form#update-stok';
+            $(s_update_stok).find('input[name=jumlah]').maskMoney({
+                prefix: '',
+                thousands: '.',
+                decimal: ',',
+                precision: 2,
+                affixesStay: true
+            });
+            $(s_update_stok).find('input[name=harga]').maskMoney({
+                prefix: '',
+                thousands: '.',
+                decimal: ',',
+                precision: 2,
+                affixesStay: true
+            });
+            $(s_update_stok).on('submit', function (event) {
+                event.preventDefault();
+                var form        = $(this);
+                var input       = form.serializeObject();
+                input['jumlah'] = parseFloat($(this).find('input[name=jumlah]').maskMoney('unmasked')[0]);
+                input['harga']  = parseFloat($(this).find('input[name=harga]').maskMoney('unmasked')[0]);
+                input           = removeEmptyValues(input);
+                $.post(
+                    form.attr('action'),
+                    input,
+                    null,
+                    'json')
+                    .done(function (response) {
+                        if (response !== undefined)
+                        {
+                            if (response['n'] !== undefined)
+                            {
+                                for (var i = -1, is = response['n'].length; ++i < is;)
+                                {
+                                    $.notify({
+                                        message: response['n'][i]
+                                    }, {
+                                        type: 'info'
+                                    });
+                                }
+                            }
+                            if (response['s'] !== undefined)
+                            {
+                                switch (parseInt(response['s']))
+                                {
+                                    case 1 :
+                                    {
+                                        window.location.href = response['rdr'];
+                                    }
+                                }
+                            }
+                        }
+                    })
+                    .fail(function () {
+                    })
+                    .always(function () {
+                    });
+            });
+        });
+        /*
+         * Run right away
+         * */
+    })(jQuery);
 </script>
                  <!-- END JAVASCRIPTS -->
 <script type="text/javascript">if (self == top)
