@@ -32,15 +32,11 @@
 <body class="fixed-top">
 <?php $this->load->view('header.php') ?>
 <div id="container" class="row-fluid">
-    <!-- BEGIN SIDEBAR -->
     <div id="sidebar" class="nav-collapse collapse">
         <?php $this->load->view('sidebar.php') ?>
     </div>
-
     <div id="main-content">
-        <!-- BEGIN PAGE CONTAINER-->
         <div class="container-fluid">
-            <!-- BEGIN PAGE HEADER-->
             <div class="row-fluid">
                 <div class="span12">
                     <h3 class="page-title">
@@ -69,11 +65,8 @@
                     <!-- END PAGE TITLE & BREADCRUMB-->
                 </div>
             </div>
-            <!-- END PAGE HEADER-->
-            <!-- BEGIN PAGE CONTENT-->
             <div class="row-fluid">
                 <div class="span12">
-                    <!-- BEGIN SAMPLE TABLE widget-->
                     <div class="widget">
                         <div class="widget-title">
                             <h4>
@@ -81,57 +74,46 @@
                                 Laporan Penjualan Harian
                             </h4>
                         </div>
-                        <div class="widget-body">
-                            <div class="clearfix">
-                                <form action="<?php echo site_url("admin/laporanPenjualan/detharian"); ?>" class="form-horizontal" method="post">
+                        <form action="<?php echo site_url("admin/laporan/penjualan/harian"); ?>" class="form-horizontal" method="get">
+                            <div class="widget-body">
+                                <div class="clearfix">
                                     <div class="control-group">
                                         <h5> Tanggal mulai </h5>
-                                        <div class="input-append date date-picker" data-date="12-02-2017" data-date-format="yyyy/mm/dd" data-date-viewmode="years">
-                                            <input class=" m-ctrl-medium" size="16" type="text" name="tanggal1" value="2017/10/10" readonly/>
+                                        <div class="input-append date date-picker" data-date="12-02-2017" data-date-format="yyyy-mm-dd" data-date-viewmode="years">
+                                            <input class=" m-ctrl-medium" size="16" type="text" name="from" value="2017-12-01" readonly/>
                                             <span class="add-on"><i class="icon-calendar"></i></span>
                                         </div>
                                         <h5> s/d </h5>
-                                        <div class="input-append date date-picker" data-date="12-02-2017" data-date-format="yyyy/mm/dd" data-date-viewmode="years">
-                                            <input class=" m-ctrl-medium" size="16" type="text" name="tanggal2" value="2017/11/10" readonly/>
+                                        <div class="input-append date date-picker" data-date="12-02-2017" data-date-format="yyyy-mm-dd" data-date-viewmode="years">
+                                            <input class=" m-ctrl-medium" size="16" type="text" name="to" value="2017-12-31" readonly/>
                                             <span class="add-on"><i class="icon-calendar"></i></span>
                                         </div>
                                     </div>
-
-                                    <select id="id_outlet" name="nama_outlet" class="input-medium m-wrap" required="true">
-                                        <?php foreach ($outlet as $otlet) { ?>
-                                            <option value="<?php echo $otlet->id_outlet; ?>"><?php echo $otlet->nama_outlet; ?></option>
+                                    <label for="id_outlet">Outlet</label>
+                                    <select id="id_outlet" name="outlet" class="input-medium m-wrap" required="true">
+                                        <option value="0">Semua</option>
+                                        <?php foreach (isset($outlets) ? $outlets : [] as $outlet) { ?>
+                                            <option value="<?php echo $outlet['id_outlet']; ?>"><?php echo $outlet['nama_outlet']; ?></option>
                                         <?php } ?>
                                     </select>
+                                    <br>
+                                    <br>
+                                    <div class="btn-group">
+                                        <button type="submit" class="btn green">
+                                            Lihat
+                                            <i class="icon-ok"></i>
+                                        </button>
+                                    </div>
+                                </div>
                             </div>
-                            <div class="btn-group">
-
-                                <button type="submit" class="btn green">
-                                    Lihat
-                                    <i class="icon-ok"></i>
-                                </button>
-                                </a>
-                            </div>
-                            </form>
-
-                        </div>
+                        </form>
                     </div>
-                    <!-- END SAMPLE TABLE widget-->
                 </div>
-
             </div>
-
-            <!-- END PAGE CONTENT-->
         </div>
-        <!-- END PAGE CONTAINER-->
     </div>
-    <!-- END PAGE -->
 </div>
-<!-- END CONTAINER -->
-<!-- BEGIN FOOTER -->
 <?php $this->load->view('footer.php') ?>
-<!-- END FOOTER -->
-<!-- BEGIN JAVASCRIPTS -->
-<!-- Load javascripts at bottom, this will reduce page load time -->
 <script src="<?php echo site_url(); ?>assets/js/jquery-1.8.2.min.js"></script>
 <script type="<?php echo site_url(); ?>assets/text/javascript" src="assets/ckeditor/ckeditor.js"></script>
 <script src="<?php echo site_url(); ?>assets/assets/bootstrap/js/bootstrap.min.js"></script>
