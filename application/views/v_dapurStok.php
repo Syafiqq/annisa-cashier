@@ -64,6 +64,7 @@ Website: http://thevectorlab.net/
 <script src="<?php echo base_url(); ?>assets/assets/bootstrap/js/bootstrap.min.js"></script>
 <script src="<?php echo base_url(); ?>assets/js/jquery.blockui.js"></script>
 <script src="<?php echo base_url(); ?>assets/assets/dttb/datatables.js"></script>
+<script src="<?php echo base_url(); ?>assets/js/sprintf.min.js"></script>
 <script src="<?php echo base_url(); ?>assets/js/scripts.js"></script>
 <script>
     jQuery(document).ready(function () {
@@ -86,9 +87,9 @@ Website: http://thevectorlab.net/
                     dt_stocks.row.add([
                         //@formatter:off
                         materials[sk]['nama_bahan']
-                        ,sv['stok']['current']
-                        ,sv['stok']['l_in']
-                        ,sv['stok']['l_out']
+                        ,sprintf("%.3f", sv['stok']['current'])
+                        ,sprintf("%.3f", sv['stok']['l_in'])
+                        ,sprintf("%.3f", sv['stok']['l_out'])
                         ,'<a href="<?php echo site_url(); ?>dapur/stok/'+sv['id_bahan']+'/masuk">'
                         +    '<i class="icon-circle-arrow-down icon-white"></i>&nbsp;'
                         +    'Stok Masuk'
