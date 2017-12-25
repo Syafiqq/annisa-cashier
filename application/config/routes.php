@@ -49,10 +49,11 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 | Examples:	my-controller/index	-> my_controller/index
 |		my-controller/my-method	-> my_controller/my_method
 */
-$route['default_controller']       = 'Login';
-$route['api/dapur/item/update']    = 'api/dapur/item_update';
-$route['api/dapur/queue/saji']     = 'api/dapur/queue_saji';
-$route['dapur/stok/(:num)/masuk']  = 'dapur/stok_masuk/$1';
-$route['dapur/stok/(:num)/keluar'] = 'dapur/stok_keluar/$1';
-$route['404_override']             = '';
-$route['translate_uri_dashes']     = false;
+$route['default_controller']             = 'Login';
+$route['api/dapur/item/update']          = 'api/dapur/item_update';
+$route['api/dapur/queue/saji']           = 'api/dapur/queue_saji';
+$route['dapur/stok/(:num)/masuk']        = 'dapur/stok_masuk/$1';
+$route['dapur/stok/(:num)/masuk/commit'] = 'dapur/stok_masuk_commit/$1';
+$route['dapur/stok/(:num)/keluar']       = 'dapur/stok_keluar/$1';
+$route['404_override']                   = '';
+$route['translate_uri_dashes']           = false;
