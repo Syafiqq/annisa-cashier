@@ -3,6 +3,8 @@
 /**
  * @property M_produk m_produk
  * @property M_bahan m_bahan
+ * @property M_stok m_stok
+ * @property MY_Input input
  * @property CI_Loader|object load
  * */
 class Dapur extends CI_Controller
@@ -74,6 +76,21 @@ class Dapur extends CI_Controller
         $material = $this->m_bahan->getResult()->row_array();
 
         $this->load->view('v_dapurSM', compact('material'));
+    }
+
+    public function stok_masuk_commit($id)
+    {
+        $this->load->model('m_stok');
+        $data             = [];
+        $data['id_bahan'] = $id;
+        $data['stok']     = doubleval($this->input->postOrDefault('jumlah', 0));
+        $data['harga']    = intval($this->input->postOrDefault('harga', 0));
+        $data['tipe']     = 'masuk';
+        $this->m_stok->insert($data, function (CI_DB_query_builder $db) {
+            $db->set('`tanggal`', 'CURRENT_TIMESTAMP', false);
+        });
+
+        echo json_encode(['n' => ['Stok Update'], 'rdr' => site_url("dapur/stok/"), 's' => 1]);
     }
 
     public function stok_keluar($id)
