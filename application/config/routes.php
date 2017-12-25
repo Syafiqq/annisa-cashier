@@ -52,6 +52,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 $route['default_controller']              = 'Login';
 $route['api/dapur/item/update']           = 'api/dapur/item_update';
 $route['api/dapur/queue/saji']            = 'api/dapur/queue_saji';
+$route['api/dapur/queue/finish']          = 'api/dapur/queue_finish';
 $route['dapur/stok/(:num)/masuk']         = 'dapur/stok_masuk/$1';
 $route['dapur/stok/(:num)/masuk/commit']  = 'dapur/stok_masuk_commit/$1';
 $route['dapur/stok/(:num)/keluar']        = 'dapur/stok_keluar/$1';
