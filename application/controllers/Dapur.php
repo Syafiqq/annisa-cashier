@@ -5,6 +5,7 @@
  * @property M_bahan m_bahan
  * @property M_stok m_stok
  * @property MY_Input input
+ * @property CI_Session session
  * @property CI_Loader|object load
  * */
 class Dapur extends CI_Controller
@@ -89,11 +90,12 @@ class Dapur extends CI_Controller
     public function stok_masuk_commit($id)
     {
         $this->load->model('m_stok');
-        $data             = [];
-        $data['id_bahan'] = $id;
-        $data['stok']     = doubleval($this->input->postOrDefault('jumlah', 0));
-        $data['harga']    = intval($this->input->postOrDefault('harga', 0));
-        $data['tipe']     = 'masuk';
+        $data              = [];
+        $data['id_outlet'] = $this->session->userdata('outlet');
+        $data['id_bahan']  = $id;
+        $data['stok']      = doubleval($this->input->postOrDefault('jumlah', 0));
+        $data['harga']     = intval($this->input->postOrDefault('harga', 0));
+        $data['tipe']      = 'masuk';
         $this->m_stok->insert($data, function (CI_DB_query_builder $db) {
             $db->set('`tanggal`', 'CURRENT_TIMESTAMP', false);
         });
@@ -116,11 +118,12 @@ class Dapur extends CI_Controller
     public function stok_keluar_commit($id)
     {
         $this->load->model('m_stok');
-        $data             = [];
-        $data['id_bahan'] = $id;
-        $data['stok']     = doubleval($this->input->postOrDefault('jumlah', 0));
-        $data['harga']    = intval($this->input->postOrDefault('harga', 0));
-        $data['tipe']     = 'keluar';
+        $data              = [];
+        $data['id_bahan']  = $id;
+        $data['id_outlet'] = $this->session->userdata('outlet');
+        $data['stok']      = doubleval($this->input->postOrDefault('jumlah', 0));
+        $data['harga']     = intval($this->input->postOrDefault('harga', 0));
+        $data['tipe']      = 'keluar';
         $this->m_stok->insert($data, function (CI_DB_query_builder $db) {
             $db->set('`tanggal`', 'CURRENT_TIMESTAMP', false);
         });
