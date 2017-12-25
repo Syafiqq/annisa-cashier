@@ -1,5 +1,8 @@
 <?php
 
+/**
+ * @property M_outlet m_outlet
+ */
 class Laporan extends CI_Controller
 {
 
@@ -17,10 +20,13 @@ class Laporan extends CI_Controller
 
     }
 
-    function laporanPerhari()
+    function penjualan_perhari()
     {
-        $this->load->view('v_lph')
-	}
+        $this->load->model('m_outlet');
+        $this->m_outlet->find(function (CI_DB_query_builder $db) { $db->select(); });
+        $outlets = $this->m_outlet->getResult()->result_array();
+        $this->load->view('v_lpHarian', compact('outlets'));
+    }
 
     function laporanPerbulan()
     {
