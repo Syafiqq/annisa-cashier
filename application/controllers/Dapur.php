@@ -21,21 +21,29 @@ class Dapur extends CI_Controller
 
     public function index()
     {
-        $this->load->model('m_produk');
-        $this->m_produk->find(function (CI_DB_query_builder $db) {
-            $db->select();
-        });
-
-        $products = [];
-        foreach ($this->m_produk->getResult()->result_array() as $product)
-        {
-            $products["p_{$product['id_produk']}"] = $product;
-        }
+        $products = $this->getProducts();
 
         $this->load->view('v_dapur', compact('products'));
     }
 
     public function saji()
+    {
+        $products = $this->getProducts();
+
+        $this->load->view('v_dapur_saji', compact('products'));
+    }
+
+    public function selesai()
+    {
+        $products = $this->getProducts();
+
+        $this->load->view('v_dapur_selesai', compact('products'));
+    }
+
+    /**
+     * @return array
+     */
+    private function getProducts()
     {
         $this->load->model('m_produk');
         $this->m_produk->find(function (CI_DB_query_builder $db) {
@@ -48,7 +56,7 @@ class Dapur extends CI_Controller
             $products["p_{$product['id_produk']}"] = $product;
         }
 
-        $this->load->view('v_dapur_saji', compact('products'));
+        return $products;
     }
 
     public function stok()
