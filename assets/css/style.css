@@ -3009,6 +3009,21 @@ div.tagsinput .not_valid {
     color: #3b3b3b;
 }
 
+.gray .pricing-head h1 {
+    background: #4d4d4d;
+    border-bottom: 1px solid #598011;
+    color: #fff;
+    font-size: 26px;
+    font-weight: bolder;
+    margin: 0;
+}
+
+.gray .pricing-subhead {
+    background: #5d5d5d;
+    border-bottom: 1px solid #598011;
+    color: #cfcfcf;
+}
+
 .pricing-head h3 span, .pricing-head h4 span {
     display: block;
     font-size: 12px;
