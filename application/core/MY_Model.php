@@ -249,10 +249,12 @@ class MY_Model extends CI_Model
 
     /**
      * @param array $data
+     * @param Closure $additional
      * @return bool
      */
-    public function insert($data)
+    public function insert($data, \Closure $additional)
     {
+        $additional($this->db);
         $status          = $this->db->insert($this->table);
         $this->query     = $this->db->last_query();
         $this->insert_id = $this->db->insert_id("{$this->table}_id_seq");
