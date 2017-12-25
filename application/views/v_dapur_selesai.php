@@ -116,7 +116,7 @@ Website: http://thevectorlab.net/
                         .append(''
                             //@formatter:off
                             +'<div class="span3 queue-wrapper">'
-                            +    '<div class="pricing-table green" style="background-color: whitesmoke">'
+                            +    '<div class="pricing-table gray" style="background-color: whitesmoke">'
                             +        '<div class="pricing-head">'
                             +            '<h1><strong>'+(++i+1)+' [#' +qv['antrian'] + '] </strong></h1>'
                             +        '</div>'
