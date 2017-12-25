@@ -11,7 +11,10 @@
                         <a href="<?php echo site_url('dapur') ?>" class="btn btn-inverse">Dimasak</a>
                     </td>
                     <td>
-                        <a href="<?php echo site_url('dapur/saji') ?>" class="btn btn-inverse">Selesai</a>
+                        <a href="<?php echo site_url('dapur/saji') ?>" class="btn btn-inverse">Disajikan</a>
+                    </td>
+                    <td>
+                        <a href="<?php echo site_url('dapur/selesai') ?>" class="btn btn-inverse">Selesai</a>
                     </td>
                 </ul>
             </div>
