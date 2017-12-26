@@ -6,7 +6,9 @@
     <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
     <meta content="" name="description"/>
     <meta content="" name="author"/>
-    <link href="<?php echo site_url(); ?>assets/assets/bootstrap/css/bootstrap.min.css" rel="stylesheet"/>
+    <link href="<?php use Carbon\Carbon;
+
+    echo site_url(); ?>assets/assets/bootstrap/css/bootstrap.min.css" rel="stylesheet"/>
     <link href="<?php echo site_url(); ?>assets/assets/bootstrap/css/bootstrap-responsive.min.css" rel="stylesheet"/>
     <link href="<?php echo site_url(); ?>assets/assets/bootstrap/css/bootstrap-fileupload.css" rel="stylesheet"/>
     <link href="<?php echo site_url(); ?>assets/assets/font-awesome/css/font-awesome.css" rel="stylesheet"/>
@@ -27,6 +29,15 @@
     <link rel="stylesheet" href="<?php echo site_url(); ?>assets/assets/bootstrap-toggle-buttons/static/stylesheets/bootstrap-toggle-buttons.css"/>
     <link rel="stylesheet" href="<?php echo site_url(); ?>assets/assets/data-tables/DT_bootstrap.css"/>
     <link rel="stylesheet" type="text/css" href="<?php echo site_url(); ?>assets/assets/bootstrap-daterangepicker/daterangepicker.css"/>
+    <script src="<?php echo base_url(); ?>assets/js/currency.min.js"></script>
+    <script type="text/javascript">
+        function indonesian(value)
+        {
+            //@formatter:off
+            return currency(value, {separator: ".", decimal: ",", symbol: "Rp ", precision: 2, formatWithSymbol: true});
+            //@formatter:on
+        }
+    </script>
 </head>
 
 <body class="fixed-top">
@@ -80,12 +91,12 @@
                                     <div class="control-group">
                                         <h5> Tanggal mulai </h5>
                                         <div class="input-append date date-picker" data-date="12-02-2017" data-date-format="yyyy-mm-dd" data-date-viewmode="years">
-                                            <input class=" m-ctrl-medium" size="16" type="text" name="from" value="2017-12-01" readonly/>
+                                            <input class=" m-ctrl-medium" size="16" type="text" name="from" value="<?php echo isset($rFrom) ? $rFrom : '2017-12-01' ?>" readonly/>
                                             <span class="add-on"><i class="icon-calendar"></i></span>
                                         </div>
                                         <h5> s/d </h5>
                                         <div class="input-append date date-picker" data-date="12-02-2017" data-date-format="yyyy-mm-dd" data-date-viewmode="years">
-                                            <input class=" m-ctrl-medium" size="16" type="text" name="to" value="2017-12-31" readonly/>
+                                            <input class=" m-ctrl-medium" size="16" type="text" name="to" value="<?php echo isset($rTo) ? $rTo : '2017-12-31' ?>" readonly/>
                                             <span class="add-on"><i class="icon-calendar"></i></span>
                                         </div>
                                     </div>
@@ -93,7 +104,7 @@
                                     <select id="id_outlet" name="outlet" class="input-medium m-wrap" required="true">
                                         <option value="0">Semua</option>
                                         <?php foreach (isset($outlets) ? $outlets : [] as $outlet) { ?>
-                                            <option value="<?php echo $outlet['id_outlet']; ?>"><?php echo $outlet['nama_outlet']; ?></option>
+                                            <option value="<?php echo $outlet['id_outlet']; ?>" <?php echo (isset($rOutlet) && (intval($outlet['id_outlet']) === intval($rOutlet))) ? 'selected' : '' ?>><?php echo $outlet['nama_outlet']; ?></option>
                                         <?php } ?>
                                     </select>
                                     <br>
@@ -110,6 +121,65 @@
                     </div>
                 </div>
             </div>
+            <?php if (!empty(isset($reports) ? $reports : [])) { ?>
+                <div class="row-fluid">
+                    <div class="span12">
+                        <div class="widget">
+                            <div class="widget-title">
+                                <h4>
+                                    <i class="icon-list"></i>
+                                    Laporan Penjualan Harian
+                                </h4>
+                            </div>
+                            <div class="widget-body">
+                                <table class="table table-bordered">
+                                    <thead>
+                                    <tr>
+                                        <th>Tanggal</th>
+                                        <th>Outlet</th>
+                                        <th>Jumlah Transaksi</th>
+                                        <th>Total Penjualan</th>
+                                    </tr>
+                                    </thead>
+                                    <tbody>
+                                    <?php
+                                    $accl_trans = 0;
+                                    $accl_total = 0;
+                                    $outlets    = isset($outlets) ? $outlets : [];
+                                    foreach (isset($reports) ? $reports : [] as $ktr => $vtr)
+                                    {
+                                        $vtr_count = count($vtr);
+                                        $i         = -1;
+                                        foreach ($vtr as $kor => $vor)
+                                        {
+                                            $accl_trans   += intval($vor['transaksi']);
+                                            $accl_total   += intval($vor['grand_total']);
+                                            $vor_date     = Carbon::createFromFormat('Y-m-d', $vor['tanggal'])->formatLocalized('%d %B %Y');
+                                            $vor_currency = number_format($vor['grand_total'], 2, ',', '.');
+                                            //@formatter:off
+                                            echo '<tr>';
+                                                echo (++$i <= 0) ? "<td rowspan='$vtr_count'>$vor_date</td>" : '';
+                                                echo "<td>{$outlets["o_{$vor['id_outlet']}"]['nama_outlet']}</td>";
+                                                echo "<td style='text-align: right'>{$vor['transaksi']}</td>";
+                                                echo "<td style='text-align: right'>Rp {$vor_currency}</td>";
+                                            echo '</tr>';
+                                            //@formatter:on
+                                        }
+                                    }
+                                    $accl_total = number_format($accl_total, 2, ',', '.');
+                                    echo '<tr>';
+                                    echo "<td colspan='2' style='text-align: center'>Total</td>";
+                                    echo "<td style='text-align: right'>{$accl_trans}</td>";
+                                    echo "<td style='text-align: right'>Rp {$accl_total}</td>";
+                                    echo '</tr>';
+                                    ?>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            <?php } ?>
         </div>
     </div>
 </div>
