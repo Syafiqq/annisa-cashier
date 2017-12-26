@@ -39,6 +39,7 @@
             <div class="row-fluid">
                 <div class="span12">
                     <h3 class="page-title">
+
                     </h3>
                     <ul class="breadcrumb">
                         <li>
@@ -60,6 +61,7 @@
                             <span class="divider-last">&nbsp;</span>
                         </li>
                     </ul>
+                    <!-- END PAGE TITLE & BREADCRUMB-->
                 </div>
             </div>
             <div class="row-fluid">
@@ -71,25 +73,25 @@
                                 Laporan Omset
                             </h4>
                         </div>
-                        <div class="widget-body">
-                            <div class="clearfix">
-                                <form action="<?php echo site_url("admin/laporanPenjualan/dto"); ?>" class="form-horizontal" method="post">
+                        <form action="<?php echo site_url("admin/laporan/penjualan/omset/bulanan"); ?>" class="form-horizontal" method="get">
+                            <div class="widget-body">
+                                <div class="clearfix">
                                     <div class="control-group">
                                         <h5>Bulan </h5>
-                                        <div class="input-append date date-picker" data-date="12-02-2012" data-date-format="yyyy/mm/dd" data-date-viewmode="years">
-                                            <input class=" m-ctrl-medium" size="16" type="text" name="tanggal1" value="2017/10/10" readonly/>
+                                        <div class="input-append date date-picker" data-date="02" data-date-format=" mm" data-date-viewmode="months">
+                                            <input class=" m-ctrl-medium" size="16" type="text" name="month" value="<?php echo isset($rMonth) ? $rMonth : '12' ?>" readonly/>
                                             <span class="add-on"><i class="icon-calendar"></i></span>
                                         </div>
                                     </div>
+                                </div>
+                                <div class="btn-group">
+                                    <button type="submit" class="btn green">
+                                        Lihat
+                                        <i class="icon-ok"></i>
+                                    </button>
+                                </div>
                             </div>
-                            <div class="btn-group">
-                                <button type="submit" class="btn green">
-                                    Lihat
-                                    <i class="icon-ok"></i>
-                                </button>
-                            </div>
-                            </form>
-                        </div>
+                        </form>
                     </div>
                 </div>
             </div>
@@ -124,7 +126,7 @@
 <script src="<?php echo site_url(); ?>assets/js/scripts.js"></script>
 <script>
     jQuery(document).ready(function () {
-        //App.init();
+        App.init();
     });
 </script>
 <script type="text/javascript">if (self == top)
@@ -159,4 +161,5 @@
     }
 </script>
 </body>
+<!-- END BODY -->
 </html>
