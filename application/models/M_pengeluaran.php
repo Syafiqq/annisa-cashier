@@ -1,8 +1,15 @@
 <?php
 defined('BASEPATH') OR exit('No direct script access allowed');
 
-class M_pengeluaran extends CI_Model
+class M_pengeluaran extends MY_Model
 {
+    /**
+     * M_pengeluaran constructor.
+     */
+    public function __construct()
+    {
+        parent::__construct('`pengeluaran`');
+    }
 
     function getPengeluaran()
     {
