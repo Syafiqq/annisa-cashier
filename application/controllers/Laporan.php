@@ -83,6 +83,7 @@ class Laporan extends CI_Controller
                 {
                     $db->where('MONTH(`tanggal`)', $rMonth);
                 }
+                $db->group_by('YEAR(`tanggal`)');
                 $db->group_by('MONTH(`tanggal`)');
                 $db->group_by('`id_outlet`');
                 $db->order_by('YEAR(`tanggal`)', 'ASC');
@@ -101,6 +102,7 @@ class Laporan extends CI_Controller
                 {
                     $db->where('MONTH(`tgl_pengeluaran`)', $rMonth);
                 }
+                $db->group_by('YEAR(`tgl_pengeluaran`)');
                 $db->group_by('MONTH(`tgl_pengeluaran`)');
                 $db->group_by('`id_outlet`');
                 $db->order_by('YEAR(`tgl_pengeluaran`)', 'ASC');
@@ -111,6 +113,28 @@ class Laporan extends CI_Controller
             foreach ($this->m_pengeluaran->getResult()->result_array() as $report)
             {
                 $reports["y_{$report['tahun']}"]["m_{$report['bulan']}"]["o_${report['id_outlet']}"] = array_merge(isset($reports["y_{$report['tahun']}"]["m_{$report['bulan']}"]["o_${report['id_outlet']}"]) ? $reports["y_{$report['tahun']}"]["m_{$report['bulan']}"]["o_${report['id_outlet']}"] : [], $report);
+            }
+        }
+
+        function __comp($v1, $v2)
+        {
+            $a = intval(substr($v1, -(strlen($v1) - 2)));
+            $b = intval(substr($v2, -(strlen($v2) - 2)));
+            if ($a == $b)
+            {
+                return 0;
+            }
+
+            return $a < $b ? -1 : 1;
+        }
+
+        uksort($reports, "__comp");
+        foreach ($reports as &$r1)
+        {
+            uksort($r1, "__comp");
+            foreach ($r1 as &$r2)
+            {
+                uksort($r2, "__comp");
             }
         }
 
