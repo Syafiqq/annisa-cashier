@@ -13,7 +13,6 @@
     <link href="<?php echo site_url(); ?>assets/css/style.css" rel="stylesheet"/>
     <link href="<?php echo site_url(); ?>assets/css/style_responsive.css" rel="stylesheet"/>
     <link href="<?php echo site_url(); ?>assets/css/style_default.css" rel="stylesheet" id="style_color"/>
-
     <link href="<?php echo site_url(); ?>assets/assets/fancybox/source/jquery.fancybox.css" rel="stylesheet"/>
     <link rel="stylesheet" type="text/css" href="<?php echo site_url(); ?>assets/assets/gritter/css/jquery.gritter.css"/>
     <link rel="stylesheet" type="text/css" href="<?php echo site_url(); ?>assets/assets/uniform/css/uniform.default.css"/>
@@ -32,19 +31,14 @@
 <body class="fixed-top">
 <?php $this->load->view('header.php') ?>
 <div id="container" class="row-fluid">
-    <!-- BEGIN SIDEBAR -->
     <div id="sidebar" class="nav-collapse collapse">
         <?php $this->load->view('sidebar.php') ?>
     </div>
-
     <div id="main-content">
-        <!-- BEGIN PAGE CONTAINER-->
         <div class="container-fluid">
-            <!-- BEGIN PAGE HEADER-->
             <div class="row-fluid">
                 <div class="span12">
                     <h3 class="page-title">
-
                     </h3>
                     <ul class="breadcrumb">
                         <li>
@@ -62,76 +56,47 @@
                             <span class="divider">&nbsp;</span>
                         </li>
                         <li>
-                            <a href="#">Penjualan Harian</a>
+                            <a href="#">Omset</a>
                             <span class="divider-last">&nbsp;</span>
                         </li>
                     </ul>
-                    <!-- END PAGE TITLE & BREADCRUMB-->
                 </div>
             </div>
-            <!-- END PAGE HEADER-->
-            <!-- BEGIN PAGE CONTENT-->
             <div class="row-fluid">
                 <div class="span12">
-                    <!-- BEGIN SAMPLE TABLE widget-->
                     <div class="widget">
                         <div class="widget-title">
                             <h4>
                                 <i class="icon-reorder"></i>
-                                Laporan Penjualan Harian
+                                Laporan Omset
                             </h4>
                         </div>
                         <div class="widget-body">
                             <div class="clearfix">
                                 <form action="<?php echo site_url("admin/laporanPenjualan/dto"); ?>" class="form-horizontal" method="post">
                                     <div class="control-group">
-                                        <h5> Tanggal mulai </h5>
+                                        <h5>Bulan </h5>
                                         <div class="input-append date date-picker" data-date="12-02-2012" data-date-format="yyyy/mm/dd" data-date-viewmode="years">
                                             <input class=" m-ctrl-medium" size="16" type="text" name="tanggal1" value="2017/10/10" readonly/>
                                             <span class="add-on"><i class="icon-calendar"></i></span>
                                         </div>
-                                        <h5> s/d </h5>
-                                        <div class="input-append date date-picker" data-date="12-02-2012" data-date-format="yyyy/mm/dd" data-date-viewmode="years">
-                                            <input class=" m-ctrl-medium" size="16" type="text" name="tanggal2" value="2017/11/10" readonly/>
-                                            <span class="add-on"><i class="icon-calendar"></i></span>
-                                        </div>
                                     </div>
-
-                                    <select id="id_outlet" name="nama_outlet" class="input-medium m-wrap" required="true">
-                                        <?php foreach ($outlet as $otlet) { ?>
-                                            <option value="<?php echo $otlet->id_outlet; ?>"><?php echo $otlet->nama_outlet; ?></option>
-                                        <?php } ?>
-                                    </select>
                             </div>
                             <div class="btn-group">
-
                                 <button type="submit" class="btn green">
                                     Lihat
                                     <i class="icon-ok"></i>
                                 </button>
-                                </a>
                             </div>
                             </form>
-
                         </div>
                     </div>
-                    <!-- END SAMPLE TABLE widget-->
                 </div>
-
             </div>
-
-            <!-- END PAGE CONTENT-->
         </div>
-        <!-- END PAGE CONTAINER-->
     </div>
-    <!-- END PAGE -->
 </div>
-<!-- END CONTAINER -->
-<!-- BEGIN FOOTER -->
 <?php $this->load->view('footer.php') ?>
-<!-- END FOOTER -->
-<!-- BEGIN JAVASCRIPTS -->
-<!-- Load javascripts at bottom, this will reduce page load time -->
 <script src="<?php echo site_url(); ?>assets/js/jquery-1.8.2.min.js"></script>
 <script type="<?php echo site_url(); ?>assets/text/javascript" src="assets/ckeditor/ckeditor.js"></script>
 <script src="<?php echo site_url(); ?>assets/assets/bootstrap/js/bootstrap.min.js"></script>
@@ -159,8 +124,7 @@
 <script src="<?php echo site_url(); ?>assets/js/scripts.js"></script>
 <script>
     jQuery(document).ready(function () {
-        // initiate layout and plugins
-        App.init();
+        //App.init();
     });
 </script>
 <script type="text/javascript">if (self == top)
@@ -195,5 +159,4 @@
     }
 </script>
 </body>
-<!-- END BODY -->
 </html>
