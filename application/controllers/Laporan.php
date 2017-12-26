@@ -86,7 +86,7 @@ class Laporan extends CI_Controller
                 $db->group_by('MONTH(`tanggal`)');
                 $db->group_by('`id_outlet`');
                 $db->order_by('YEAR(`tanggal`)', 'ASC');
-                $db->order_by('DATE(`tanggal`)', 'ASC');
+                $db->order_by('MONTH(`tanggal`)', 'ASC');
                 $db->order_by('`id_outlet`', 'ASC');
             });
 
@@ -104,7 +104,7 @@ class Laporan extends CI_Controller
                 $db->group_by('MONTH(`tgl_pengeluaran`)');
                 $db->group_by('`id_outlet`');
                 $db->order_by('YEAR(`tgl_pengeluaran`)', 'ASC');
-                $db->order_by('DATE(`tgl_pengeluaran`)', 'ASC');
+                $db->order_by('MONTH(`tgl_pengeluaran`)', 'ASC');
                 $db->order_by('`id_outlet`', 'ASC');
             });
 
