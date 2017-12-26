@@ -4,6 +4,7 @@
  * @property M_outlet m_outlet
  * @property MY_Input input
  * @property M_transaksi_m m_transaksi_m
+ * @property M_pengeluaran m_pengeluaran
  */
 class Laporan extends CI_Controller
 {
@@ -59,6 +60,61 @@ class Laporan extends CI_Controller
             }
         }
         $this->load->view('v_lpHarian', compact('outlets', 'reports', 'rFrom', 'rTo', 'rOutlet'));
+    }
+
+    function penjualan_omset_bulanan()
+    {
+        $this->load->model('m_outlet');
+        $this->m_outlet->find(function (CI_DB_query_builder $db) { $db->select(); });
+        $outlets = [];
+        $reports = [];
+        foreach ($this->m_outlet->getResult()->result_array() as $outlet)
+        {
+            $outlets["o_{$outlet['id_outlet']}"] = $outlet;
+        }
+
+        $rMonth = $this->input->getOrDefault('month', null);
+        if (!is_null($rMonth))
+        {
+            $this->load->model(['m_transaksi_m', 'm_pengeluaran']);
+            $this->m_transaksi_m->find(function (CI_DB_query_builder $db) use ($rMonth) {
+                $db->select("YEAR(`tanggal`) AS 'tahun', MONTH(`tanggal`) AS 'bulan', `id_outlet`, SUM(`grand_total`) AS 'pemasukan'");
+                if ($rMonth > 0)
+                {
+                    $db->where('MONTH(`tanggal`)', $rMonth);
+                }
+                $db->group_by('MONTH(`tanggal`)');
+                $db->group_by('`id_outlet`');
+                $db->order_by('YEAR(`tanggal`)', 'ASC');
+                $db->order_by('DATE(`tanggal`)', 'ASC');
+                $db->order_by('`id_outlet`', 'ASC');
+            });
+
+            foreach ($this->m_transaksi_m->getResult()->result_array() as $report)
+            {
+                $reports["y_{$report['tahun']}"]["m_{$report['bulan']}"]["o_${report['id_outlet']}"] = $report;
+            }
+
+            $this->m_pengeluaran->find(function (CI_DB_query_builder $db) use ($rMonth) {
+                $db->select("YEAR(`tgl_pengeluaran`) AS 'tahun', MONTH(`tgl_pengeluaran`) AS 'bulan', `id_outlet`, SUM(`jumlah`) AS 'pengeluaran'");
+                if ($rMonth > 0)
+                {
+                    $db->where('MONTH(`tgl_pengeluaran`)', $rMonth);
+                }
+                $db->group_by('MONTH(`tgl_pengeluaran`)');
+                $db->group_by('`id_outlet`');
+                $db->order_by('YEAR(`tgl_pengeluaran`)', 'ASC');
+                $db->order_by('DATE(`tgl_pengeluaran`)', 'ASC');
+                $db->order_by('`id_outlet`', 'ASC');
+            });
+
+            foreach ($this->m_pengeluaran->getResult()->result_array() as $report)
+            {
+                $reports["y_{$report['tahun']}"]["m_{$report['bulan']}"]["o_${report['id_outlet']}"] = array_merge(isset($reports["y_{$report['tahun']}"]["m_{$report['bulan']}"]["o_${report['id_outlet']}"]) ? $reports["y_{$report['tahun']}"]["m_{$report['bulan']}"]["o_${report['id_outlet']}"] : [], $report);
+            }
+        }
+
+        $this->load->view('v_lpOmset', compact('outlets', 'reports', 'rMonth'));
     }
 
     function laporanPerbulan()
