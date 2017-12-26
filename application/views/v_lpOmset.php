@@ -78,10 +78,21 @@
                                 <div class="clearfix">
                                     <div class="control-group">
                                         <h5>Bulan </h5>
-                                        <div class="input-append date date-picker" data-date="02" data-date-format=" mm" data-date-viewmode="months">
-                                            <input class=" m-ctrl-medium" size="16" type="text" name="month" value="<?php echo isset($rMonth) ? $rMonth : '12' ?>" readonly/>
-                                            <span class="add-on"><i class="icon-calendar"></i></span>
-                                        </div>
+                                        <select id="id_outlet" name="month" class="input-medium m-wrap" required="true">
+                                            <option value="0" <?php echo (isset($rMonth) && (intval(0) === intval($rMonth))) ? 'selected' : '' ?>> Semua</option>
+                                            <option value="1" <?php echo (isset($rMonth) && (intval(1) === intval($rMonth))) ? 'selected' : '' ?>> Januari</option>
+                                            <option value="2" <?php echo (isset($rMonth) && (intval(2) === intval($rMonth))) ? 'selected' : '' ?>> Februari</option>
+                                            <option value="3" <?php echo (isset($rMonth) && (intval(3) === intval($rMonth))) ? 'selected' : '' ?>> Maret</option>
+                                            <option value="4" <?php echo (isset($rMonth) && (intval(4) === intval($rMonth))) ? 'selected' : '' ?>> April</option>
+                                            <option value="5" <?php echo (isset($rMonth) && (intval(5) === intval($rMonth))) ? 'selected' : '' ?>> Mei</option>
+                                            <option value="6" <?php echo (isset($rMonth) && (intval(6) === intval($rMonth))) ? 'selected' : '' ?>> Juni</option>
+                                            <option value="7" <?php echo (isset($rMonth) && (intval(7) === intval($rMonth))) ? 'selected' : '' ?>> Juli</option>
+                                            <option value="8" <?php echo (isset($rMonth) && (intval(8) === intval($rMonth))) ? 'selected' : '' ?>> Agustus</option>
+                                            <option value="9" <?php echo (isset($rMonth) && (intval(9) === intval($rMonth))) ? 'selected' : '' ?>> September</option>
+                                            <option value="10" <?php echo (isset($rMonth) && (intval(10) === intval($rMonth))) ? 'selected' : '' ?>>Oktober</option>
+                                            <option value="11" <?php echo (isset($rMonth) && (intval(11) === intval($rMonth))) ? 'selected' : '' ?>>November</option>
+                                            <option value="12" <?php echo (isset($rMonth) && (intval(12) === intval($rMonth))) ? 'selected' : '' ?>>Desember</option>
+                                        </select>
                                     </div>
                                 </div>
                                 <div class="btn-group">
