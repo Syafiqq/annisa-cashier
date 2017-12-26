@@ -6,7 +6,9 @@
     <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
     <meta content="" name="description"/>
     <meta content="" name="author"/>
-    <link href="<?php echo site_url(); ?>assets/assets/bootstrap/css/bootstrap.min.css" rel="stylesheet"/>
+    <link href="<?php use Carbon\Carbon;
+
+    echo site_url(); ?>assets/assets/bootstrap/css/bootstrap.min.css" rel="stylesheet"/>
     <link href="<?php echo site_url(); ?>assets/assets/bootstrap/css/bootstrap-responsive.min.css" rel="stylesheet"/>
     <link href="<?php echo site_url(); ?>assets/assets/bootstrap/css/bootstrap-fileupload.css" rel="stylesheet"/>
     <link href="<?php echo site_url(); ?>assets/assets/font-awesome/css/font-awesome.css" rel="stylesheet"/>
@@ -26,6 +28,25 @@
     <link rel="stylesheet" href="<?php echo site_url(); ?>assets/assets/bootstrap-toggle-buttons/static/stylesheets/bootstrap-toggle-buttons.css"/>
     <link rel="stylesheet" href="<?php echo site_url(); ?>assets/assets/data-tables/DT_bootstrap.css"/>
     <link rel="stylesheet" type="text/css" href="<?php echo site_url(); ?>assets/assets/bootstrap-daterangepicker/daterangepicker.css"/>
+    <?php
+    function getArrCount($arr, $depth = 1)
+    {
+        if (!is_array($arr) || !$depth)
+        {
+            return 0;
+        }
+
+        $res = count($arr);
+
+        foreach ($arr as $in_ar)
+        {
+            $res += getArrCount($in_ar, $depth - 1);
+        }
+
+        return $res;
+    }
+
+    ?>
 </head>
 
 <body class="fixed-top">
@@ -106,6 +127,72 @@
                     </div>
                 </div>
             </div>
+            <?php if (!empty(isset($reports) ? $reports : [])) { ?>
+                <div class="row-fluid">
+                    <div class="span12">
+                        <div class="widget">
+                            <div class="widget-title">
+                                <h4>
+                                    <i class="icon-list"></i>
+                                    Laporan Penjualan Omset Bulanan
+                                </h4>
+                            </div>
+                            <div class="widget-body">
+                                <table class="table table-bordered">
+                                    <thead>
+                                    <tr>
+                                        <th>Tahun</th>
+                                        <th>Bulan</th>
+                                        <th>Outlet</th>
+                                        <th>Penjualan</th>
+                                        <th>Pengeluaran</th>
+                                        <th>Laba</th>
+                                    </tr>
+                                    </thead>
+                                    <tbody>
+                                    <?php
+                                    $accl_trans = 0;
+                                    $accl_total = 0;
+                                    $outlets    = isset($outlets) ? $outlets : [];
+                                    foreach (isset($reports) ? $reports : [] as $kyr => $vyr)
+                                    {
+                                        $vyr_count = getArrCount($vyr, 2);
+                                        $kyri      = -1;
+                                        foreach ($vyr as $kmr => $vmr)
+                                        {
+                                            $vmr_count = getArrCount($vmr);
+                                            $kmri      = -1;
+                                            foreach ($vmr as $kor => $vor)
+                                            {
+                                                $pemasukan   = isset($vor['pemasukan']) ? intval($vor['pemasukan']) : 0;
+                                                $pengeluaran = isset($vor['pengeluaran']) ? intval($vor['pengeluaran']) : 0;
+                                                $laba        = $pemasukan - $pengeluaran;
+                                                $vor_year    = Carbon::createFromFormat('Y', $vor['tahun'])->formatLocalized('%Y');
+                                                $vor_month   = Carbon::createFromFormat('m', $vor['bulan'])->formatLocalized('%B');
+                                                $pemasukan   = number_format($pemasukan, 2, ',', '.');
+                                                $pengeluaran = number_format($pengeluaran, 2, ',', '.');
+                                                $laba        = number_format($laba, 2, ',', '.');
+                                                //@formatter:off
+                                                echo '<tr>';
+                                                    echo (++$kyri <= 0) ? "<td rowspan='$vyr_count'>{$vor_year}</td>" : '';
+                                                    echo (++$kmri <= 0) ? "<td rowspan='$vmr_count'>{$vor_month}</td>" : '';
+                                                    echo "<td>{$outlets["o_{$vor['id_outlet']}"]['nama_outlet']}</td>";
+                                                    echo "<td style='text-align: right'>Rp {$pemasukan}</td>";
+                                                    echo "<td style='text-align: right'>Rp {$pengeluaran}</td>";
+                                                    echo "<td style='text-align: right'>Rp {$laba}</td>";
+                                                echo '</tr>';
+                                                //@formatter:on
+                                            }
+                                        }
+                                    }
+                                    ?>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            <?php } ?>
         </div>
     </div>
 </div>
