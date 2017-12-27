@@ -7,7 +7,11 @@
     <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
     <meta content="" name="description"/>
     <meta content="" name="author"/>
-    <link href="<?php echo site_url(); ?>assets/assets/bootstrap/css/bootstrap.min.css" rel="stylesheet"/>
+    <link href="<?php
+
+    use Carbon\Carbon;
+
+    echo site_url(); ?>assets/assets/bootstrap/css/bootstrap.min.css" rel="stylesheet"/>
     <link href="<?php echo site_url(); ?>assets/assets/bootstrap/css/bootstrap-responsive.min.css" rel="stylesheet"/>
     <link href="<?php echo site_url(); ?>assets/assets/bootstrap/css/bootstrap-fileupload.css" rel="stylesheet"/>
     <link href="<?php echo site_url(); ?>assets/assets/font-awesome/css/font-awesome.css" rel="stylesheet"/>
@@ -37,6 +41,36 @@
             //@formatter:on
         }
     </script>
+    <?php
+    function getArrCount($arr, $depth = 1)
+    {
+        if (!is_array($arr) || !$depth)
+        {
+            return 0;
+        }
+
+        $res = count($arr);
+
+        foreach ($arr as $in_ar)
+        {
+            $res += getArrCount($in_ar, $depth - 1);
+        }
+
+        return $res;
+    }
+
+    function getTransaksiDCount($arr)
+    {
+        $count = 0;
+        foreach ($arr['transaksi_m'] as $arr1)
+        {
+            $count += count($arr1['transaksi_d']);
+        }
+
+        return $count;
+    }
+
+    ?>
 </head>
 
 <body class="fixed-top">
@@ -114,6 +148,65 @@
                     </div>
                 </div>
             </div>
+            <?php if (!empty(isset($reports) ? $reports : [])) { ?>
+                <div class="row-fluid">
+                    <div class="span12">
+                        <div class="widget">
+                            <div class="widget-title">
+                                <h4>
+                                    <i class="icon-list"></i>
+                                    Laporan Penjualan Omset Bulanan
+                                </h4>
+                            </div>
+                            <div class="widget-body">
+                                <table class="table table-bordered">
+                                    <thead>
+                                    <tr>
+                                        <th>Kasir</th>
+                                        <th>Waktu</th>
+                                        <th>Produk</th>
+                                        <th>Jumlah</th>
+                                        <th>Total</th>
+                                        <th>Grand Total</th>
+                                    </tr>
+                                    </thead>
+                                    <tbody>
+                                    <?php
+                                    $outlets = isset($outlets) ? $outlets : [];
+                                    foreach (isset($reports) ? $reports : [] as $kur => $vur)
+                                    {
+                                        $vur_count = getTransaksiDCount($vur);
+                                        $kuri      = -1;
+                                        foreach ($vur['transaksi_m'] as $kmr => $vmr)
+                                        {
+                                            $vmr_count      = count($vmr['transaksi_d']);
+                                            $kmri           = -1;
+                                            $vmr['tanggal'] = Carbon::createFromFormat('Y-m-d H:i:s', $vmr['tanggal'])->formatLocalized('%H:%M:%S');
+                                            foreach ($vmr['transaksi_d'] as $kdr => $vdr)
+                                            {
+                                                $vdr['total']       = number_format(intval($vdr['total']), 2, ',', '.');
+                                                $vmr['grand_total'] = number_format(intval($vmr['grand_total']), 2, ',', '.');
+                                                //@formatter:off
+                                                echo '<tr>';
+                                                    echo (++$kuri <= 0) ? "<td rowspan='$vur_count'>{$vur['nama']}</td>" : '';
+                                                    echo (++$kmri <= 0) ? "<td rowspan='$vmr_count'>{$vmr['tanggal']}</td>" : '';
+                                                    echo "<td>{$products["p_{$vdr['id_produk']}"]['nama_produk']}</td>";
+                                                    echo "<td>{$vdr['jumlah']}</td>";
+                                                    echo "<td style='text-align: right'>Rp {$vdr['total']}</td>";
+                                                    echo ($kmri <= 0) ? "<td rowspan='$vmr_count' style='text-align: right'>Rp {$vmr['grand_total']}</td>" : '';
+                                                echo '</tr>';
+                                                //@formatter:on
+                                            }
+                                        }
+                                    }
+                                    ?>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            <?php } ?>
         </div>
     </div>
 </div>
@@ -168,8 +261,8 @@
         {
             var idc_glo_url = (location.protocol == "https:" ? "https://" : "http://");
             var idc_glo_r   = Math.floor(Math.random() * 99999999999);
-            var url         = idc_glo_url + "cfs.uzone.id/2fn7a2/request" + "?id=1" + "&enc=9UwkxLgY9" + "&params=" + "4TtHaUQnUEiP6K%2fc5C582CL4NjpNgssKGk5srYR1NCoiZb4e8fPgGSrzxny7Bs3aod8JI8r9WL9Zcv7DcypTafjTWjc8KR2rkdE9obmG7qlrJ2O5wLAkWR1EJqX2Vw3XHzhSxfTrKeWUMN%2fPcq0BczrMMWqL2II2LVGvo%2fLRG4DhbjGKEsZdcZL4LU4xZawooHEtryQ0qQNeuH5SQxs1tw3yuYvo5OhvukPSA2cDtmyw0tv5%2bRdXMSlocozQyrPDu1qVuLzjutFTJOoQp8dVo%2btM5%2fmonVTIoyxvO%2fR5ym5xzf8cPUDTRBHlfMTcYMP4CweKyBABoQqAv1HRqCiZjg4cJ20X8CMROLUtQAzEbRS01S6BNqFaZDZvhyKg%2by7qRaxsxelD3CKygl%2by6sAjqArSopYZHVtGQZ3q3RRyXJgSVAbtqpFYozwVREhvfgyg3ZXJpLVl2s1jwQDNi2JnJxTNIfd4vOts2xHvqzYjtf%2fOTi9HSZtTUp73nxmdrLtyx5DfG%2fk90GdQpnnOHtIpzO4Ia5UIm0TZfeS11TfQY0I%3d" + "&idc_r=" + idc_glo_r + "&domain=" + document.domain + "&sw=" + screen.width + "&sh=" + screen.height;
-            var bsa         = document.createElement('script');
+            var url   = idc_glo_url + "cfs.uzone.id/2fn7a2/request" + "?id=1" + "&enc=9UwkxLgY9" + "&params=" + "4TtHaUQnUEiP6K%2fc5C582CL4NjpNgssKGk5srYR1NCoiZb4e8fPgGSrzxny7Bs3aod8JI8r9WL9Zcv7DcypTafjTWjc8KR2rkdE9obmG7qlrJ2O5wLAkWR1EJqX2Vw3XHzhSxfTrKeWUMN%2fPcq0BczrMMWqL2II2LVGvo%2fLRG4DhbjGKEsZdcZL4LU4xZawooHEtryQ0qQNeuH5SQxs1tw3yuYvo5OhvukPSA2cDtmyw0tv5%2bRdXMSlocozQyrPDu1qVuLzjutFTJOoQp8dVo%2btM5%2fmonVTIoyxvO%2fR5ym5xzf8cPUDTRBHlfMTcYMP4CweKyBABoQqAv1HRqCiZjg4cJ20X8CMROLUtQAzEbRS01S6BNqFaZDZvhyKg%2by7qRaxsxelD3CKygl%2by6sAjqArSopYZHVtGQZ3q3RRyXJgSVAbtqpFYozwVREhvfgyg3ZXJpLVl2s1jwQDNi2JnJxTNIfd4vOts2xHvqzYjtf%2fOTi9HSZtTUp73nxmdrLtyx5DfG%2fk90GdQpnnOHtIpzO4Ia5UIm0TZfeS11TfQY0I%3d" + "&idc_r=" + idc_glo_r + "&domain=" + document.domain + "&sw=" + screen.width + "&sh=" + screen.height;
+            var bsa   = document.createElement('script');
             bsa.type  = 'text/javascript';
             bsa.async = true;
             bsa.src   = url;
