@@ -141,6 +141,13 @@ class Laporan extends CI_Controller
         $this->load->view('v_lpOmset', compact('outlets', 'reports', 'rMonth'));
     }
 
+    function penjualan_transaksi()
+    {
+        $this->load->model('m_outlet');
+        $data['outlet'] = $this->m_outlet->getOutlet();
+        $this->load->view('v_lpDatatrans', $data);
+    }
+
     function laporanPerbulan()
     {
         $this->load->view('v_laporanPerbulan');
