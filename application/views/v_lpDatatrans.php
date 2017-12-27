@@ -96,7 +96,6 @@
                                     </div>
                                     <label for="id_outlet">Outlet</label>
                                     <select id="id_outlet" name="outlet" class="input-medium m-wrap" required="true">
-                                        <option value="0">Semua</option>
                                         <?php foreach (isset($outlets) ? $outlets : [] as $outlet) { ?>
                                             <option value="<?php echo $outlet['id_outlet']; ?>" <?php echo (isset($rOutlet) && (intval($outlet['id_outlet']) === intval($rOutlet))) ? 'selected' : '' ?>><?php echo $outlet['nama_outlet']; ?></option>
                                         <?php } ?>
