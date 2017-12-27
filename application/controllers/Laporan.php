@@ -5,6 +5,9 @@
  * @property MY_Input input
  * @property M_transaksi_m m_transaksi_m
  * @property M_pengeluaran m_pengeluaran
+ * @property M_user m_user
+ * @property M_transaksi_d m_transaksi_d
+ * @property M_produk m_produk
  */
 class Laporan extends CI_Controller
 {
@@ -144,8 +147,67 @@ class Laporan extends CI_Controller
     function penjualan_transaksi()
     {
         $this->load->model('m_outlet');
-        $data['outlet'] = $this->m_outlet->getOutlet();
-        $this->load->view('v_lpDatatrans', $data);
+        $this->m_outlet->find(function (CI_DB_query_builder $db) { $db->select(); });
+        $outlets  = [];
+        $reports  = [];
+        $products = [];
+        foreach ($this->m_outlet->getResult()->result_array() as $outlet)
+        {
+            $outlets["o_{$outlet['id_outlet']}"] = $outlet;
+        }
+
+        $rDate   = $this->input->getOrDefault('tanggal', null);
+        $rOutlet = $this->input->getOrDefault('outlet', 0);
+        if ((!is_null($rDate) && ($rOutlet > 0)))
+        {
+            $this->load->model(['m_user', 'm_transaksi_m', 'm_transaksi_d', 'm_produk']);
+            $this->m_produk->find(function (CI_DB_query_builder $db) { $db->select(); });
+            foreach ($this->m_produk->getResult()->result_array() as $product)
+            {
+                $products["p_{$product['id_produk']}"] = $product;
+            }
+
+            $this->m_user->find(function (CI_DB_query_builder $db) use ($rOutlet) {
+                $db->select('`id_user`, `nama`');
+                $db->where('`id_outlet`', $rOutlet);
+                $db->where('`level`', 'kasir');
+            });
+
+            foreach ($_users = $this->m_user->getResult()->result_array() as $_user)
+            {
+                $this->m_transaksi_m->find(function (CI_DB_query_builder $db) use ($rDate, $_user, $rOutlet) {
+                    $db->select('`id_tm`, `tanggal`, `grand_total`');
+                    $db->where('`id_outlet`', $rOutlet);
+                    $db->where('`id_user`', $_user['id_user']);
+                    $db->where('DATE(`tanggal`)', $rDate);
+                    $db->order_by('`tanggal`', 'ASC');
+                });
+
+                foreach ($_transaksi_ms = $this->m_transaksi_m->getResult()->result_array() as $_transaksi_m)
+                {
+                    $this->m_transaksi_d->find(function (CI_DB_query_builder $db) use ($_transaksi_m) {
+                        $db->select('`id_td`, `id_produk`, `jumlah`, `total`');
+                        $db->where('`id_tm`', $_transaksi_m['id_tm']);
+                        $db->order_by('`id_produk`', 'ASC');
+                    });
+
+                    foreach ($_transaksi_ds = $this->m_transaksi_d->getResult()->result_array() as $_transaksi_d)
+                    {
+                        $_transaksi_m['transaksi_d']["td_{$_transaksi_d['id_td']}"] = $_transaksi_d;
+
+                    }
+
+                    $_user['transaksi_m']["tm_{$_transaksi_m['id_tm']}"] = $_transaksi_m;
+                }
+
+                if (isset($_user['transaksi_m']) && (count($_user['transaksi_m']) > 0))
+                {
+                    $reports["u_{$_user['id_user']}"] = $_user;
+                }
+            }
+        }
+
+        $this->load->view('v_lpDatatrans', compact('outlets', 'rDate', 'products', 'reports'));
     }
 
     function laporanPerbulan()
