@@ -59,5 +59,6 @@ $route['dapur/stok/(:num)/keluar']              = 'dapur/stok_keluar/$1';
 $route['dapur/stok/(:num)/keluar/commit']       = 'dapur/stok_keluar_commit/$1';
 $route['admin/laporan/penjualan/harian']        = 'laporan/penjualan_perhari';
 $route['admin/laporan/penjualan/omset/bulanan'] = 'laporan/penjualan_omset_bulanan';
+$route['admin/laporan/penjualan/transaksi'] = 'laporan/penjualan_transaksi';
 $route['404_override']                          = '';
 $route['translate_uri_dashes']                  = false;
