@@ -80,7 +80,7 @@
                 {
                     echo "active";
                 } ?>">
-                    <a href="<?php echo base_url() ?>admin/laporanProduk">Laporan Produk</a>
+                    <a href="<?php echo base_url() ?>admin/laporan/produk">Laporan Produk</a>
                 </li>
                 <li class="<?php if ($this->uri->segment(2) == '')
                 {
