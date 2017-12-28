@@ -64,15 +64,15 @@
                 <div class="span12">
                     <!-- BEGIN SAMPLE TABLE widget-->
                     <div class="row-fluid">
-                        <a href="<?php echo site_url('admin/laporanPenjualan/lph'); ?>" class="icon-btn span2">
+                        <a href="<?php echo site_url('admin/laporan/penjualan/harian'); ?>" class="icon-btn span2">
                             <i class="icon-calendar"></i>
                             <div>Penjualan Harian</div>
                         </a>
-                        <a href="<?php echo site_url('admin/laporanPenjualan/ldo'); ?>" class="icon-btn span2">
+                        <a href="<?php echo site_url('admin/laporan/penjualan/omset/bulanan'); ?>" class="icon-btn span2">
                             <i class="icon-bar-chart"></i>
                             <div>Omset</div>
                         </a>
-                        <a href="<?php echo site_url('admin/laporanPenjualan/datatp'); ?>" class="icon-btn span2">
+                        <a href="<?php echo site_url('admin/laporan/penjualan/transaksi'); ?>" class="icon-btn span2">
                             <i class="icon-credit-card"></i>
                             <div>Data Transaksi Penjualan</div>
                         </a>
