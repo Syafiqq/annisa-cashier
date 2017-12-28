@@ -207,7 +207,7 @@ class Laporan extends CI_Controller
             }
         }
 
-        $this->load->view('v_lpDatatrans', compact('outlets', 'rDate', 'products', 'reports'));
+        $this->load->view('v_lpDatatrans', compact('outlets', 'rDate', 'products', 'reports', 'rOutlet'));
     }
 
     function laporanPerbulan()
