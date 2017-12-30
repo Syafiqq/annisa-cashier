@@ -86,7 +86,7 @@
                 {
                     echo "active";
                 } ?>">
-                    <a href="<?php echo base_url() ?>admin/laporanStok">Laporan Stok</a>
+                    <a href="<?php echo base_url() ?>admin/laporan/stok">Laporan Stok</a>
                 </li>
             </ul>
         </li>
