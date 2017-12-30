@@ -149,7 +149,7 @@
                             <div class="widget-title">
                                 <h4>
                                     <i class="icon-list"></i>
-                                    Laporan Penjualan Omset Bulanan
+                                    Laporan Produk
                                 </h4>
                             </div>
                             <div class="widget-body">
