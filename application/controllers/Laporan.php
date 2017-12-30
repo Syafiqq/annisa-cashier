@@ -226,30 +226,41 @@ class Laporan extends CI_Controller
 
         if ((!is_null($rDate) && ($rOutlet > 0)))
         {
+            $_products = [];
             $this->load->model(['m_produk', 'm_user', 'm_transaksi_m']);
 
-            $this->m_produk->find(function (CI_DB_query_builder $db) use ($rOutlet, $rDate) {
-                //@formatter:off
-                    $db->select("`produk`.`id_produk`, `produk`.`nama_produk`, `produk`.`kategori`, COALESCE(SUM(`transaksi_d`.`jumlah`), 0) AS 'jumlah', COALESCE(SUM(`transaksi_d`.`total`), 0) AS 'total'");
-                    $db->join('`transaksi_d`', '`transaksi_d`.`id_produk` = `produk`.`id_produk`', 'LEFT OUTER');
-                    $db->join('`transaksi_m`', '`transaksi_m`.`id_tm` = `transaksi_d`.`id_tm`', 'LEFT OUTER');
-                    $db->group_start();
-                        $db->where('DATE(`transaksi_m`.`tanggal`)', $rDate);
-                        $db->or_where('DATE(`transaksi_m`.`tanggal`)', null);
-                    $db->group_end();
-                    $db->group_start();
-                        $db->where('`transaksi_m`.`id_outlet`', $rOutlet);
-                        $db->or_where('`transaksi_m`.`id_outlet`', null);
-                    $db->group_end();
-                    $db->group_by('`produk`.`id_produk`');
-                    $db->order_by('`produk`.`id_produk`', 'ASC');
-                    $db->order_by('`transaksi_m`.`tanggal`', 'ASC');
-                    //@formatter:on
+            $this->m_produk->find(function (CI_DB_query_builder $db) { $db->select('`id_produk`, `nama_produk`, `kategori`'); });
+            foreach ($this->m_produk->getResult()->result_array() as $product)
+            {
+                $_products["p_{$product['id_produk']}"] = $product;
+            }
+
+            $this->m_user->find(function (CI_DB_query_builder $db) use ($rOutlet) {
+                $db->select('`id_user`, `nama`');
+                $db->where('`id_outlet`', $rOutlet);
+                $db->where('`level`', 'kasir');
             });
 
-            foreach ($this->m_produk->getResult()->result_array() as $_product)
+            foreach ($_products as $_product)
             {
-                $reports["p_{$_product['id_produk']}"] = $_product;
+                $this->m_transaksi_m->find(function (CI_DB_query_builder $db) use ($_product, $rOutlet, $rDate) {
+                    $db->select("COALESCE(SUM(`transaksi_d`.`jumlah`), 0) AS 'jumlah', COALESCE(SUM(`transaksi_d`.`total`), 0) AS 'total'");
+                    $db->join('`transaksi_d`', '`transaksi_m`.`id_tm` = `transaksi_d`.`id_tm`', 'LEFT OUTER');
+                    $db->where('DATE(`transaksi_m`.`tanggal`)', $rDate);
+                    $db->where('`transaksi_m`.`id_outlet`', $rOutlet);
+                    $db->where('`transaksi_d`.`id_produk`', $_product['id_produk']);
+                    $db->group_by('`transaksi_d`.`id_produk`');
+                    $db->order_by('`transaksi_m`.`tanggal`', 'ASC');
+                });
+
+                if ($this->m_transaksi_m->getResult()->num_rows() > 0)
+                {
+                    $reports["p_{$_product['id_produk']}"] = array_merge($_product, $this->m_transaksi_m->getResult()->row_array());
+                }
+                else
+                {
+                    $reports["p_{$_product['id_produk']}"] = array_merge($_product, ['jumlah' => 0, 'total' => 0]);
+                }
             }
         }
 
