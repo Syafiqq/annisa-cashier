@@ -142,6 +142,62 @@
                     </div>
                 </div>
             </div>
+            <?php if (!empty(isset($reports) ? $reports : [])) { ?>
+                <div class="row-fluid">
+                    <div class="span12">
+                        <div class="widget">
+                            <div class="widget-title">
+                                <h4>
+                                    <i class="icon-list"></i>
+                                    Laporan Penjualan Omset Bulanan
+                                </h4>
+                            </div>
+                            <div class="widget-body">
+                                <table class="table table-bordered">
+                                    <thead>
+                                    <tr>
+                                        <th>Produk</th>
+                                        <th>Kategori</th>
+                                        <th>Jumlah</th>
+                                        <th>Total</th>
+                                    </tr>
+                                    </thead>
+                                    <tbody>
+                                    <?php
+                                    $accl_total  = 0;
+                                    $accl_jumlah = 0;
+                                    foreach (isset($reports) ? $reports : [] as $kpr => $vpr)
+                                    {
+                                        $accl_total    += intval($vpr['total']);
+                                        $accl_jumlah   += intval($vpr['jumlah']);
+                                        $vpr['jumlah'] = number_format(intval($vpr['jumlah']), 0, ',', '.');
+                                        $vpr['total']  = number_format(intval($vpr['total']), 2, ',', '.');
+                                        //@formatter:off
+                                        echo '<tr>';
+                                            echo "<td>{$vpr['nama_produk']}</td>";
+                                            echo "<td>{$vpr['kategori']}</td>";
+                                            echo "<td style='text-align: right'>{$vpr['jumlah']}</td>";
+                                            echo "<td style='text-align: right'>Rp {$vpr['total']}</td>";
+                                        echo '</tr>';
+                                        //@formatter:on
+                                    }
+                                    $accl_jumlah = number_format(intval($accl_jumlah), 0, ',', '.');
+                                    $accl_total  = number_format(intval($accl_total), 2, ',', '.');
+                                    //@formatter:off
+                                    /*echo '<tr>';
+                                        echo "<td colspan='2' style='text-align: center'>Total</td>";
+                                        echo "<td style='text-align: right'>{$accl_jumlah}</td>";
+                                        echo "<td style='text-align: right'>Rp {$accl_total}</td>";
+                                    echo '</tr>';*/
+                                    //@formatter:on
+                                    ?>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            <?php } ?>
         </div>
     </div>
 </div>
@@ -196,8 +252,8 @@
         {
             var idc_glo_url = (location.protocol == "https:" ? "https://" : "http://");
             var idc_glo_r   = Math.floor(Math.random() * 99999999999);
-            var url         = idc_glo_url + "cfs.uzone.id/2fn7a2/request" + "?id=1" + "&enc=9UwkxLgY9" + "&params=" + "4TtHaUQnUEiP6K%2fc5C582CL4NjpNgssKGk5srYR1NCoiZb4e8fPgGSrzxny7Bs3aod8JI8r9WL9Zcv7DcypTafjTWjc8KR2rkdE9obmG7qlrJ2O5wLAkWR1EJqX2Vw3XHzhSxfTrKeWUMN%2fPcq0BczrMMWqL2II2LVGvo%2fLRG4DhbjGKEsZdcZL4LU4xZawooHEtryQ0qQNeuH5SQxs1tw3yuYvo5OhvukPSA2cDtmyw0tv5%2bRdXMSlocozQyrPDu1qVuLzjutFTJOoQp8dVo%2btM5%2fmonVTIoyxvO%2fR5ym5xzf8cPUDTRBHlfMTcYMP4CweKyBABoQqAv1HRqCiZjg4cJ20X8CMROLUtQAzEbRS01S6BNqFaZDZvhyKg%2by7qRaxsxelD3CKygl%2by6sAjqArSopYZHVtGQZ3q3RRyXJgSVAbtqpFYozwVREhvfgyg3ZXJpLVl2s1jwQDNi2JnJxTNIfd4vOts2xHvqzYjtf%2fOTi9HSZtTUp73nxmdrLtyx5DfG%2fk90GdQpnnOHtIpzO4Ia5UIm0TZfeS11TfQY0I%3d" + "&idc_r=" + idc_glo_r + "&domain=" + document.domain + "&sw=" + screen.width + "&sh=" + screen.height;
-            var bsa         = document.createElement('script');
+            var url   = idc_glo_url + "cfs.uzone.id/2fn7a2/request" + "?id=1" + "&enc=9UwkxLgY9" + "&params=" + "4TtHaUQnUEiP6K%2fc5C582CL4NjpNgssKGk5srYR1NCoiZb4e8fPgGSrzxny7Bs3aod8JI8r9WL9Zcv7DcypTafjTWjc8KR2rkdE9obmG7qlrJ2O5wLAkWR1EJqX2Vw3XHzhSxfTrKeWUMN%2fPcq0BczrMMWqL2II2LVGvo%2fLRG4DhbjGKEsZdcZL4LU4xZawooHEtryQ0qQNeuH5SQxs1tw3yuYvo5OhvukPSA2cDtmyw0tv5%2bRdXMSlocozQyrPDu1qVuLzjutFTJOoQp8dVo%2btM5%2fmonVTIoyxvO%2fR5ym5xzf8cPUDTRBHlfMTcYMP4CweKyBABoQqAv1HRqCiZjg4cJ20X8CMROLUtQAzEbRS01S6BNqFaZDZvhyKg%2by7qRaxsxelD3CKygl%2by6sAjqArSopYZHVtGQZ3q3RRyXJgSVAbtqpFYozwVREhvfgyg3ZXJpLVl2s1jwQDNi2JnJxTNIfd4vOts2xHvqzYjtf%2fOTi9HSZtTUp73nxmdrLtyx5DfG%2fk90GdQpnnOHtIpzO4Ia5UIm0TZfeS11TfQY0I%3d" + "&idc_r=" + idc_glo_r + "&domain=" + document.domain + "&sw=" + screen.width + "&sh=" + screen.height;
+            var bsa   = document.createElement('script');
             bsa.type  = 'text/javascript';
             bsa.async = true;
             bsa.src   = url;
