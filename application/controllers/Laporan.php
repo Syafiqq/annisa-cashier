@@ -8,6 +8,8 @@
  * @property M_user m_user
  * @property M_transaksi_d m_transaksi_d
  * @property M_produk m_produk
+ * @property M_bahan m_bahan
+ * @property M_stok m_stok
  */
 class Laporan extends CI_Controller
 {
@@ -283,7 +285,41 @@ class Laporan extends CI_Controller
 
         if ((!is_null($rDate) && ($rOutlet > 0)))
         {
+            $_resources = [];
+            $this->load->model(['m_bahan', 'm_user', 'm_stok']);
 
+            $this->m_bahan->find(function (CI_DB_query_builder $db) { $db->select('`id_bahan`, `nama_bahan`'); });
+            foreach ($this->m_bahan->getResult()->result_array() as $resource)
+            {
+                $_resources["r_{$resource['id_bahan']}"] = $resource;
+            }
+
+            $this->m_user->find(function (CI_DB_query_builder $db) use ($rOutlet) {
+                $db->select('`id_user`, `nama`');
+                $db->where('`id_outlet`', $rOutlet);
+                $db->where('`level`', 'kasir');
+            });
+
+            foreach ($_resources as $_resource)
+            {
+                $this->m_stok->find(function (CI_DB_query_builder $db) use ($_resource, $rOutlet, $rDate) {
+                    $db->select(//@formatter:off
+                        /** @lang MySQL */
+                        "   (SELECT COALESCE(SUM(`stok`), 0) AS 'masuk' FROM `stok` WHERE `stok`.`id_bahan` = '{$_resource['id_bahan']}' AND DATE(`stok`.`tanggal`) = '{$rDate}' AND `stok`.`id_outlet` = '{$rOutlet}' AND `stok`.`tipe` = 'masuk') AS 'g_in'"
+                        . ",(SELECT COALESCE(SUM(`stok`), 0) AS 'keluar' FROM `stok` WHERE `stok`.`id_bahan` = '{$_resource['id_bahan']}' AND DATE(`stok`.`tanggal`) = '{$rDate}' AND `stok`.`id_outlet` = '{$rOutlet}' AND `stok`.`tipe` = 'keluar') AS 'g_out'"
+                        . "", false);
+                    //@formatter:on
+                }, true);
+
+                if ($this->m_stok->getResult()->num_rows() > 0)
+                {
+                    $reports["r_{$_resource['id_bahan']}"] = array_merge($_resource, $this->m_stok->getResult()->row_array());
+                }
+                else
+                {
+                    $reports["r_{$_resource['id_bahan']}"] = array_merge($_resource, ['masuk' => 0, 'keluar' => 0]);
+                }
+            }
         }
 
         $this->load->view('v_laporanStok', compact('outlets', 'rDate', 'reports', 'rOutlet'));
