@@ -305,8 +305,8 @@ class Laporan extends CI_Controller
                 $this->m_stok->find(function (CI_DB_query_builder $db) use ($_resource, $rOutlet, $rDate) {
                     $db->select(//@formatter:off
                         /** @lang MySQL */
-                        "   (SELECT COALESCE(SUM(`stok`), 0) AS 'masuk' FROM `stok` WHERE `stok`.`id_bahan` = '{$_resource['id_bahan']}' AND DATE(`stok`.`tanggal`) = '{$rDate}' AND `stok`.`id_outlet` = '{$rOutlet}' AND `stok`.`tipe` = 'masuk') AS 'g_in'"
-                        . ",(SELECT COALESCE(SUM(`stok`), 0) AS 'keluar' FROM `stok` WHERE `stok`.`id_bahan` = '{$_resource['id_bahan']}' AND DATE(`stok`.`tanggal`) = '{$rDate}' AND `stok`.`id_outlet` = '{$rOutlet}' AND `stok`.`tipe` = 'keluar') AS 'g_out'"
+                        "   (SELECT COALESCE(SUM(`stok`), 0) AS 'masuk' FROM `stok` WHERE `stok`.`id_bahan` = '{$_resource['id_bahan']}' AND DATE(`stok`.`tanggal`) = '{$rDate}' AND `stok`.`id_outlet` = '{$rOutlet}' AND `stok`.`tipe` = 'masuk') AS 'masuk'"
+                        . ",(SELECT COALESCE(SUM(`stok`), 0) AS 'keluar' FROM `stok` WHERE `stok`.`id_bahan` = '{$_resource['id_bahan']}' AND DATE(`stok`.`tanggal`) = '{$rDate}' AND `stok`.`id_outlet` = '{$rOutlet}' AND `stok`.`tipe` = 'keluar') AS 'keluar'"
                         . "", false);
                     //@formatter:on
                 }, true);
