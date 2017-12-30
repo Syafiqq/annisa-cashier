@@ -123,8 +123,8 @@
                                 <div class="clearfix">
                                     <div class="control-group">
                                         <h5> Tanggal </h5>
-                                        <div class="input-append date date-picker" data-date="12-02-2017" data-date-format="yyyy-mm-dd" data-date-viewmode="years">
-                                            <input class=" m-ctrl-medium" size="16" type="text" name="tanggal" value="<?php echo isset($rDate) ? $rDate : '2017-12-01' ?>" readonly/>
+                                        <div class="input-append date date-picker" data-date=<?php echo \Carbon\Carbon::now()->toDateString() ?> data-date-format="yyyy-mm-dd" data-date-viewmode="days">
+                                            <input class=" m-ctrl-medium" size="16" type="text" name="tanggal" value="<?php echo isset($rDate) ? $rDate : \Carbon\Carbon::now()->toDateString() ?>" readonly/>
                                             <span class="add-on"><i class="icon-calendar"></i></span>
                                         </div>
                                     </div>
