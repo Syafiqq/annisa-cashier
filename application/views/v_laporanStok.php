@@ -102,6 +102,60 @@
                     </div>
                 </div>
             </div>
+            <?php if (!empty(isset($reports) ? $reports : [])) { ?>
+                <div class="row-fluid">
+                    <div class="span12">
+                        <div class="widget">
+                            <div class="widget-title">
+                                <h4>
+                                    <i class="icon-list"></i>
+                                    Laporan Stok
+                                </h4>
+                            </div>
+                            <div class="widget-body">
+                                <table class="table table-bordered">
+                                    <thead>
+                                    <tr>
+                                        <th>Bahan</th>
+                                        <th>Stok Masuk</th>
+                                        <th>Stok Keluar</th>
+                                    </tr>
+                                    </thead>
+                                    <tbody>
+                                    <?php
+                                    $accl_masuk  = 0;
+                                    $accl_keluar = 0;
+                                    foreach (isset($reports) ? $reports : [] as $krr => $vrr)
+                                    {
+                                        $accl_masuk    += intval($vrr['masuk']);
+                                        $accl_keluar   += intval($vrr['keluar']);
+                                        $vrr['masuk']  = number_format(intval($vrr['masuk']), 0, ',', '.');
+                                        $vrr['keluar'] = number_format(intval($vrr['keluar']), 0, ',', '.');
+                                        //@formatter:off
+                                        echo '<tr>';
+                                            echo "<td>{$vrr['nama_bahan']}</td>";
+                                            echo "<td style='text-align: right'>{$vrr['masuk']}</td>";
+                                            echo "<td style='text-align: right'>{$vrr['keluar']}</td>";
+                                        echo '</tr>';
+                                        //@formatter:on
+                                    }
+                                    $accl_keluar = number_format(intval($accl_keluar), 0, ',', '.');
+                                    $accl_masuk  = number_format(intval($accl_masuk), 0, ',', '.');
+                                    //@formatter:off
+                                    /*echo '<tr>';
+                                        echo "<td style='text-align: center'>Total</td>";
+                                        echo "<td style='text-align: right'>{$accl_masuk}</td>";
+                                        echo "<td style='text-align: right'>{$accl_keluar}</td>";
+                                    echo '</tr>';*/
+                                    //@formatter:on
+                                    ?>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            <?php } ?>
         </div>
     </div>
 </div>
