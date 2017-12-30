@@ -224,6 +224,49 @@ class Laporan extends CI_Controller
         $rDate   = $this->input->getOrDefault('tanggal', null);
         $rOutlet = $this->input->getOrDefault('outlet', 0);
 
+        if ((!is_null($rDate) && ($rOutlet > 0)))
+        {
+            $this->load->model(['m_produk', 'm_user', 'm_transaksi_m']);
+
+            $this->m_user->find(function (CI_DB_query_builder $db) use ($rOutlet) {
+                $db->select('`id_user`, `nama`');
+                $db->where('`id_outlet`', $rOutlet);
+                $db->where('`level`', 'kasir');
+            });
+
+            foreach ($_users = $this->m_user->getResult()->result_array() as $_user)
+            {
+                $this->m_produk->find(function (CI_DB_query_builder $db) use ($_user, $rOutlet, $rDate) {
+                    //@formatter:off
+                    $db->select("`produk`.`id_produk`, `produk`.`nama_produk`, `produk`.`kategori`, COALESCE(SUM(`transaksi_d`.`jumlah`), 0) AS 'jumlah', COALESCE(SUM(`transaksi_d`.`total`), 0) AS 'total'");
+                    $db->join('`transaksi_d`', '`transaksi_d`.`id_produk` = `produk`.`id_produk`', 'LEFT OUTER');
+                    $db->join('`transaksi_m`', '`transaksi_m`.`id_tm` = `transaksi_d`.`id_tm`', 'LEFT OUTER');
+                    $db->group_start();
+                        $db->where('DATE(`transaksi_m`.`tanggal`)', $rDate);
+                        $db->or_where('DATE(`transaksi_m`.`tanggal`)', null);
+                    $db->group_end();
+                    $db->group_start();
+                        $db->where('`transaksi_m`.`id_outlet`', $rOutlet);
+                        $db->or_where('`transaksi_m`.`id_outlet`', null);
+                    $db->group_end();
+                    $db->group_start();
+                        $db->where('`transaksi_m`.`id_user`', $_user['id_user']);
+                        $db->or_where('`transaksi_m`.`id_user`', null);
+                    $db->group_end();
+                    $db->group_by('`produk`.`id_produk`');
+                    $db->order_by('`produk`.`id_produk`', 'ASC');
+                    $db->order_by('`transaksi_m`.`tanggal`', 'ASC');
+                    //@formatter:on
+                });
+
+                foreach ($this->m_produk->getResult()->result_array() as $_product)
+                {
+                    $_user['produk']["p_{$_product['id_produk']}"] = $_product;
+                }
+                $reports["u_{$_user['id_user']}"] = $_user;
+            }
+        }
+
         $this->load->view('v_laporanProduk', compact('outlets', 'rDate', 'reports', 'rOutlet'));
     }
 
