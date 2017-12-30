@@ -6,38 +6,43 @@
     <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
     <meta content="" name="description"/>
     <meta content="" name="author"/>
-    <link href="<?php echo site_url(); ?>assets/assets/bootstrap/css/bootstrap.min.css" rel="stylesheet"/>
+    <link href="<?php
+
+    echo site_url(); ?>assets/assets/bootstrap/css/bootstrap.min.css" rel="stylesheet"/>
     <link href="<?php echo site_url(); ?>assets/assets/bootstrap/css/bootstrap-responsive.min.css" rel="stylesheet"/>
+    <link href="<?php echo site_url(); ?>assets/assets/bootstrap/css/bootstrap-fileupload.css" rel="stylesheet"/>
     <link href="<?php echo site_url(); ?>assets/assets/font-awesome/css/font-awesome.css" rel="stylesheet"/>
     <link href="<?php echo site_url(); ?>assets/css/style.css" rel="stylesheet"/>
     <link href="<?php echo site_url(); ?>assets/css/style_responsive.css" rel="stylesheet"/>
     <link href="<?php echo site_url(); ?>assets/css/style_default.css" rel="stylesheet" id="style_color"/>
 
     <link href="<?php echo site_url(); ?>assets/assets/fancybox/source/jquery.fancybox.css" rel="stylesheet"/>
-    <link rel="stylesheet" type="text/css" href="<?php echo site_url() ?>assets/assets/uniform/css/uniform.default.css"/>
+    <link rel="stylesheet" type="text/css" href="<?php echo site_url(); ?>assets/assets/gritter/css/jquery.gritter.css"/>
+    <link rel="stylesheet" type="text/css" href="<?php echo site_url(); ?>assets/assets/uniform/css/uniform.default.css"/>
+    <link rel="stylesheet" type="text/css" href="<?php echo site_url(); ?>assets/assets/chosen-bootstrap/chosen/chosen.css"/>
+    <link rel="stylesheet" type="text/css" href="<?php echo site_url(); ?>assets/assets/jquery-tags-input/jquery.tagsinput.css"/>
+    <link rel="stylesheet" type="text/css" href="<?php echo site_url(); ?>assets/assets/clockface/css/clockface.css"/>
+    <link rel="stylesheet" type="text/css" href="<?php echo site_url(); ?>assets/assets/bootstrap-wysihtml5/bootstrap-wysihtml5.css"/>
+    <link rel="stylesheet" type="text/css" href="<?php echo site_url(); ?>assets/assets/bootstrap-datepicker/css/datepicker.css"/>
+    <link rel="stylesheet" type="text/css" href="<?php echo site_url(); ?>assets/assets/bootstrap-timepicker/compiled/timepicker.css"/>
+    <link rel="stylesheet" type="text/css" href="<?php echo site_url(); ?>assets/assets/bootstrap-colorpicker/css/colorpicker.css"/>
+    <link rel="stylesheet" href="<?php echo site_url(); ?>assets/assets/bootstrap-toggle-buttons/static/stylesheets/bootstrap-toggle-buttons.css"/>
+    <link rel="stylesheet" href="<?php echo site_url(); ?>assets/assets/data-tables/DT_bootstrap.css"/>
+    <link rel="stylesheet" type="text/css" href="<?php echo site_url(); ?>assets/assets/bootstrap-daterangepicker/daterangepicker.css"/>
 </head>
 
 <body class="fixed-top">
 <?php $this->load->view('header.php') ?>
 <div id="container" class="row-fluid">
-    <!-- BEGIN SIDEBAR -->
     <div id="sidebar" class="nav-collapse collapse">
         <?php $this->load->view('sidebar.php') ?>
     </div>
-    <!-- END SIDEBAR -->
-
-    <!-- BEGIN PAGE -->
     <div id="main-content">
-        <!-- BEGIN PAGE CONTAINER-->
         <div class="container-fluid">
-            <!-- BEGIN PAGE HEADER-->
             <div class="row-fluid">
                 <div class="span12">
-                    <!-- BEGIN THEME CUSTOMIZER-->
-                    <!-- END THEME CUSTOMIZER-->
-                    <!-- BEGIN PAGE TITLE & BREADCRUMB-->
                     <h3 class="page-title">
-                        Daftar Outlet
+
                     </h3>
                     <ul class="breadcrumb">
                         <li>
@@ -47,89 +52,84 @@
                             <span class="divider">&nbsp;</span>
                         </li>
                         <li>
-                            <a href="#">Outlet</a>
+                            <a href="#">Laporan</a>
                             <span class="divider">&nbsp;</span>
                         </li>
                         <li>
-                            <a href="#">Daftar Outlet</a>
+                            <a href="#">Laporan Stok</a>
                             <span class="divider-last">&nbsp;</span>
                         </li>
                     </ul>
                     <!-- END PAGE TITLE & BREADCRUMB-->
                 </div>
             </div>
-            <!-- END PAGE HEADER-->
-            <!-- BEGIN PAGE CONTENT-->
             <div class="row-fluid">
                 <div class="span12">
-                    <!-- BEGIN SAMPLE TABLE widget-->
                     <div class="widget">
                         <div class="widget-title">
                             <h4>
                                 <i class="icon-reorder"></i>
-                                Outlet
+                                Laporan Stok
                             </h4>
                         </div>
-                        <div class="widget-body">
-                            <div class="portlet-body">
+                        <form action="<?php echo site_url("admin/laporan/stok"); ?>" class="form-horizontal" method="get">
+                            <div class="widget-body">
                                 <div class="clearfix">
+                                    <div class="control-group">
+                                        <h5> Tanggal </h5>
+                                        <div class="input-append date date-picker" data-date="12-02-2017" data-date-format="yyyy-mm-dd" data-date-viewmode="years">
+                                            <input class=" m-ctrl-medium" size="16" type="text" name="tanggal" value="<?php echo isset($rDate) ? $rDate : '2017-12-01' ?>" readonly/>
+                                            <span class="add-on"><i class="icon-calendar"></i></span>
+                                        </div>
+                                    </div>
+                                    <label for="id_outlet">Outlet</label>
+                                    <select id="id_outlet" name="outlet" class="input-medium m-wrap" required="true">
+                                        <?php foreach (isset($outlets) ? $outlets : [] as $outlet) { ?>
+                                            <option value="<?php echo $outlet['id_outlet']; ?>" <?php echo (isset($rOutlet) && (intval($outlet['id_outlet']) === intval($rOutlet))) ? 'selected' : '' ?>><?php echo $outlet['nama_outlet']; ?></option>
+                                        <?php } ?>
+                                    </select>
+                                    <br>
+                                    <br>
                                     <div class="btn-group">
-
-                                        <button type="button" class="btn green">
-                                            Tambah outlet
-                                            <i class="icon-plus"></i>
+                                        <button type="submit" class="btn green">
+                                            Lihat
+                                            <i class="icon-ok"></i>
                                         </button>
-                                        </a>
                                     </div>
                                 </div>
-
-                                <div class="space15"></div>
-                                <table class="table table-striped table-hover table-bordered" id="sample_editable_1">
-                                    <thead>
-                                    <tr>
-                                        <th>No</th>
-                                        <th>Nama</th>
-                                        <th>Alamat</th>
-                                        <th>No. Telepon</th>
-                                        <th>Edit</th>
-                                        <th>Hapus</th>
-                                    </tr>
-                                    </thead>
-                                    <tbody>
-
-                                    </tbody>
-                                </table>
                             </div>
-                        </div>
+                        </form>
                     </div>
-                    <!-- END SAMPLE TABLE widget-->
                 </div>
-
             </div>
-
-            <!-- END PAGE CONTENT-->
         </div>
-        <!-- END PAGE CONTAINER-->
     </div>
-    <!-- END PAGE -->
 </div>
-<!-- END CONTAINER -->
-<!-- BEGIN FOOTER -->
 <?php $this->load->view('footer.php') ?>
-<!-- END FOOTER -->
-<!-- BEGIN JAVASCRIPTS -->
-<!-- Load javascripts at bottom, this will reduce page load time -->
-<script src="<?php echo site_url(); ?>assets/js/jquery-1.8.3.min.js"></script>
+<script src="<?php echo site_url(); ?>assets/js/jquery-1.8.2.min.js"></script>
+<script type="<?php echo site_url(); ?>assets/text/javascript" src="assets/ckeditor/ckeditor.js"></script>
 <script src="<?php echo site_url(); ?>assets/assets/bootstrap/js/bootstrap.min.js"></script>
+<script type="<?php echo site_url(); ?>assets/text/javascript" src="assets/bootstrap/js/bootstrap-fileupload.js"></script>
 <script src="<?php echo site_url(); ?>assets/js/jquery.blockui.js"></script>
 <!-- ie8 fixes -->
 <!--[if lt IE 9]>
 <script src="js/excanvas.js"></script>
 <script src="js/respond.js"></script>
 <![endif]-->
+<script type="text/javascript" src="<?php echo site_url(); ?>assets/assets/chosen-bootstrap/chosen/chosen.jquery.min.js"></script>
 <script type="text/javascript" src="<?php echo site_url(); ?>assets/assets/uniform/jquery.uniform.min.js"></script>
-<script type="text/javascript" src="<?php echo site_url(); ?>assets/assets/data-tables/jquery.dataTables.js"></script>
-<script type="text/javascript" src="<?php echo site_url(); ?>assets/assets/data-tables/DT_bootstrap.js"></script>
+<script type="text/javascript" src="<?php echo site_url(); ?>assets/assets/bootstrap-wysihtml5/wysihtml5-0.3.0.js"></script>
+<script type="text/javascript" src="<?php echo site_url(); ?>assets/assets/bootstrap-wysihtml5/bootstrap-wysihtml5.js"></script>
+<script type="text/javascript" src="<?php echo site_url(); ?>assets/assets/clockface/js/clockface.js"></script>
+<script type="text/javascript" src="<?php echo site_url(); ?>assets/assets/jquery-tags-input/jquery.tagsinput.min.js"></script>
+<script type="text/javascript" src="<?php echo site_url(); ?>assets/assets/bootstrap-toggle-buttons/static/js/jquery.toggle.buttons.js"></script>
+<script type="text/javascript" src="<?php echo site_url(); ?>assets/assets/bootstrap-datepicker/js/bootstrap-datepicker.js"></script>
+<script type="text/javascript" src="<?php echo site_url(); ?>assets/assets/bootstrap-daterangepicker/date.js"></script>
+<script type="text/javascript" src="<?php echo site_url(); ?>assets/assets/bootstrap-daterangepicker/daterangepicker.js"></script>
+<script type="text/javascript" src="<?php echo site_url(); ?>assets/assets/bootstrap-colorpicker/js/bootstrap-colorpicker.js"></script>
+<script type="text/javascript" src="<?php echo site_url(); ?>assets/assets/bootstrap-timepicker/js/bootstrap-timepicker.js"></script>
+<script type="text/javascript" src="<?php echo site_url(); ?>assets/assets/bootstrap-inputmask/bootstrap-inputmask.min.js"></script>
+<script src="<?php echo site_url(); ?>assets/assets/fancybox/source/jquery.fancybox.pack.js"></script>
 <script src="<?php echo site_url(); ?>assets/js/scripts.js"></script>
 <script>
     jQuery(document).ready(function () {

@@ -267,6 +267,28 @@ class Laporan extends CI_Controller
         $this->load->view('v_laporanProduk', compact('outlets', 'rDate', 'reports', 'rOutlet'));
     }
 
+    public function stok()
+    {
+        $this->load->model('m_outlet');
+        $this->m_outlet->find(function (CI_DB_query_builder $db) { $db->select(); });
+        $outlets = [];
+        $reports = [];
+        foreach ($this->m_outlet->getResult()->result_array() as $outlet)
+        {
+            $outlets["o_{$outlet['id_outlet']}"] = $outlet;
+        }
+
+        $rDate   = $this->input->getOrDefault('tanggal', null);
+        $rOutlet = $this->input->getOrDefault('outlet', 0);
+
+        if ((!is_null($rDate) && ($rOutlet > 0)))
+        {
+
+        }
+
+        $this->load->view('v_laporanStok', compact('outlets', 'rDate', 'reports', 'rOutlet'));
+    }
+
     function laporanPerbulan()
     {
         $this->load->view('v_laporanPerbulan');
