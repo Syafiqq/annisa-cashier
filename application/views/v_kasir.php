@@ -419,7 +419,7 @@
             /*            var _v = form_sender.find('input[name=payment]').maskMoney('unmasked')[0].toString().split(".");
                         console.log(form_sender.find('input[name=payment]').val());
                         payment = (parseInt(_v[0]) * 1000) + (parseInt(_v[1] === undefined ? '0' : _v[1]));*/
-            payment = form_sender.find('input[name=payment]').val().replace(/\./g, '');
+            payment = parseInt(form_sender.find('input[name=payment]').val().replace(/\./g, ''));
             obs_gt();
         });
 
