@@ -1,4 +1,5 @@
 <!DOCTYPE html>
+<?php $summary = isset($summary) ? $summary : [] ?>
 <!--
 Template Name: Admin Lab Dashboard build with Bootstrap v2.3.1
 Template Version: 1.3
@@ -122,21 +123,18 @@ Website: http://thevectorlab.net/
                                         <tr>
                                             <td>Total Penjualan Rata-rata</td>
                                             <td>
-                                                <strong>Rp</strong>
+                                                <strong>Rp <?php echo number_format($summary['total'] / (count($summary['outlet']) > 0 ? count($summary['outlet']) : 1), 0, ",", ".") ?></strong>
                                             </td>
                                         </tr>
-                                        <tr>
-                                            <td>Total Penjualan Outlet 1</td>
-                                            <td>
-                                                <strong>Rp</strong>
-                                            </td>
-                                        </tr>
-                                        <tr>
-                                            <td>Total Penjualan Outlet 2</td>
-                                            <td>
-                                                <strong>Rp</strong>
-                                            </td>
-                                        </tr>
+                                        <?php foreach ($summary['outlet'] as $vor)
+                                        {
+                                            $vor['penjualan'] = number_format($vor['penjualan'], 0, ",", ".");
+                                            echo '<tr>';
+                                            echo "<td>Total Penjualan Outlet {$vor['nama_outlet']}</td>";
+                                            echo "<td><strong>Rp {$vor['penjualan']}</strong></td>";
+                                            echo '</tr>';
+                                        }
+                                        ?>
                                         </tbody>
                                     </table>
                                 </div>
