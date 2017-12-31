@@ -295,6 +295,14 @@ class Admin extends CI_Controller
             {
                 $this->load->model('m_pengeluaran');
                 $data['pengeluaran'] = $this->m_pengeluaran->datacount() + 1;
+                $this->load->model('m_outlet');
+                $this->m_outlet->find(function (CI_DB_query_builder $db) { $db->select(); });
+                $outlets = [];
+                foreach ($this->m_outlet->getResult()->result_array() as $outlet)
+                {
+                    $outlets["o_{$outlet['id_outlet']}"] = $outlet;
+                }
+                $data['outlets'] = $outlets;
                 $this->load->view('v_pengeluaranTambah', $data);
 
             }
