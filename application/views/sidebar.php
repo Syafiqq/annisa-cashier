@@ -35,19 +35,13 @@
                 {
                     echo "active";
                 } ?>">
+                    <a href="<?php echo base_url() ?>admin/bahanBaku">Stok Bahan</a>
+                </li>
+                <li class="<?php if ($this->uri->segment(2) == '')
+                {
+                    echo "active";
+                } ?>">
                     <a href="<?php echo base_url() ?>admin/bahanBaku">Bahan Baku</a>
-                </li>
-                <li class="<?php if ($this->uri->segment(2) == '')
-                {
-                    echo "active";
-                } ?>">
-                    <a href="<?php echo base_url() ?>admin/stokMasuk">Stok Masuk</a>
-                </li>
-                <li class="<?php if ($this->uri->segment(2) == '')
-                {
-                    echo "active";
-                } ?>">
-                    <a href="<?php echo base_url() ?>admin/stokKeluar">Stok Keluar</a>
                 </li>
             </ul>
         </li>
