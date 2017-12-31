@@ -1,5 +1,9 @@
 <?php
 
+/**
+ * @property CI_Loader load
+ * @property M_outlet m_outlet
+ */
 class Admin extends CI_Controller
 {
 
@@ -14,8 +18,28 @@ class Admin extends CI_Controller
 
     function index()
     {
+        $summary = [];
+        $this->load->model(['m_outlet']);
+        $this->m_outlet->find(function (CI_DB_query_builder $db) {
+            $db->select("`outlet`.`id_outlet`, `outlet`.`nama_outlet`, COALESCE(SUM(`transaksi_m`.`grand_total`), 0) AS 'penjualan'");
+            $db->join('`transaksi_m`', '`transaksi_m`.`id_outlet` = `outlet`.`id_outlet`', 'LEFT OUTER');
+            $db->group_start();
+            $db->where('DATE(`tanggal`) = DATE(NOW())', null, false);
+            $db->or_where('DATE(`tanggal`) IS NULL', null, false);
+            $db->group_end();
+            $db->group_by('`outlet`.`id_outlet`');
+            $db->order_by('`outlet`.`id_outlet`', 'ASC');
+        });
 
-        $this->load->view('v_admin');
+        $total = 0;
+        foreach ($this->m_outlet->getResult()->result_array() as $outlet)
+        {
+            $summary['outlet']["o_{$outlet['id_outlet']}"] = $outlet;
+            $total                                         += intval($outlet['penjualan']);
+        }
+        $summary['total'] = $total;
+
+        $this->load->view('v_admin', compact('summary'));
     }
 
     function produk()
