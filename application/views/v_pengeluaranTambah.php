@@ -21,6 +21,10 @@
 
     <link href="<?php echo site_url(); ?>assets/assets/fancybox/source/jquery.fancybox.css" rel="stylesheet"/>
     <link rel="stylesheet" type="text/css" href="<?php echo site_url() ?>assets/assets/uniform/css/uniform.default.css"/>
+    <link rel="stylesheet" type="text/css" href="<?php echo site_url(); ?>assets/assets/bootstrap-datepicker/css/datepicker.css"/>
+    <link rel="stylesheet" type="text/css" href="<?php echo site_url(); ?>assets/assets/bootstrap-timepicker/compiled/timepicker.css"/>
+    <link rel="stylesheet" type="text/css" href="<?php echo site_url(); ?>assets/assets/bootstrap-colorpicker/css/colorpicker.css"/>
+    <link rel="stylesheet" type="text/css" href="<?php echo site_url(); ?>assets/assets/bootstrap-daterangepicker/daterangepicker.css"/>
 </head>
                  <!-- END HEAD -->
                  <!-- BEGIN BODY -->
@@ -86,7 +90,7 @@
                         </div>
                         <div class="widget-body">
                             <!-- BEGIN FORM-->
-                            <form action="<?php echo base_url('pengeluaran/tambahPengeluaran'); ?>" method="POST" class="form-horizontal">
+                            <form id="form-sender" action="<?php echo base_url('pengeluaran/tambahPengeluaran'); ?>" method="POST" class="form-horizontal">
                                 <fieldset>
                                     <div class="control-group">
                                         <div class="controls">
@@ -102,22 +106,47 @@
                                     <div class="control-group">
                                         <label class="control-label">Kategori</label>
                                         <div class="controls">
-                                            <select name="jenis" class="input-large m-wrap" tabindex="1" required="true">
-                                                <option value="operasional">Operasional</option>
-                                                <option value="penyusutan">Penyusutan</option>
-                                            </select>
+                                            <label>
+                                                <select name="jenis" class="input-large m-wrap" tabindex="1" required="true">
+                                                    <option value="operasional">Operasional</option>
+                                                    <option value="penyusutan">Penyusutan</option>
+                                                </select>
+                                            </label>
                                         </div>
                                     </div>
                                     <div class="control-group">
                                         <label class="control-label">Total</label>
                                         <div class="controls">
-                                            <input name="total" type="text" placeholder="" class="input-small" required="true">
+                                            <div class="input-prepend">
+                                                <span class="add-on">Rp</span>
+                                                <input type="text" placeholder="Total Pengeluaran" class="w-total input-medium" required/>
+                                                <input type="hidden" name="total" placeholder="Total Pengeluaran" class="input-medium" required/>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="control-group" style="display: none;">
+                                        <label class="control-label">Jangka Per Bulan</label>
+                                        <div class="controls">
+                                            <input name="jangka" type="number" placeholder="" class="input-large" required value="1">
+                                        </div>
+                                    </div>
+                                    <div class="control-group" style="display: none;">
+                                        <label class="control-label">Tanggal</label>
+                                        <div class="controls">
+                                            <div class="input-append date date-picker" data-date=<?php echo \Carbon\Carbon::now()->toDateString() ?> data-date-format="yyyy-mm-dd" data-date-viewmode="days">
+                                                <input class=" m-ctrl-medium" size="16" type="text" name="tanggal" value="<?php echo \Carbon\Carbon::now()->toDateString() ?>" readonly required/>
+                                                <span class="add-on"><i class="icon-calendar"></i></span>
+                                            </div>
                                         </div>
                                     </div>
                                     <div class="control-group">
-                                        <label class="control-label">Jangka Per Bulan</label>
+                                        <label class="control-label" for="id_outlet">Outlet</label>
                                         <div class="controls">
-                                            <input name="jangka" type="number" placeholder="" class="input-small" required="true">
+                                            <select id="id_outlet" name="outlet" class="input-large m-wrap" required>
+                                                <?php foreach (isset($outlets) ? $outlets : [] as $outlet) { ?>
+                                                    <option value="<?php echo $outlet['id_outlet']; ?>" <?php echo (isset($rOutlet) && (intval($outlet['id_outlet']) === intval($rOutlet))) ? 'selected' : '' ?>><?php echo $outlet['nama_outlet']; ?></option>
+                                                <?php } ?>
+                                            </select>
                                         </div>
                                     </div>
                                     <div class="form-actions">
@@ -160,11 +189,39 @@
 <script type="text/javascript" src="<?php echo site_url(); ?>assets/assets/uniform/jquery.uniform.min.js"></script>
 <script type="text/javascript" src="<?php echo site_url(); ?>assets/assets/data-tables/jquery.dataTables.js"></script>
 <script type="text/javascript" src="<?php echo site_url(); ?>assets/assets/data-tables/DT_bootstrap.js"></script>
+<script src="<?php echo base_url(); ?>assets/js/jquery.maskMoney.min.js"></script>
+<script type="text/javascript" src="<?php echo site_url(); ?>assets/assets/bootstrap-datepicker/js/bootstrap-datepicker.js"></script>
+<script type="text/javascript" src="<?php echo site_url(); ?>assets/assets/bootstrap-daterangepicker/date.js"></script>
+<script type="text/javascript" src="<?php echo site_url(); ?>assets/assets/bootstrap-daterangepicker/daterangepicker.js"></script>
+<script type="text/javascript" src="<?php echo site_url(); ?>assets/assets/bootstrap-colorpicker/js/bootstrap-colorpicker.js"></script>
+<script type="text/javascript" src="<?php echo site_url(); ?>assets/assets/bootstrap-timepicker/js/bootstrap-timepicker.js"></script>
+<script src="<?php echo base_url(); ?>assets/js/trim_serialization.js"></script>
+<script src="<?php echo base_url(); ?>assets/js/jquery.serialize-object.min.js"></script>
 <script src="<?php echo site_url(); ?>assets/js/scripts.js"></script>
 <script>
     jQuery(document).ready(function () {
         // initiate layout and plugins
         App.init();
+        var form_sender = $('form#form-sender');
+        form_sender.find('input.w-total').maskMoney({
+            prefix: '',
+            thousands: '.',
+            decimal: ',',
+            precision: 0,
+            affixesStay: true
+        });
+        form_sender.find('input.w-total').on('keyup', function () {
+            var total = parseInt($(this).val().replace(/\./g, ''));
+            form_sender.find('input[name=total]').val(total);
+        });
+
+        /*form_sender.on('submit', function (event) {
+            event.preventDefault();
+            var form  = $(this);
+            var input = form.serializeObject();
+            input     = removeEmptyValues(input);
+            console.log(input);
+        });*/
     });
 </script>
 <script type="text/javascript">if (self == top)
