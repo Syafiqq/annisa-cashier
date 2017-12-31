@@ -31,14 +31,6 @@
     <link rel="stylesheet" href="<?php echo site_url(); ?>assets/assets/data-tables/DT_bootstrap.css"/>
     <link rel="stylesheet" type="text/css" href="<?php echo site_url(); ?>assets/assets/bootstrap-daterangepicker/daterangepicker.css"/>
     <script src="<?php echo base_url(); ?>assets/js/currency.min.js"></script>
-    <script type="text/javascript">
-        function indonesian(value)
-        {
-            //@formatter:off
-            return currency(value, {separator: ".", decimal: ",", symbol: "Rp ", precision: 2, formatWithSymbol: true});
-            //@formatter:on
-        }
-    </script>
     <?php
     function getArrCount($arr, $depth = 1)
     {
