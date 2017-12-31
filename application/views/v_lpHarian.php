@@ -147,7 +147,7 @@
                                             $accl_trans   += intval($vor['transaksi']);
                                             $accl_total   += intval($vor['grand_total']);
                                             $vor_date     = Carbon::createFromFormat('Y-m-d', $vor['tanggal'])->formatLocalized('%d %B %Y');
-                                            $vor_currency = number_format($vor['grand_total'], 2, ',', '.');
+                                            $vor_currency = number_format($vor['grand_total'], 0, ',', '.');
                                             //@formatter:off
                                             echo '<tr>';
                                                 echo (++$i <= 0) ? "<td rowspan='$vtr_count'>$vor_date</td>" : '';
@@ -158,7 +158,7 @@
                                             //@formatter:on
                                         }
                                     }
-                                    $accl_total = number_format($accl_total, 2, ',', '.');
+                                    $accl_total = number_format($accl_total, 0, ',', '.');
                                     echo '<tr>';
                                     echo "<td colspan='2' style='text-align: center'>Total</td>";
                                     echo "<td style='text-align: right'>{$accl_trans}</td>";

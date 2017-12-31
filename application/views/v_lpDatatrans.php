@@ -176,8 +176,8 @@
                                             $vmr['tanggal'] = Carbon::createFromFormat('Y-m-d H:i:s', $vmr['tanggal'])->formatLocalized('%H:%M:%S');
                                             foreach ($vmr['transaksi_d'] as $kdr => $vdr)
                                             {
-                                                $vdr['total']       = number_format(intval($vdr['total']), 2, ',', '.');
-                                                $vmr['grand_total'] = number_format(intval($vmr['grand_total']), 2, ',', '.');
+                                                $vdr['total']       = number_format(intval($vdr['total']), 0, ',', '.');
+                                                $vmr['grand_total'] = number_format(intval($vmr['grand_total']), 0, ',', '.');
                                                 //@formatter:off
                                                 echo '<tr>';
                                                     echo (++$kuri <= 0) ? "<td rowspan='$vur_count'>{$vur['nama']}</td>" : '';

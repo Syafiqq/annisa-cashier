@@ -169,9 +169,9 @@
                                                 $laba        = $pemasukan - $pengeluaran;
                                                 $vor_year    = Carbon::createFromFormat('Y', $vor['tahun'])->formatLocalized('%Y');
                                                 $vor_month   = Carbon::createFromFormat('m', $vor['bulan'])->formatLocalized('%B');
-                                                $pemasukan   = number_format($pemasukan, 2, ',', '.');
-                                                $pengeluaran = number_format($pengeluaran, 2, ',', '.');
-                                                $laba        = number_format($laba, 2, ',', '.');
+                                                $pemasukan   = number_format($pemasukan, 0, ',', '.');
+                                                $pengeluaran = number_format($pengeluaran, 0, ',', '.');
+                                                $laba        = number_format($laba, 0, ',', '.');
                                                 //@formatter:off
                                                 echo '<tr>';
                                                     echo (++$kyri <= 0) ? "<td rowspan='$vyr_count'>{$vor_year}</td>" : '';

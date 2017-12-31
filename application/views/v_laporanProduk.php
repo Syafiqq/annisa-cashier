@@ -163,7 +163,7 @@
                                         $accl_total    += intval($vpr['total']);
                                         $accl_jumlah   += intval($vpr['jumlah']);
                                         $vpr['jumlah'] = number_format(intval($vpr['jumlah']), 0, ',', '.');
-                                        $vpr['total']  = number_format(intval($vpr['total']), 2, ',', '.');
+                                        $vpr['total']  = number_format(intval($vpr['total']), 0, ',', '.');
                                         //@formatter:off
                                         echo '<tr>';
                                             echo "<td>{$vpr['nama_produk']}</td>";
@@ -174,7 +174,7 @@
                                         //@formatter:on
                                     }
                                     $accl_jumlah = number_format(intval($accl_jumlah), 0, ',', '.');
-                                    $accl_total  = number_format(intval($accl_total), 2, ',', '.');
+                                    $accl_total  = number_format(intval($accl_total), 0, ',', '.');
                                     //@formatter:off
                                     /*echo '<tr>';
                                         echo "<td colspan='2' style='text-align: center'>Total</td>";

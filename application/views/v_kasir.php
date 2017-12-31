@@ -131,13 +131,19 @@
                                     <div class="control-group">
                                         <label for="name" class="control-label">Uang Pembayaran</label>
                                         <div class="controls">
-                                            <input type="text" name="payment" placeholder="Isi disini" class="input-medium" required/>
+                                            <div class="input-prepend">
+                                                <span class="add-on">Rp</span>
+                                                <input type="text" name="payment" placeholder="Isi disini" class="input-medium" required/>
+                                            </div>
                                         </div>
                                     </div>
                                     <div class="control-group">
                                         <label for="name" class="control-label">Uang Kembalian</label>
                                         <div class="controls">
-                                            <p class="input-medium payback"></p>
+                                            <div class="input-prepend">
+                                                <span class="add-on">Rp</span>
+                                                <input type="text" placeholder="Kembalian" class="input-medium payback" readonly/>
+                                            </div>
                                         </div>
                                     </div>
                                     <div class="form-actions">
@@ -251,6 +257,7 @@
     </div>
     <script src="<?php echo base_url(); ?>assets/js/jquery-1.8.3.min.js"></script>
     <script src="<?php echo base_url(); ?>assets/js/currency.min.js"></script>
+    <script src="<?php echo base_url(); ?>assets/js/numeral.min.js"></script>
     <script src="<?php echo base_url(); ?>assets/js/jquery.maskMoney.min.js"></script>
     <script src="<?php echo base_url(); ?>assets/assets/jquery-slimscroll/jquery-ui-1.9.2.custom.min.js"></script>
     <script src="<?php echo base_url(); ?>assets/assets/jquery-slimscroll/jquery.slimscroll.min.js"></script>
@@ -293,10 +300,32 @@
         var payment      = 0;
         var payback      = 0;
 
+        numeral.register('locale', 'id', {
+            delimiters: {
+                thousands: '.',
+                decimal: ','
+            },
+            abbreviations: {
+                thousand: 'k',
+                million: 'm',
+                billion: 'b',
+                trillion: 't'
+            },
+            ordinal: function (number) {
+                return number === 1 ? 'er' : 'ème';
+            },
+            currency: {
+                symbol: 'Rp '
+            }
+        });
+
+        numeral.locale('id');
+
         function indonesian(value)
         {
             //@formatter:off
-            return currency(value, {separator: ".", decimal: ",", symbol: "Rp ", precision: 0, formatWithSymbol: true});
+            //return currency(value, {separator: ".", decimal: ",", symbol: "Rp ", precision: 0});
+            return numeral(value).format('$0,0')
             //@formatter:on
         }
 
@@ -305,9 +334,9 @@
             var data      = p_projection[pid];
             var container = $("#my_table").find('tr.' + pid);
             container.find('td.p-n').text(data['n']);
-            container.find('td.p-c').text(indonesian(data['c']).format());
+            container.find('td.p-c').text(indonesian(data['c']));
             container.find('input.p-q').val(data['q']);
-            container.find('td.p-t').text(indonesian(data['c'] * data['q']).format());
+            container.find('td.p-t').text(indonesian(data['c'] * data['q']));
             obs_gt();
         }
 
@@ -325,9 +354,9 @@
                 '<tr class="'+ pid +'">' +
                     '<td class="p-id" style="display: none" >' + pid + '</td>' +
                     '<td class="p-n" >' + data['n'] + '</td>' +
-                    '<td class="p-c" style="text-align: right">' + indonesian(data['c']).format() + '</td>' +
+                    '<td class="p-c" style="text-align: right">' + indonesian(data['c']) + '</td>' +
                     '<td><input class="input-mini p-q" type="number" value="'+ data['q'] +'" min="1" step="1"></td>' +
-                    '<td class="p-t" style="text-align: right">' + indonesian(data['c'] * data['q']).format() + '</td>' +
+                    '<td class="p-t" style="text-align: right">' + indonesian(data['c'] * data['q']) + '</td>' +
                     '<td><a class="p-d " href="" role="button button-warning"><i class="icon-trash "></i></a></td>' +
                 '</tr>'
                 //@formatter:on
@@ -379,15 +408,18 @@
         });
 
         form_sender.find('input[name=payment]').maskMoney({
-            prefix: 'Rp ',
+            prefix: '',
             thousands: '.',
             decimal: ',',
-            precision: 2,
+            precision: 0,
             affixesStay: true
         });
 
         form_sender.find('input[name=payment]').on('keyup', function () {
-            payment = parseFloat(form_sender.find('input[name=payment]').maskMoney('unmasked')[0]);
+            /*            var _v = form_sender.find('input[name=payment]').maskMoney('unmasked')[0].toString().split(".");
+                        console.log(form_sender.find('input[name=payment]').val());
+                        payment = (parseInt(_v[0]) * 1000) + (parseInt(_v[1] === undefined ? '0' : _v[1]));*/
+            payment = form_sender.find('input[name=payment]').val().replace(/\./g, '');
             obs_gt();
         });
 
@@ -397,10 +429,11 @@
             $.each(p_projection, function (index, value) {
                 gt += (value['c'] * value['q'])
             });
-            $('span#TotalBayar').text(indonesian(gt).format());
+            $('span#TotalBayar').text(indonesian(gt));
             cost    = gt;
             payback = payment - cost;
-            form_sender.find('p.payback').text(indonesian(payback).format())
+            form_sender.find('input.payback').val(numeral(payback).format('0,0'));
+            //form_sender.find('p.payback').text(indonesian(payback))
 
         }
 
@@ -471,7 +504,7 @@
 
                                     BootstrapDialog.show({
                                         title: 'Pengumuman',
-                                        message: 'Nomor Antrian Anda  : ' + response['r']['q'] + "<br>" + 'Kembalian Anda : ' + indonesian(payback).format(),
+                                        message: 'Nomor Antrian Anda  : ' + response['r']['q'] + "<br>" + 'Kembalian Anda : ' + indonesian(payback),
                                         closable: false,
                                         closeByBackdrop: false,
                                         closeByKeyboard: false,
