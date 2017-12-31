@@ -113,23 +113,33 @@ $material = $material ?: [];
                 prefix: '',
                 thousands: '.',
                 decimal: ',',
-                precision: 2,
+                precision: 0,
                 affixesStay: true
             });
             $(s_update_stok).find('input[name=harga]').maskMoney({
                 prefix: '',
                 thousands: '.',
                 decimal: ',',
-                precision: 2,
+                precision: 0,
                 affixesStay: true
             });
             $(s_update_stok).on('submit', function (event) {
                 event.preventDefault();
                 var form        = $(this);
                 var input       = form.serializeObject();
-                input['jumlah'] = parseFloat($(this).find('input[name=jumlah]').maskMoney('unmasked')[0]);
-                input['harga']  = parseFloat($(this).find('input[name=harga]').maskMoney('unmasked')[0]);
+                input['jumlah'] = parseFloat($(this).find('input[name=jumlah]').val().replace(/\./g, ''));
+                input['harga']  = parseFloat($(this).find('input[name=harga]').val().replace(/\./g, ''));
                 input           = removeEmptyValues(input);
+                if (input['jumlah'] <= 0.0)
+                {
+                    alert("Jumlah Pemasukan Harus Diisi");
+                    return;
+                }
+                if (input['harga'] <= 0.0)
+                {
+                    alert("Harga Harus Diisi");
+                    return;
+                }
                 $.post(
                     form.attr('action'),
                     input,
