@@ -266,6 +266,10 @@ Website: http://thevectorlab.net/
                             +        '<div class="price-actions">'
                             +            '<input type="button" data-id="'+qv['id_tm']+'" class="queue-saji btn btn-mini btn-block '+_approve_button+'" value="Saji"/>'
                             +        '</div>'
+                            +        '<div class="price-actions" style="border-bottom: #DDDDDD solid 1px">'
+                            +            '<p>Catatan : </p>'
+                            +            '<p>'+qv['keterangan']+'</p>'
+                            +        '</div>'
                             +        '<ul>'
                             +           _r_template
                             +        '</ul>'
