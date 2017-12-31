@@ -60,7 +60,7 @@ $material = $material ?: [];
                             <label class="control-label">Jumlah</label>
                             <div class="controls">
                                 <div class="input-append">
-                                    <input name="jumlah" value="0" style="text-align: right" class="input-small" id="appendedInput" type="text">
+                                    <input name="jumlah" value="0" style="text-align: right" class="input-small" id="appendedInput" type="text" required>
                                     <span class="add-on"><?php echo @$material['satuan'] ?></span>
                                 </div>
                             </div>
@@ -102,22 +102,20 @@ $material = $material ?: [];
                 prefix: '',
                 thousands: '.',
                 decimal: ',',
-                precision: 2,
-                affixesStay: true
-            });
-            $(s_update_stok).find('input[name=harga]').maskMoney({
-                prefix: '',
-                thousands: '.',
-                decimal: ',',
-                precision: 2,
+                precision: 0,
                 affixesStay: true
             });
             $(s_update_stok).on('submit', function (event) {
                 event.preventDefault();
                 var form        = $(this);
                 var input       = form.serializeObject();
-                input['jumlah'] = parseFloat($(this).find('input[name=jumlah]').maskMoney('unmasked')[0]);
+                input['jumlah'] = parseFloat($(this).find('input[name=jumlah]').val().replace(/\./g, ''));
                 input           = removeEmptyValues(input);
+                if (input['jumlah'] <= 0.0)
+                {
+                    alert("Jumlah Pengeluaran Harus Diisi");
+                    return;
+                }
                 $.post(
                     form.attr('action'),
                     input,
