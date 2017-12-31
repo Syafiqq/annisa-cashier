@@ -3,6 +3,7 @@
 /**
  * @property CI_Loader load
  * @property M_outlet m_outlet
+ * @property M_transaksi_m m_transaksi_m
  */
 class Admin extends CI_Controller
 {
@@ -18,24 +19,29 @@ class Admin extends CI_Controller
 
     function index()
     {
-        $summary = [];
-        $this->load->model(['m_outlet']);
-        $this->m_outlet->find(function (CI_DB_query_builder $db) {
-            $db->select("`outlet`.`id_outlet`, `outlet`.`nama_outlet`, COALESCE(SUM(`transaksi_m`.`grand_total`), 0) AS 'penjualan'");
-            $db->join('`transaksi_m`', '`transaksi_m`.`id_outlet` = `outlet`.`id_outlet`', 'LEFT OUTER');
-            $db->group_start();
-            $db->where('DATE(`tanggal`) = DATE(NOW())', null, false);
-            $db->or_where('DATE(`tanggal`) IS NULL', null, false);
-            $db->group_end();
-            $db->group_by('`outlet`.`id_outlet`');
-            $db->order_by('`outlet`.`id_outlet`', 'ASC');
-        });
-
+        $summary = ['outlet' => []];
+        $this->load->model(['m_outlet', 'm_transaksi_m']);
+        $this->m_outlet->find(function (CI_DB_query_builder $db) { $db->select('`outlet`.`id_outlet`, `outlet`.`nama_outlet`'); });
         $total = 0;
+
         foreach ($this->m_outlet->getResult()->result_array() as $outlet)
         {
-            $summary['outlet']["o_{$outlet['id_outlet']}"] = $outlet;
-            $total                                         += intval($outlet['penjualan']);
+            $this->m_transaksi_m->find(function (CI_DB_query_builder $db) use ($outlet) {
+                $db->select("COALESCE(SUM(`transaksi_m`.`grand_total`), 0) AS 'penjualan'");
+                $db->where('DATE(`tanggal`) = DATE(NOW())', null, false);
+                $db->where('`transaksi_m`.`selesai`', 2);
+                $db->where('`transaksi_m`.`id_outlet`', $outlet['id_outlet']);
+            });
+
+            if ($this->m_transaksi_m->getResult()->num_rows() > 0)
+            {
+                $summary['outlet']["o_{$outlet['id_outlet']}"] = array_merge($outlet, $this->m_transaksi_m->getResult()->row_array());
+            }
+            else
+            {
+                $summary['outlet']["o_{$outlet['id_outlet']}"] = array_merge(['penjualan' => 0], $this->m_transaksi_m->getResult()->row_array());
+            }
+            $total += intval($summary['outlet']["o_{$outlet['id_outlet']}"]['penjualan']);
         }
         $summary['total'] = $total;
 
