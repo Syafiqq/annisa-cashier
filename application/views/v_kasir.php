@@ -296,7 +296,7 @@
         function indonesian(value)
         {
             //@formatter:off
-            return currency(value, {separator: ".", decimal: ",", symbol: "Rp ", precision: 2, formatWithSymbol: true});
+            return currency(value, {separator: ".", decimal: ",", symbol: "Rp ", precision: 0, formatWithSymbol: true});
             //@formatter:on
         }
 
