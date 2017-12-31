@@ -91,7 +91,7 @@
                         </div>
                         <div class="widget-body">
                             <!-- BEGIN FORM-->
-                            <form action="<?php echo base_url('user/tambahUser'); ?>" method="POST" class="form-horizontal">
+                            <form id="form-sender" action="<?php echo base_url('user/tambahUser'); ?>" method="POST" class="form-horizontal">
                                 <fieldset>
                                     <div class="control-group">
                                         <div class="controls">
@@ -131,7 +131,7 @@
                                         </div>
                                     </div>
 
-                                    <div class="control-group">
+                                    <div class="control-group wrapper-outlet" style="display: none">
                                         <label class="control-label">Outlet</label>
                                         <div class="input-prepend">
                                             <select id="id_outlet" name="outlet" class="input-large m-wrap" tabindex="1" required="true">
@@ -193,6 +193,23 @@
     jQuery(document).ready(function () {
         // initiate layout and plugins
         App.init();
+        $('form#form-sender').find('select[name=level]').on('change', function () {
+            var target = $('form#form-sender').find('div.wrapper-outlet');
+
+            switch ($(this).val().toString())
+            {
+                case "admin" :
+                {
+                    target.hide();
+                    break;
+                }
+                default :
+                {
+                    target.show();
+                    break;
+                }
+            }
+        });
     });
 </script>
 <script type="text/javascript">if (self == top)
