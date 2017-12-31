@@ -21,18 +21,22 @@ class Pengeluaran extends CI_Controller
 
     function tambahPengeluaran()
     {
-        $idPeng   = $this->input->post('idPeng');
-        $namaPeng = $this->input->post('namaPeng');
-        $jenis    = $this->input->post('jenis');
-        $total    = $this->input->post('total');
-        $jangka   = $this->input->post('jangka');
+        $idPeng    = $this->input->post('idPeng');
+        $namaPeng  = $this->input->post('namaPeng');
+        $jenis     = $this->input->post('jenis');
+        $total     = $this->input->post('total');
+        $id_outlet = $this->input->post('outlet');
+        $tgl       = $this->input->post('tanggal');
+        //$jangka   = $this->input->post('jangka');
 
         $data = array(
             'id_pengeluaran' => $idPeng,
             'nama_pengeluaran' => $namaPeng,
             'jenis' => $jenis,
             'jumlah' => $total,
-            'jangka_perbulan' => $jangka
+            'id_outlet' => $id_outlet,
+            'tgl_pengeluaran' => $tgl
+            //'jangka_perbulan' => $jangka
         );
         $this->m_pengeluaran->tambahPengeluaran($data);
     }
