@@ -174,7 +174,7 @@ class Dapur extends CI_Controller
         /** @noinspection PhpParamsInspection */
         $this->load->model(['m_bahan', 'm_stok']);
         $this->m_bahan->find(function (CI_DB_query_builder $db) {
-            $db->select('`id_bahan`');
+            $db->select('`id_bahan`, `satuan');
         });
         $stocks    = [];
         $id_outlet = $this->session->userdata('outlet');
