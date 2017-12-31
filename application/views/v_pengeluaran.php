@@ -12,7 +12,9 @@
     <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
     <meta content="" name="description"/>
     <meta content="" name="author"/>
-    <link href="<?php echo site_url(); ?>assets/assets/bootstrap/css/bootstrap.min.css" rel="stylesheet"/>
+    <link href="<?php use Carbon\Carbon;
+
+    echo site_url(); ?>assets/assets/bootstrap/css/bootstrap.min.css" rel="stylesheet"/>
     <link href="<?php echo site_url(); ?>assets/assets/bootstrap/css/bootstrap-responsive.min.css" rel="stylesheet"/>
     <link href="<?php echo site_url(); ?>assets/assets/font-awesome/css/font-awesome.css" rel="stylesheet"/>
     <link href="<?php echo site_url(); ?>assets/css/style.css" rel="stylesheet"/>
@@ -116,9 +118,10 @@
                                     <tr>
                                         <th>No</th>
                                         <th>Nama</th>
+                                        <th>Tanggal</th>
+                                        <th>Outlet</th>
                                         <th>Jenis</th>
                                         <th>Total</th>
-                                        <th>Jangka Per Bulan</th>
                                         <th>Hapus</th>
                                     </tr>
                                     </thead>
@@ -131,9 +134,10 @@
                                         <tr>
                                             <td><?php echo $jumlah += 1 ?></td>
                                             <td><?php echo $data->nama_pengeluaran ?></td>
+                                            <td><?php echo Carbon::createFromFormat('Y-m-d', $data->tgl_pengeluaran)->formatLocalized('%d %B %Y') ?></td>
+                                            <td><?php echo $outlets["o_{$data->id_outlet}"]['nama_outlet'] ?></td>
                                             <td><?php echo $data->jenis ?></td>
                                             <td><?php echo 'Rp   ' . $data->jumlah ?></td>
-                                            <td><?php echo $data->jangka_perbulan ?></td>
                                             <td>
                                                 <a href="<?php echo base_url('admin/Pengeluaran/hapus' . $data->id_pengeluaran); ?>" class="delete"> Hapus</a>
                                             </td>
