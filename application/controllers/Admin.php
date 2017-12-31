@@ -4,6 +4,8 @@
  * @property CI_Loader load
  * @property M_outlet m_outlet
  * @property M_transaksi_m m_transaksi_m
+ * @property M_bahan m_bahan
+ * @property M_stok m_stok
  */
 class Admin extends CI_Controller
 {
@@ -102,9 +104,7 @@ class Admin extends CI_Controller
         {
             if (!$this->uri->segment(3))
             {
-                $this->load->model('m_bahan');
-                $data['bahanBaku'] = $this->m_bahan->getBahan();
-                $this->load->view('v_bahanbaku', $data);
+                $this->__management_stok();
 
             }
             else if ($this->uri->segment(3) == "tambah")
@@ -375,5 +375,37 @@ class Admin extends CI_Controller
         $this->session->unset_userdata('level');
         session_destroy();
         redirect(base_url("Login"));
+    }
+
+    private function __management_stok()
+    {
+        $rOutlet = $this->input->getOrDefault('outlet', 0);
+
+        $this->load->model(['m_outlet', 'm_bahan', 'm_stok']);
+        $this->m_outlet->find(function (CI_DB_query_builder $db) { $db->select(); });
+        $outlets = [];
+        foreach ($this->m_outlet->getResult()->result_array() as $outlet)
+        {
+            $outlets["o_{$outlet['id_outlet']}"] = $outlet;
+        }
+
+        $this->m_bahan->find(function (CI_DB_query_builder $db) { $db->select(); });
+        $stocks    = [];
+        $id_outlet = $rOutlet;
+        foreach ($this->m_bahan->getResult()->result_array() as $material)
+        {
+            $this->m_stok->find(function (CI_DB_query_builder $db) use ($id_outlet, $material) {
+                $db->select(//@formatter:off
+                /** @lang MySQL */
+                    "(SELECT COALESCE(SUM(`stok`), 0) AS 'g_in' FROM `stok` WHERE `stok`.`id_bahan` = '{$material['id_bahan']}' AND `stok`.`id_outlet` = '{$id_outlet}' AND `stok`.`tipe` = 'masuk') AS 'g_in'"
+                    . ",(SELECT COALESCE(SUM(`stok`), 0) AS 'g_out' FROM `stok` WHERE `stok`.`id_bahan` = '{$material['id_bahan']}' AND `stok`.`id_outlet` = '{$id_outlet}' AND `stok`.`tipe` = 'keluar') AS 'g_out'"
+                    . "", false);
+                //@formatter:on
+            }, true);
+            $material['stok']                     = $this->m_stok->getResult()->row_array();
+            $stocks["bk_{$material['id_bahan']}"] = $material;
+        }
+
+        $this->load->view('v_bahanbaku', compact('outlets', 'rOutlet', 'stocks'));
     }
 }
