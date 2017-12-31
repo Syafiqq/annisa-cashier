@@ -61,6 +61,7 @@ Website: http://thevectorlab.net/
 </div>
 </body>
 <script src="<?php echo base_url(); ?>assets/js/jquery-1.8.3.min.js"></script>
+<script src="<?php echo base_url(); ?>assets/js/numeral.min.js"></script>
 <script src="<?php echo base_url(); ?>assets/assets/bootstrap/js/bootstrap.min.js"></script>
 <script src="<?php echo base_url(); ?>assets/js/jquery.blockui.js"></script>
 <script src="<?php echo base_url(); ?>assets/assets/dttb/datatables.js"></script>
@@ -80,6 +81,27 @@ Website: http://thevectorlab.net/
             var stocks    = {};
             var dt_stocks = $(s_stocks).DataTable();
 
+            numeral.register('locale', 'id', {
+                delimiters: {
+                    thousands: '.',
+                    decimal: ','
+                },
+                abbreviations: {
+                    thousand: 'k',
+                    million: 'm',
+                    billion: 'b',
+                    trillion: 't'
+                },
+                ordinal: function (number) {
+                    return number === 1 ? 'er' : 'ème';
+                },
+                currency: {
+                    symbol: 'Rp '
+                }
+            });
+
+            numeral.locale('id');
+
             function update()
             {
                 dt_stocks.clear();
@@ -87,9 +109,9 @@ Website: http://thevectorlab.net/
                     dt_stocks.row.add([
                         //@formatter:off
                         materials[sk]['nama_bahan']
-                        ,sprintf("%.3f", sv['stok']['current'])
-                        ,sprintf("%.3f", sv['stok']['l_in'])
-                        ,sprintf("%.3f", sv['stok']['l_out'])
+                        ,numeral(sv['stok']['current']).format('0,0') + " " + sv['satuan']
+                        ,numeral(sv['stok']['l_in']).format('0,0')    + " " + sv['satuan']
+                        ,numeral(sv['stok']['l_out']).format('0,0')   + " " + sv['satuan']
                         ,'<a href="<?php echo site_url(); ?>dapur/stok/'+sv['id_bahan']+'/masuk">'
                         +    '<i class="icon-circle-arrow-down icon-white"></i>&nbsp;'
                         +    'Stok Masuk'
