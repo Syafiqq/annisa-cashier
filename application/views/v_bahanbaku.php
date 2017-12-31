@@ -92,16 +92,18 @@
                     </div>
                     <div class="widget-body">
                         <div class="portlet-body">
-                            <div class="clearfix">
-                                <div class="btn-group">
-                                    <a href="<?php echo site_url('admin/bahanBaku/tambah'); ?>">
-                                        <button type="button" class="btn green">
-                                            Tambah Bahan Baku
-                                            <i class="icon-plus"></i>
-                                        </button>
-                                    </a>
+                            <form id="form-sender" action="" class="form-horizontal" method="get">
+                                <div class="widget-body">
+                                    <div class="clearfix">
+                                        <label for="id_outlet">Outlet</label>
+                                        <select id="id_outlet" name="outlet" class="input-medium m-wrap" required="true">
+                                            <?php foreach (isset($outlets) ? $outlets : [] as $outlet) { ?>
+                                                <option value="<?php echo $outlet['id_outlet']; ?>" <?php echo (isset($rOutlet) && (intval($outlet['id_outlet']) === intval($rOutlet))) ? 'selected' : '' ?>><?php echo $outlet['nama_outlet']; ?></option>
+                                            <?php } ?>
+                                        </select>
+                                    </div>
                                 </div>
-                            </div>
+                            </form>
 
                             <div class="space15"></div>
                             <table class="table table-striped table-hover table-bordered" id="tabelku" data-toggle="table" data-show-toggle="true" data-search="true" data-select-item-name="toolbar1" data-pagination="true" data-sort-name="name" data-sort-order="desc">
@@ -119,24 +121,24 @@
                                 <tbody>
                                 <?php
                                 $jumlah = 0;
-                                foreach ($bahanBaku as $data)
+                                foreach ($stocks as $stock)
                                 {
                                     ?>
                                     <tr>
                                         <td><?php echo $jumlah += 1 ?></td>
-                                        <td><?php echo $data->nama_bahan ?></td>
-                                        <td><?php echo $data->satuan ?></td>
+                                        <td><?php echo $stock['nama_bahan'] ?></td>
+                                        <td><?php echo $stock['satuan'] ?></td>
                                         <td>
-                                            <a href="<?php echo base_url('admin/bahanBaku/edit/' . $data->id_bahan); ?>" class="edit"> Edit</a>
+                                            <a href="<?php echo base_url('admin/bahanBaku/edit/' . $stock['id_bahan']); ?>" class="edit"> Edit</a>
                                         </td>
                                         <td>
-                                            <a href="<?php echo base_url('admin/bahanBaku/hapus/' . $data->id_bahan); ?>" class="delete"> Hapus</a>
+                                            <a href="<?php echo base_url('admin/bahanBaku/hapus/' . $stock['id_bahan']); ?>" class="delete"> Hapus</a>
                                         </td>
                                         <td>
-                                            <a href="<?php echo base_url('admin/bahanBaku/tambahSin' . $data->id_bahan); ?>">Tambah</a>
+                                            <?php echo "{$stock['stok']['g_in']} {$stock['satuan']}" ?>
                                         </td>
                                         <td>
-                                            <a href="<?php echo base_url('admin/bahanBaku/tambahSin' . $data->id_bahan); ?>">Tambah</a>
+                                            <?php echo "{$stock['stok']['g_out']} {$stock['satuan']}" ?>
                                         </td>
                                     </tr>
                                 <?php } ?>
@@ -178,6 +180,10 @@
     jQuery(document).ready(function () {
         // initiate layout and plugins
         App.init();
+        $('form#form-sender').find('select[name=outlet]').on('change', function () {
+            $('form#form-sender').submit();
+        });
+
     });
 </script>
 <script>
