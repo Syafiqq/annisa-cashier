@@ -22,6 +22,7 @@
     <link href="<?php echo site_url(); ?>assets/css/style_default.css" rel="stylesheet" id="style_color"/>
 
     <link href="<?php echo site_url(); ?>assets/assets/fancybox/source/jquery.fancybox.css" rel="stylesheet"/>
+    <link href="<?php echo base_url(); ?>assets/assets/dttb/datatables.css" rel="stylesheet" id="style_color"/>
     <link rel="stylesheet" type="text/css" href="<?php echo site_url() ?>assets/assets/uniform/css/uniform.default.css"/>
 </head>
                  <!-- END HEAD -->
@@ -176,10 +177,12 @@
 <script type="text/javascript" src="<?php echo site_url(); ?>assets/assets/uniform/jquery.uniform.min.js"></script>
 <script type="text/javascript" src="<?php echo site_url(); ?>assets/assets/data-tables/jquery.dataTables.js"></script>
 <script type="text/javascript" src="<?php echo site_url(); ?>assets/assets/data-tables/DT_bootstrap.js"></script>
+<script src="<?php echo base_url(); ?>assets/assets/dttb/datatables.js"></script>
 <script src="<?php echo site_url(); ?>assets/js/scripts.js"></script>
 <script>
     jQuery(document).ready(function () {
         // initiate layout and plugins
+        $('table#tabelku').DataTable();
         App.init();
     });
 </script>
