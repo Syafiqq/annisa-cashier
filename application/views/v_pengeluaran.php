@@ -109,14 +109,16 @@ usort($pengeluaran, function ($v1, $v2) {
                                             </button>
                                         </a>
                                     </div>
-                                    <br></br>
+                                    <br>
                                     <label class="control-label">Kategori</label>
                                     <div class="controls">
-                                        <select class="input-medium m-wrap" tabindex="1">
-                                            <option value="">Semua</option>
-                                            <option value="operasional">Operasional</option>
-                                            <option value="penyusutan">Penyusutan</option>
-                                        </select>
+                                        <form id="form-sender" action="" class="form-horizontal" method="get">
+                                            <select id="category" name="category" class="input-medium m-wrap" tabindex="1">
+                                                <option value="">Semua</option>
+                                                <option value="operasional" <?php echo (isset($category)) && ($category == 'operasional') ? 'selected' : '' ?>>Operasional</option>
+                                                <option value="penyusutan" <?php echo (isset($category)) && ($category == 'penyusutan') ? 'selected' : '' ?>>Penyusutan</option>
+                                            </select>
+                                        </form>
                                     </div>
                                 </div>
 
@@ -189,26 +191,15 @@ usort($pengeluaran, function ($v1, $v2) {
 <script>
     jQuery(document).ready(function () {
         // initiate layout and plugins
-        $('table#tabelku').DataTable();
+        //$('table#tabelku').DataTable();
         App.init();
     });
 </script>
 <script>
     var $cells  = $('#tabelku tr td:nth-child(3)'),
         $hidden = $();
-    $('select').on('change', function () {
-        var search = $(this).val();
-        if ($(this).val() === "")
-        {
-            location.reload();
-        } else
-        {
-            var $to_hide = $cells.filter(function () {
-                return $(this).text() !== search;
-            }).parent();
-            $hidden.not($to_hide.get()).show();
-            $hidden = $to_hide.hide();
-        }
+    $('select#category').on('change', function () {
+        $('form#form-sender').submit();
     });
 </script>
 

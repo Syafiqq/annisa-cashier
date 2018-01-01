@@ -6,6 +6,7 @@
  * @property M_transaksi_m m_transaksi_m
  * @property M_bahan m_bahan
  * @property M_stok m_stok
+ * @property MY_Input input
  */
 class Admin extends CI_Controller
 {
@@ -278,8 +279,9 @@ class Admin extends CI_Controller
         {
             if (!$this->uri->segment(3))
             {
+                $jenis = $this->input->getOrDefault('category', null);
                 $this->load->model('m_pengeluaran');
-                $data['pengeluaran'] = $this->m_pengeluaran->getPengeluaran();
+                $data['pengeluaran'] = $this->m_pengeluaran->getPengeluaran($jenis);
 
                 $this->load->model('m_outlet');
                 $this->m_outlet->find(function (CI_DB_query_builder $db) { $db->select(); });
@@ -288,7 +290,8 @@ class Admin extends CI_Controller
                 {
                     $outlets["o_{$outlet['id_outlet']}"] = $outlet;
                 }
-                $data['outlets'] = $outlets;
+                $data['outlets']  = $outlets;
+                $data['category'] = $jenis;
                 $this->load->view('v_pengeluaran', $data);
             }
             else if ($this->uri->segment(3) == "tambah")
