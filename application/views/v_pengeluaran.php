@@ -3,6 +3,15 @@
 <html lang="en" class="ie8"> <![endif]-->
 <!--[if IE 9]>
 <html lang="en" class="ie9"> <![endif]-->
+
+<?php
+
+use Carbon\Carbon;
+
+$pengeluaran = isset($pengeluaran) ? $pengeluaran : [];
+usort($pengeluaran, function ($v1, $v2) {
+    return Carbon::createFromFormat('Y-m-d', $v1->tgl_pengeluaran)->lessThan(Carbon::createFromFormat('Y-m-d', $v2->tgl_pengeluaran));
+}) ?>
 <!--[if !IE]><!-->
 <html lang="en"> <!--<![endif]-->
                  <!-- BEGIN HEAD -->
@@ -12,9 +21,7 @@
     <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
     <meta content="" name="description"/>
     <meta content="" name="author"/>
-    <link href="<?php use Carbon\Carbon;
-
-    echo site_url(); ?>assets/assets/bootstrap/css/bootstrap.min.css" rel="stylesheet"/>
+    <link href="<?php echo site_url(); ?>assets/assets/bootstrap/css/bootstrap.min.css" rel="stylesheet"/>
     <link href="<?php echo site_url(); ?>assets/assets/bootstrap/css/bootstrap-responsive.min.css" rel="stylesheet"/>
     <link href="<?php echo site_url(); ?>assets/assets/font-awesome/css/font-awesome.css" rel="stylesheet"/>
     <link href="<?php echo site_url(); ?>assets/css/style.css" rel="stylesheet"/>
