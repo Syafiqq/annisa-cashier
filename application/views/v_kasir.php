@@ -271,6 +271,8 @@
     <script src="<?php echo base_url(); ?>assets/js/jquery.peity.min.js"></script>
     <script type="text/javascript" src="<?php echo base_url(); ?>assets/assets/uniform/jquery.uniform.min.js"></script>
     <script type="text/javascript" src="<?php echo base_url(); ?>assets/assets/data-tables/jquery.dataTables.js"></script>
+    <script type="text/javascript" src="<?php echo base_url(); ?>assets/js/moment-with-locales.min.js"></script>
+    <script type="text/javascript" src="<?php echo base_url(); ?>assets/js/moment-timezone-with-data.min.js"></script>
     <script type="text/javascript" src="<?php echo base_url(); ?>assets/assets/data-tables/DT_bootstrap.js"></script>
     <script type="text/javascript" src="<?php echo base_url(); ?>assets/js/bootstrap-notify.min.js"></script>
     <script type="text/javascript" src="<?php echo base_url(); ?>assets/js/bootstrap-dialog.min.js"></script>
@@ -500,19 +502,74 @@
                             {
                                 case 1 :
                                 {
-
+                                    var outlet = <?php echo json_encode(isset($outlet) ? $outlet : [])?>;
+                                    var now    = moment().tz('Asia/Jakarta').locale('id').format('Do MMMM YYYY, HH:mm:ss');
                                     BootstrapDialog.show({
                                         title: 'Struk',
                                         message: function (dialog) {
+                                            var __product_list = '';
+                                            $.each(p_projection, function (index, p) {
+                                                __product_list += ''
+                                                    //@formatter:off
+                                                    + '<tr>'
+                                                    +   '<td colspan="2" style="font-size: 12px">'+p['n']+'</td>'
+                                                    + '</tr>'
+                                                    + '<tr>'
+                                                    +   '<td width="65%" style="font-size: 12px">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;' + p['q'] + ' x ' + indonesian(p['c']) + '</td>'
+                                                    +   '<td width="35%" style="font-size: 12px; text-align: right">'+indonesian(parseInt(p['q'])*parseInt(p['c']))+'</td>'
+                                                    + '</tr>';
+                                                    //@formatter:on
+                                            });
                                             var $__content = $('' +
                                                 //@formatter:off
                                                 + '<div>'
+                                                +   '<h3 style="text-align: center">Nomor Antrian Anda</h3>'
+                                                +   '<h1 style="text-align: center">' + response['r']['q'] + '</h1>'
+                                                +   '<hr>'
                                                 +   '<page class="page" size="A6" id="printable-area">'
                                                 +       '<div class="container" id="print_container">'
-                                                +           '<div class="row">'
-                                                +               '<div class="span12">'
-                                                +                   '<p> HAHAHAH'
-                                                +                   '</p>'
+                                                +           '<div class="row printable-row">'
+                                                +               '<div class="col-sm-12">'
+                                                +                   '<h3 style="text-align: center; margin-bottom: 0">'+outlet['nama_outlet']+'</h3>'
+                                                +                   '<h4 style="text-align: center; margin-top: 0; margin-bottom: 0">'+outlet['alamat']+'</h4>'
+                                                +                   '<h6 style="text-align: center; margin-top: 0; margin-bottom: 0;">Telp : <i>'+outlet['telepon']+'</i></h6>'
+                                                +                   '<hr>'
+                                                +                   '<h5 style="margin-top: 0; margin-bottom: 0; font-size: 12px">'+now+'</h5>'
+                                                +                   '<table width="100%" style="margin: 24px 0;">'
+                                                +                       '<thead style="display: none">'
+                                                +                           '<tr>'
+                                                +                               '<th width="65%"></th>'
+                                                +                               '<th width="35%"></th>'
+                                                +                           '</tr>'
+                                                +                       '</head>'
+                                                +                       '<tbody>'
+                                                +                           __product_list
+                                                +                       '</tbody>'
+                                                +                   '</table>'
+                                                +                   '<hr>'
+                                                +                   '<table width="100%" style="margin: 24px 0;">'
+                                                +                       '<thead style="display: none">'
+                                                +                           '<tr>'
+                                                +                               '<th width="50%"></th>'
+                                                +                               '<th width="50%"></th>'
+                                                +                           '</tr>'
+                                                +                       '</head>'
+                                                +                       '<tbody>'
+                                                +                           '<tr>'
+                                                +                             '<td width="50%" style="font-size: 12px; text-align: right">Grand Total</td>'
+                                                +                             '<td width="50%" style="font-size: 12px; text-align: right">'+indonesian(cost)+'</td>'
+                                                +                           '</tr>'
+                                                +                           '<tr>'
+                                                +                             '<td width="50%" style="font-size: 12px; text-align: right">Bayar</td>'
+                                                +                             '<td width="50%" style="font-size: 12px; text-align: right">'+indonesian(payment)+'</td>'
+                                                +                           '</tr>'
+                                                +                           '<tr>'
+                                                +                             '<td width="50%" style="font-size: 12px; text-align: right">Kembali</td>'
+                                                +                             '<td width="50%" style="font-size: 12px; text-align: right">'+indonesian(payback)+'</td>'
+                                                +                           '</tr>'
+                                                +                       '</tbody>'
+                                                +                   '</table>'
+                                                +                   '<h4 style="text-align: center; margin-top: 0; margin-bottom: 0; font-size: 12px">--- Terima Kasih Atas Kunjungan Anda ---</h4>'
                                                 +               '</div>'
                                                 +           '</div>'
                                                 +       '</div>'
@@ -529,7 +586,7 @@
                                             label: 'Close',
                                             action: function (dialogRef) {
                                                 dialogRef.close();
-                                                //location.reload();
+                                                location.reload();
                                             }
                                         },
                                             {
@@ -549,7 +606,7 @@
                                                         title: null,
                                                         doctype: '<!doctype html>'
                                                     });
-                                                    //location.reload();
+                                                    location.reload();
                                                 }
                                             }
                                         ]
