@@ -29,21 +29,15 @@
     <link rel="stylesheet" href="<?php echo site_url(); ?>assets/assets/data-tables/DT_bootstrap.css"/>
     <link rel="stylesheet" type="text/css" href="<?php echo site_url(); ?>assets/assets/bootstrap-daterangepicker/daterangepicker.css"/>
     <?php
-    function getArrCount($arr, $depth = 1)
+    function getYearCount($yArr)
     {
-        if (!is_array($arr) || !$depth)
+        $count = 0;
+        foreach ($yArr as $m)
         {
-            return 0;
+            $count += count($m);
         }
 
-        $res = count($arr);
-
-        foreach ($arr as $in_ar)
-        {
-            $res += getArrCount($in_ar, $depth - 1);
-        }
-
-        return $res;
+        return $count;
     }
 
     ?>
@@ -142,7 +136,6 @@
                                     <thead>
                                     <tr>
                                         <th>Tahun</th>
-                                        <th>Bulan</th>
                                         <th>Outlet</th>
                                         <th>Penjualan</th>
                                         <th>Pengeluaran</th>
@@ -154,14 +147,13 @@
                                     $accl_trans = 0;
                                     $accl_total = 0;
                                     $outlets    = isset($outlets) ? $outlets : [];
+                                    log_message('ERROR', var_export($reports, true));
                                     foreach (isset($reports) ? $reports : [] as $kyr => $vyr)
                                     {
-                                        $vyr_count = getArrCount($vyr, 2);
+                                        $vyr_count = getYearCount($vyr);
                                         $kyri      = -1;
                                         foreach ($vyr as $kmr => $vmr)
                                         {
-                                            $vmr_count = getArrCount($vmr);
-                                            $kmri      = -1;
                                             foreach ($vmr as $kor => $vor)
                                             {
                                                 $pemasukan   = isset($vor['pemasukan']) ? intval($vor['pemasukan']) : 0;
@@ -175,7 +167,6 @@
                                                 //@formatter:off
                                                 echo '<tr>';
                                                     echo (++$kyri <= 0) ? "<td rowspan='$vyr_count'>{$vor_year}</td>" : '';
-                                                    echo (++$kmri <= 0) ? "<td rowspan='$vmr_count'>{$vor_month}</td>" : '';
                                                     echo "<td>{$outlets["o_{$vor['id_outlet']}"]['nama_outlet']}</td>";
                                                     echo "<td style='text-align: right'>Rp {$pemasukan}</td>";
                                                     echo "<td style='text-align: right'>Rp {$pengeluaran}</td>";
