@@ -20,6 +20,7 @@
     <link href="<?php echo site_url(); ?>assets/assets/fullcalendar/fullcalendar/bootstrap-fullcalendar.css" rel="stylesheet"/>
     <link href="<?php echo site_url(); ?>assets/css/bootstrap-dialog.min.css" rel="stylesheet"/>
     <link href="<?php echo site_url(); ?>assets/assets/jqvmap/jqvmap/jqvmap.css" media="screen" rel="stylesheet" type="text/css"/>
+    <link href="<?php echo site_url('/assets/css/printable.css'); ?>" rel="stylesheet" type="text/css"/>
     <style>
         #content1, #content2, #content3 {
             display: none;
@@ -274,6 +275,7 @@
     <script type="text/javascript" src="<?php echo base_url(); ?>assets/js/bootstrap-notify.min.js"></script>
     <script type="text/javascript" src="<?php echo base_url(); ?>assets/js/bootstrap-dialog.min.js"></script>
     <script src="<?php echo base_url(); ?>assets/js/scripts.js"></script>
+    <script src="<?php echo base_url(); ?>assets/js/jQuery.print.min.js"></script>
     <script>
         jQuery(document).ready(function () {
 
@@ -498,13 +500,28 @@
                             {
                                 case 1 :
                                 {
-                                    setTimeout(function () {
-                                        location.reload();
-                                    }, 7500);
 
                                     BootstrapDialog.show({
-                                        title: 'Pengumuman',
-                                        message: 'Nomor Antrian Anda  : ' + response['r']['q'] + "<br>" + 'Kembalian Anda : ' + indonesian(payback),
+                                        title: 'Struk',
+                                        message: function (dialog) {
+                                            var $__content = $('' +
+                                                //@formatter:off
+                                                + '<div>'
+                                                +   '<page class="page" size="A6" id="printable-area">'
+                                                +       '<div class="container" id="print_container">'
+                                                +           '<div class="row">'
+                                                +               '<div class="span12">'
+                                                +                   '<p> HAHAHAH'
+                                                +                   '</p>'
+                                                +               '</div>'
+                                                +           '</div>'
+                                                +       '</div>'
+                                                +   '</page>'
+                                                + '</div>'
+                                            );
+                                                //@formatter:on
+                                            return $__content;
+                                        },
                                         closable: false,
                                         closeByBackdrop: false,
                                         closeByKeyboard: false,
@@ -512,9 +529,30 @@
                                             label: 'Close',
                                             action: function (dialogRef) {
                                                 dialogRef.close();
-                                                location.reload();
+                                                //location.reload();
                                             }
-                                        }]
+                                        },
+                                            {
+                                                label: 'Print',
+                                                action: function (dialogRef) {
+                                                    $("page#printable-area").print({
+                                                        globalStyles: true,
+                                                        mediaPrint: false,
+                                                        stylesheet: ['<?php echo site_url('/assets/css/printable.css'); ?>'],
+                                                        noPrintSelector: ".no-print",
+                                                        iframe: true,
+                                                        append: null,
+                                                        prepend: null,
+                                                        manuallyCopyFormValues: true,
+                                                        deferred: $.Deferred(),
+                                                        timeout: 750,
+                                                        title: null,
+                                                        doctype: '<!doctype html>'
+                                                    });
+                                                    //location.reload();
+                                                }
+                                            }
+                                        ]
                                     });
                                 }
                                     break;
