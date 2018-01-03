@@ -1,0 +1,261 @@
+.page {
+    width: 105mm;
+    min-height: 148mm;
+    margin: 2mm auto;
+    border: 1px #D3D3D3 solid;
+    border-radius: 5px;
+    background: white;
+    box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);
+}
+
+.subpage {
+    padding: 10mm;
+    border: 5px red solid;
+    height: 257mm;
+    outline: 20mm #FFEAEA solid;
+}
+
+.bigHr {
+    -webkit-print-color-adjust: exact;
+    background-color: black !important;
+    color: black !important;
+    height: 1.5mm !important;
+    margin: 2px;
+}
+
+#secret_container {
+    -webkit-print-color-adjust: exact;
+    background-color: #9E9E9E !important;
+    padding: 1.25mm;
+}
+
+#header_department {
+    font-weight: bold;
+    font-size: 16px;
+}
+
+#secret {
+    font-size: 24px;
+    margin: 0;
+}
+
+#print_container {
+    width: initial;
+    padding: 4mm;
+    height: 100%;
+    -webkit-print-color-adjust: exact;
+}
+
+.vertical-align {
+    display: flex;
+    align-items: center;
+}
+
+.identity_value {
+    padding-left: 0;
+}
+
+.no-margin-bottom {
+    margin-bottom: 0;
+}
+
+.no-border-print {
+    border: none !important;
+}
+
+page {
+    font: 12pt "Serif";
+    background: white;
+    display: block;
+    margin: auto auto 5mm;
+    box-shadow: 0 0 5mm rgba(0, 0, 0, 0.5);
+}
+
+page[size="A6"] {
+    width: 105mm;
+    min-height: 148mm;
+}
+
+.margin-bottom-2 {
+    margin-bottom: 2px;
+}
+
+.margin-bottom-4 {
+    margin-bottom: 4px;
+}
+
+.margin-left-1-cm {
+    margin-left: 10mm;
+}
+
+.color-transparent {
+    background-color: transparent !important;
+    -webkit-print-color-adjust: exact;
+}
+
+.printable-row {
+    margin-left: 0;
+}
+
+@page {
+    size: 105mm 148mm;
+    margin: 0;
+}
+
+@media print {
+    html, body, page {
+        width: 105mm;
+        min-height: 148mm;
+        margin: 0;
+        font: 12pt "Serif";
+    }
+
+    .printable-row {
+        margin-left: 0;
+    }
+
+    .col-sm-1, .col-sm-2, .col-sm-3, .col-sm-4, .col-sm-5, .col-sm-6, .col-sm-7, .col-sm-8, .col-sm-9, .col-sm-10, .col-sm-11, .col-sm-12 {
+        float: left;
+    }
+
+    .col-sm-12 {
+        width: 100%;
+    }
+
+    .col-sm-11 {
+        width: 91.66666666666666%;
+    }
+
+    .col-sm-10 {
+        width: 83.33333333333334%;
+    }
+
+    .col-sm-9 {
+        width: 75%;
+    }
+
+    .col-sm-8 {
+        width: 66.66666666666666%;
+    }
+
+    .col-sm-7 {
+        width: 58.333333333333336%;
+    }
+
+    .col-sm-6 {
+        width: 50%;
+    }
+
+    .col-sm-5 {
+        width: 41.66666666666667%;
+    }
+
+    .col-sm-4 {
+        width: 33.33333333333333%;
+    }
+
+    .col-sm-3 {
+        width: 25%;
+    }
+
+    .col-sm-2 {
+        width: 16.666666666666664%;
+    }
+
+    .col-sm-1 {
+        width: 8.333333333333332%;
+    }
+
+    .page {
+        margin: 0;
+        border: initial;
+        border-radius: initial;
+        width: initial;
+        min-height: initial;
+        box-shadow: initial;
+        background: initial;
+        page-break-after: always;
+    }
+
+    .bigHr {
+        -webkit-print-color-adjust: exact;
+        background-color: black !important;
+        color: black !important;
+        height: 1.5mm !important;
+        margin: 2px;
+    }
+
+    #secret_container {
+        -webkit-print-color-adjust: exact;
+        background-color: #9E9E9E !important;
+        padding: 1.25mm;
+    }
+
+    #header_department {
+        font-weight: bold;
+        font-size: 16px;
+    }
+
+    #secret {
+        font-size: 24px;
+        margin: 0;
+    }
+
+    #print_container {
+        width: initial;
+        padding: 5mm;
+        background-size: 75mm !important;
+    }
+
+    .vertical-align {
+        display: flex;
+        align-items: center;
+    }
+
+    .identity_value {
+        padding-left: 0;
+    }
+
+    .no-margin-bottom {
+        margin-bottom: 0;
+    }
+
+    .no-border-print {
+        border: transparent 0 !important;
+    }
+
+    .margin-bottom-2 {
+        margin-bottom: 2px;
+    }
+
+    .margin-bottom-4 {
+        margin-bottom: 4px;
+    }
+
+    .color-transparent {
+        background-color: transparent !important;
+        -webkit-print-color-adjust: exact;
+    }
+}
+
+.custom-table {
+    border: solid black 1px;
+    width: 100%;
+}
+
+.custom-table th, .custom-table td {
+    border: solid black 1px;
+    padding: 2px 4px 2px 4px;
+}
+
+.font-size-12px {
+    font-size: 12px;
+}
+
+.font-size-14px {
+    font-size: 12px;
+}
+
+.bold-normal {
+    font-weight: bold;
+}
