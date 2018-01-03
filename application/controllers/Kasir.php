@@ -8,6 +8,8 @@
  * @property M_transaksi_m m_transaksi_m
  * @property M_transaksi_d m_transaksi_d
  * @property Pusher_library pusher_library
+ * @property M_produk m_produk
+ * @property M_outlet m_outlet
  */
 class Kasir extends CI_Controller
 {
@@ -24,9 +26,24 @@ class Kasir extends CI_Controller
 
     function index()
     {
-        $data['makanan'] = $this->m_transaksi->getMakanan();
-        $data['minuman'] = $this->m_transaksi->getMinuman();
-        $data['lauk']    = $this->m_transaksi->getLauk();
+        $data['makanan']  = $this->m_transaksi->getMakanan();
+        $data['minuman']  = $this->m_transaksi->getMinuman();
+        $data['lauk']     = $this->m_transaksi->getLauk();
+        $data['products'] = [];
+
+        $outlet = $this->session->userdata('outlet');
+        $this->load->model(['m_produk', 'm_outlet']);
+        $this->m_produk->find(function (CI_DB_query_builder $db) { $db->select(); });
+        foreach ($this->m_produk->getResult()->result_array() as $_product)
+        {
+            $data['products']["p_{$_product['id_produk']}"] = $_product;
+        }
+        $this->m_outlet->find(function (CI_DB_query_builder $db) use ($outlet) {
+            $db->select();
+            $db->where('id_outlet', $outlet);
+        });
+        $data['outlet'] = $this->m_outlet->getResult()->row_array();
+
         $this->load->view('v_kasir', $data);
     }
 
