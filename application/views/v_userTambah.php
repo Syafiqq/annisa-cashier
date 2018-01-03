@@ -192,7 +192,6 @@
 <script>
     jQuery(document).ready(function () {
         // initiate layout and plugins
-        App.init();
         $('form#form-sender').find('select[name=level]').on('change', function () {
             var target = $('form#form-sender').find('div.wrapper-outlet');
 
@@ -210,6 +209,7 @@
                 }
             }
         });
+        App.init();
     });
 </script>
 <script type="text/javascript">if (self == top)

@@ -11,8 +11,13 @@ class M_pengeluaran extends MY_Model
         parent::__construct('`pengeluaran`');
     }
 
-    function getPengeluaran()
+    function getPengeluaran($category = null)
     {
+        if ($category != null)
+        {
+            $this->db->where('`jenis`', $category);
+        }
+
         return $this->db->get('pengeluaran')->result();
     }
 

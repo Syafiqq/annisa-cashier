@@ -200,8 +200,7 @@
 <script src="<?php echo site_url(); ?>assets/js/scripts.js"></script>
 <script>
     jQuery(document).ready(function () {
-        // initiate layout and plugins
-        App.init();
+        // initiate layout and plugin
         var form_sender = $('form#form-sender');
         form_sender.find('input.w-total').maskMoney({
             prefix: '',
@@ -222,6 +221,7 @@
             input     = removeEmptyValues(input);
             console.log(input);
         });*/
+        App.init();
     });
 </script>
 <script type="text/javascript">if (self == top)

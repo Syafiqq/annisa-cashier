@@ -3,6 +3,15 @@
 <html lang="en" class="ie8"> <![endif]-->
 <!--[if IE 9]>
 <html lang="en" class="ie9"> <![endif]-->
+
+<?php
+
+use Carbon\Carbon;
+
+$pengeluaran = isset($pengeluaran) ? $pengeluaran : [];
+usort($pengeluaran, function ($v1, $v2) {
+    return Carbon::createFromFormat('Y-m-d', $v1->tgl_pengeluaran)->lessThan(Carbon::createFromFormat('Y-m-d', $v2->tgl_pengeluaran));
+}) ?>
 <!--[if !IE]><!-->
 <html lang="en"> <!--<![endif]-->
                  <!-- BEGIN HEAD -->
@@ -12,9 +21,7 @@
     <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
     <meta content="" name="description"/>
     <meta content="" name="author"/>
-    <link href="<?php use Carbon\Carbon;
-
-    echo site_url(); ?>assets/assets/bootstrap/css/bootstrap.min.css" rel="stylesheet"/>
+    <link href="<?php echo site_url(); ?>assets/assets/bootstrap/css/bootstrap.min.css" rel="stylesheet"/>
     <link href="<?php echo site_url(); ?>assets/assets/bootstrap/css/bootstrap-responsive.min.css" rel="stylesheet"/>
     <link href="<?php echo site_url(); ?>assets/assets/font-awesome/css/font-awesome.css" rel="stylesheet"/>
     <link href="<?php echo site_url(); ?>assets/css/style.css" rel="stylesheet"/>
@@ -22,6 +29,7 @@
     <link href="<?php echo site_url(); ?>assets/css/style_default.css" rel="stylesheet" id="style_color"/>
 
     <link href="<?php echo site_url(); ?>assets/assets/fancybox/source/jquery.fancybox.css" rel="stylesheet"/>
+    <link href="<?php echo base_url(); ?>assets/assets/dttb/datatables.css" rel="stylesheet" id="style_color"/>
     <link rel="stylesheet" type="text/css" href="<?php echo site_url() ?>assets/assets/uniform/css/uniform.default.css"/>
 </head>
                  <!-- END HEAD -->
@@ -101,14 +109,16 @@
                                             </button>
                                         </a>
                                     </div>
-                                    <br></br>
+                                    <br>
                                     <label class="control-label">Kategori</label>
                                     <div class="controls">
-                                        <select class="input-medium m-wrap" tabindex="1">
-                                            <option value="">Semua</option>
-                                            <option value="operasional">Operasional</option>
-                                            <option value="penyusutan">Penyusutan</option>
-                                        </select>
+                                        <form id="form-sender" action="" class="form-horizontal" method="get">
+                                            <select id="category" name="category" class="input-medium m-wrap" tabindex="1">
+                                                <option value="">Semua</option>
+                                                <option value="operasional" <?php echo (isset($category)) && ($category == 'operasional') ? 'selected' : '' ?>>Operasional</option>
+                                                <option value="penyusutan" <?php echo (isset($category)) && ($category == 'penyusutan') ? 'selected' : '' ?>>Penyusutan</option>
+                                            </select>
+                                        </form>
                                     </div>
                                 </div>
 
@@ -176,29 +186,20 @@
 <script type="text/javascript" src="<?php echo site_url(); ?>assets/assets/uniform/jquery.uniform.min.js"></script>
 <script type="text/javascript" src="<?php echo site_url(); ?>assets/assets/data-tables/jquery.dataTables.js"></script>
 <script type="text/javascript" src="<?php echo site_url(); ?>assets/assets/data-tables/DT_bootstrap.js"></script>
+<script src="<?php echo base_url(); ?>assets/assets/dttb/datatables.js"></script>
 <script src="<?php echo site_url(); ?>assets/js/scripts.js"></script>
 <script>
     jQuery(document).ready(function () {
         // initiate layout and plugins
+        //$('table#tabelku').DataTable();
         App.init();
     });
 </script>
 <script>
     var $cells  = $('#tabelku tr td:nth-child(3)'),
         $hidden = $();
-    $('select').on('change', function () {
-        var search = $(this).val();
-        if ($(this).val() === "")
-        {
-            location.reload();
-        } else
-        {
-            var $to_hide = $cells.filter(function () {
-                return $(this).text() !== search;
-            }).parent();
-            $hidden.not($to_hide.get()).show();
-            $hidden = $to_hide.hide();
-        }
+    $('select#category').on('change', function () {
+        $('form#form-sender').submit();
     });
 </script>
 

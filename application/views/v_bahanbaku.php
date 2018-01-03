@@ -179,10 +179,10 @@
 <script>
     jQuery(document).ready(function () {
         // initiate layout and plugins
-        App.init();
         $('form#form-sender').find('select[name=outlet]').on('change', function () {
             $('form#form-sender').submit();
         });
+        App.init();
 
     });
 </script>
